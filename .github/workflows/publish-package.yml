@@ -1,0 +1,27 @@
+name: Node.js Package
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+      packages: write 
+    steps:
+      - name: Pulling Project
+        uses: actions/checkout@v2
+      - name: Setup node  
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@borisbelmar'
+          always-auth: true
+      - name: Install dependencies
+        run: yarn ci
+      - name: Publish package
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

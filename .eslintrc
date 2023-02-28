@@ -1,0 +1,43 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "browser": true
+  },
+  "plugins": ["import"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "semi": ["error", "never"],
+    "quotes": ["error", "single"],
+    "no-console": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "space-before-function-paren": ["error", "always"],
+    "import/extensions": "off",
+    "comma-dangle": ["error", "never"],
+    "class-methods-use-this": "off",
+    "object-curly-newline": "off",
+    "import/prefer-default-export": "off",
+    "prefer-destructuring": "off",
+    "no-shadow": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_id", "__typename"] }],
+    "@typescript-eslint/no-shadow": "error",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".ts"]
+      }
+    }
+  }
+}
