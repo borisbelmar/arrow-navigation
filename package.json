@@ -1,6 +1,6 @@
 {
   "name": "@borisbelmar/arrow-navigation",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "This is a simple module that adds keyboard arrow navigation to the user interface, built in TypeScript.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
