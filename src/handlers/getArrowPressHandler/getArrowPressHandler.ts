@@ -1,6 +1,6 @@
 import findClosestElementInGroup from './findClosestElementInGroup'
 import findClosestGroup from './findClosestGroup'
-import { ArrowNavigationState, FocusableElement, FocusableGroup } from './types.d'
+import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types.d'
 
 const keyToDirection: { [x: string]: string } = {
   ArrowLeft: 'left',
@@ -54,7 +54,7 @@ export default function getArrowPressHandler (state: ArrowNavigationState) {
         }
         // eslint-disable-next-line no-param-reassign
         state.currentElement = firstGroupElement
-        state.currentElement.el.focus()
+        state.currentElement?.el.focus()
       }
     }
   }

@@ -1,5 +1,5 @@
 import getReferencePointsByDirection from './getReferencePointsByDirection'
-import getDOMRectMock from '../__mocks__/getDOMRect.mock'
+import getDOMRectMock from '../../../__mocks__/getDOMRect.mock'
 
 describe('getReferencePointsByDirection Function', () => {
   const rect1 = getDOMRectMock(20, 64, 30, 30) as DOMRect

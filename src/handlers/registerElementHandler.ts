@@ -1,4 +1,4 @@
-import { ArrowNavigationState } from './types.d'
+import type { ArrowNavigationState } from '../types.d'
 
 export default function registerElementHandler (state: ArrowNavigationState) {
   return (element: HTMLElement, group: string) => {
@@ -25,6 +25,7 @@ export default function registerElementHandler (state: ArrowNavigationState) {
     }
 
     if (!state.currentElement) {
+      // eslint-disable-next-line no-param-reassign
       state.currentElement = focusableElement
       element.focus()
     }

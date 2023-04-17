@@ -1,9 +1,11 @@
-import getArrowPressHandler from './getArrowPressHandler'
-import registerElementHandler from './registerElementHandler'
-import registerGroupHandler from './registerGroupHandler'
-import setFocusHandler from './setFocusHandler'
+import {
+  getArrowPressHandler,
+  registerElementHandler,
+  registerGroupHandler,
+  setFocusHandler,
+  unregisterElementHandler
+} from './handlers'
 import type { ArrowNavigationState } from './types.d'
-import unregisterElementHandler from './unregisterElementHandler'
 
 export default function initArrowNavigation () {
   const state: ArrowNavigationState = {

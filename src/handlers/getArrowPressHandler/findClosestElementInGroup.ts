@@ -1,7 +1,7 @@
 import getEuclideanDistance from './utils/getEuclideanDistance'
 import getReferencePointsByDirection from './utils/getReferencePointsByDirection'
 import isElementInDirection from './utils/isElementInDirection'
-import { FocusableElement } from './types.d'
+import { FocusableElement } from '../../types.d'
 
 interface Result {
   minDistance: number

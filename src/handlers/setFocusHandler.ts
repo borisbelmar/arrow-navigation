@@ -1,4 +1,4 @@
-import { ArrowNavigationState } from './types.d'
+import type { ArrowNavigationState } from '../types.d'
 
 export default function setFocusHandler (state: ArrowNavigationState) {
   return (id: string, group: string) => {
