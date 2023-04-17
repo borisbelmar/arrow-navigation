@@ -1,17 +1,24 @@
-import findClosestElement from './findClosestElement'
-import type { ArrowNavigationState } from './types'
+import findClosestElement from './findClosestElementInGroup'
+import type { ArrowNavigationState, FocusableElement } from './types'
 
 const getClosestElementByDirection = (
   direction: string,
-  state: ArrowNavigationState
-): HTMLElement | null => {
-  const { currentElement, elements } = state
+  state: ArrowNavigationState,
+  group: string
+): FocusableElement | null => {
+  const { currentElement } = state
 
-  if (!currentElement) {
+  const elements = state.groups.get(group)?.elements
+
+  if (!currentElement || !elements) {
     return null
   }
 
-  return findClosestElement(elements, currentElement, direction)
+  return findClosestElement({
+    direction,
+    candidateElements: elements,
+    currentFocusElement: currentElement
+  })
 }
 
 export default getClosestElementByDirection
