@@ -25,6 +25,7 @@ export type FocusableGroup = {
   keepAlive?: boolean
   saveLast?: boolean
   focusType?: FocusType
+  viewportSafe?: boolean
 }
 
 export type GroupMap = Map<string, FocusableGroup>
@@ -32,5 +33,6 @@ export type GroupMap = Map<string, FocusableGroup>
 export type ArrowNavigationState = {
   currentElement: FocusableElement | null,
   groups: GroupMap,
+  groupsWithElements: GroupMap
   elements: Set<HTMLElement>
 }

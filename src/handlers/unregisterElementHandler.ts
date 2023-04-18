@@ -1,4 +1,4 @@
-import type { ArrowNavigationState } from '../types.d'
+import type { ArrowNavigationState } from '@/types.d'
 
 export default function unregisterElementHandler (state: ArrowNavigationState) {
   return (element: HTMLElement, group: string) => {

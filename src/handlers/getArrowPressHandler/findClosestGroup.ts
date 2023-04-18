@@ -1,7 +1,5 @@
-import getEuclideanDistance from './utils/getEuclideanDistance'
-import getReferencePointsByCenter from './utils/getReferencePointsByCenter'
-import isElementInDirection from './utils/isElementInDirection'
-import type { FocusableGroup, GroupMap } from '../../types.d'
+import type { FocusableElement, FocusableGroup, GroupMap } from '@/types.d'
+import { getEuclideanDistance, getReferencePointsByCenter, isEligibleCandidate } from './utils'
 
 interface Result {
   minDistance: number
@@ -9,35 +7,48 @@ interface Result {
 }
 
 interface Props {
-  currentGroup: FocusableGroup
+  currentElement: FocusableElement
   candidateGroups: GroupMap
-  direction: string
+  direction: string,
+  threshold?: number
+  isViewportSafe?: boolean
 }
 
 export default function findClosestGroup ({
+  isViewportSafe = false,
+  threshold = 2,
   candidateGroups,
-  currentGroup,
+  currentElement,
   direction
 }: Props): FocusableGroup | null {
   const groupIdsArray = Array.from(candidateGroups.keys())
 
   const result = groupIdsArray.reduce<Result>(
     (acc, candidateKey) => {
+      const currentGroup = candidateGroups.get(currentElement?.group) as FocusableGroup
       const candidate = candidateGroups.get(candidateKey) as FocusableGroup
       if (
-        candidate.el === currentGroup.el
-        || !currentGroup.el
+        candidate.el === currentGroup?.el
+        || !currentElement?.el
+        || !currentGroup
         || !candidate.el
       ) return acc
 
-      const currentRect = currentGroup.el.getBoundingClientRect()
-      const candidateRect = candidate.el.getBoundingClientRect()
+      const currentElementRect = currentElement.el.getBoundingClientRect()
+      const currentGroupRect = currentGroup.el.getBoundingClientRect()
+      const candidateGroupRect = candidate.el.getBoundingClientRect()
 
-      if (!isElementInDirection(direction, currentRect, candidateRect)) return acc
+      if (!isEligibleCandidate({
+        direction,
+        currentRect: currentGroupRect,
+        candidateRect: candidateGroupRect,
+        isViewportSafe,
+        threshold
+      })) return acc
 
       const refPoints = getReferencePointsByCenter(
-        currentRect,
-        candidateRect
+        currentElementRect,
+        candidateGroupRect
       )
 
       const distance = getEuclideanDistance(refPoints.a, refPoints.b)

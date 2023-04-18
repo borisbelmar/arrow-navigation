@@ -1,6 +1,6 @@
 import findClosestElementInGroup from './findClosestElementInGroup'
 import findClosestGroup from './findClosestGroup'
-import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types.d'
+import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types.d'
 
 const keyToDirection: { [x: string]: string } = {
   ArrowLeft: 'left',
@@ -25,7 +25,7 @@ export default function getArrowPressHandler (state: ArrowNavigationState) {
     const elements = state.groups.get(group)?.elements
 
     if (!currentElement && !elements) {
-      console.warn(`Group ${group} does not exist or not have any elements`)
+      console.warn(`Group ${group} does not have any elements`)
       return
     }
 
@@ -42,7 +42,7 @@ export default function getArrowPressHandler (state: ArrowNavigationState) {
     } else {
       const closestGroup = findClosestGroup({
         direction: keyToDirection[key],
-        currentGroup,
+        currentElement: currentElement as FocusableElement,
         candidateGroups: state.groups
       })
 

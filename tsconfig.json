@@ -16,9 +16,13 @@
     "skipLibCheck": true,
     "strict": true,
     "typeRoots": ["./node_modules/@types", "./src/@types"],
-    "types": ["jest"]
+    "types": ["jest", "node"],
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "include": ["."],
+  "include": ["src/**/*"],
   "exclude": [
     "dist",
     "build",

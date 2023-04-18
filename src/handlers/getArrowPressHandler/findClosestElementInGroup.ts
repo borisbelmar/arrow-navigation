@@ -1,7 +1,7 @@
 import getEuclideanDistance from './utils/getEuclideanDistance'
 import getReferencePointsByDirection from './utils/getReferencePointsByDirection'
-import isElementInDirection from './utils/isElementInDirection'
-import { FocusableElement } from '../../types.d'
+import type { FocusableElement } from '@/types.d'
+import isEligibleCandidate from './utils/isEligibleCandidate/isEligibleCandidate'
 
 interface Result {
   minDistance: number
@@ -13,13 +13,15 @@ interface Props {
   candidateElements: FocusableElement[]
   direction: string
   threshold?: number
+  isViewportSafe?: boolean
 }
 
 export default function findClosestElementInGroup ({
   candidateElements,
   currentFocusElement,
   direction,
-  threshold = 200
+  threshold = 2,
+  isViewportSafe = false
 }: Props): FocusableElement | null {
   const result = candidateElements.reduce<Result>(
     (acc, candidate) => {
@@ -32,7 +34,13 @@ export default function findClosestElementInGroup ({
       const currentRect = currentFocusElement.el.getBoundingClientRect()
       const candidateRect = candidate.el.getBoundingClientRect()
 
-      if (!isElementInDirection(direction, currentRect, candidateRect)) return acc
+      if (!isEligibleCandidate({
+        direction,
+        currentRect,
+        candidateRect,
+        isViewportSafe,
+        threshold
+      })) return acc
 
       const refPoints = getReferencePointsByDirection(
         direction,
@@ -42,7 +50,7 @@ export default function findClosestElementInGroup ({
 
       const distance = getEuclideanDistance(refPoints.a, refPoints.b)
 
-      if (distance < acc.minDistance && distance < threshold) {
+      if (distance < acc.minDistance) {
         return { minDistance: distance, closestElement: candidate }
       }
       return acc

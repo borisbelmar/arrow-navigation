@@ -5,13 +5,14 @@ import {
   setFocusHandler,
   unregisterElementHandler
 } from './handlers'
-import type { ArrowNavigationState } from './types.d'
+import type { ArrowNavigationState } from '@/types.d'
 
 export default function initArrowNavigation () {
   const state: ArrowNavigationState = {
     currentElement: null,
     groups: new Map(),
-    elements: new Set()
+    elements: new Set(),
+    groupsWithElements: new Map()
   }
 
   const onKeyPress = getArrowPressHandler(state)

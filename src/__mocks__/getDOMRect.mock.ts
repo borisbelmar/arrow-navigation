@@ -7,6 +7,7 @@ export default function getDOMRectMock (x: number, y: number, width: number, hei
     top: y,
     right: x + width,
     bottom: y + height,
-    left: x
+    left: x,
+    toJSON: jest.fn()
   }
 }

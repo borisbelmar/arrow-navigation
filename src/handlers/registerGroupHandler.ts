@@ -1,4 +1,4 @@
-import type { ArrowNavigationState, FocusableGroup } from '../types.d'
+import type { ArrowNavigationState, FocusableGroup } from '@/types.d'
 
 export default function registerGroupHandler (state: ArrowNavigationState) {
   return (
@@ -23,7 +23,5 @@ export default function registerGroupHandler (state: ArrowNavigationState) {
       el: element,
       ...(options || {})
     })
-
-    console.log('state', state)
   }
 }
