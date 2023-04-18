@@ -1,11 +1,11 @@
 import findClosestGroup from './findClosestGroup'
-import viewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
 import { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types.d'
+import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
 
 describe('findClosestGroup', () => {
   let state: ArrowNavigationState
   beforeEach(() => {
-    state = viewNavigationStateMock
+    state = getViewNavigationStateMock()
     window.innerWidth = 50
     window.innerHeight = 50
   })
@@ -14,7 +14,7 @@ describe('findClosestGroup', () => {
     const group0 = state.groups.get('group-0') as FocusableGroup
     const group1 = state.groups.get('group-1') as FocusableGroup
 
-    state.currentElement = group0.elements[0]
+    state.currentElement = group0.elements.get('element-0-0') as FocusableElement
     const closestGroup = findClosestGroup({
       direction: 'right',
       currentElement: state.currentElement as FocusableElement,
@@ -26,7 +26,7 @@ describe('findClosestGroup', () => {
 
   it('should return null if the next candidate is out of viewport if isViewportSafe is true', () => {
     const group = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = group.elements[3]
+    state.currentElement = group.elements.get('element-0-3') as FocusableElement
 
     const closestGroup = findClosestGroup({
       direction: 'down',
@@ -41,13 +41,14 @@ describe('findClosestGroup', () => {
     const group1 = state.groups.get('group-0') as FocusableGroup
     const group2 = state.groups.get('group-4') as FocusableGroup
 
-    state.currentElement = group1.elements[3]
+    state.currentElement = group1.elements.get('element-0-3') as FocusableElement
 
     const closestGroup = findClosestGroup({
       direction: 'down',
       currentElement: state.currentElement as FocusableElement,
       candidateGroups: state.groups
     })
+
     expect(closestGroup).toBe(group2)
   })
 

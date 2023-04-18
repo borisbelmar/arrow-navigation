@@ -1,27 +1,49 @@
-import type { ArrowNavigationState } from '@/types.d'
+import type { ArrowNavigationState, FocusableElement } from '@/types.d'
+
+type Options = Omit<FocusableElement, 'el' | 'group'>
+
+export const ERROR_MESSAGES = {
+  GROUP_REQUIRED: 'Group is required',
+  ELEMENT_ID_REQUIRED: 'Element ID is required',
+  ELEMENT_ID_ALREADY_REGISTERED: (id: string) => `Element with id ${id} is already registered. Check if you are not registering the same element twice. If you are, use the "unregisterElement" method to unregister it first.`
+}
 
 export default function registerElementHandler (state: ArrowNavigationState) {
-  return (element: HTMLElement, group: string) => {
+  return (
+    element: HTMLElement,
+    group: string,
+    options?: Options
+  ) => {
     if (!group) {
-      throw new Error('Group is required')
+      throw new Error(ERROR_MESSAGES.GROUP_REQUIRED)
+    }
+
+    if (!element.id) {
+      throw new Error(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
+    }
+
+    if (state.elements.get(element.id)) {
+      console.warn(ERROR_MESSAGES.ELEMENT_ID_ALREADY_REGISTERED(element.id))
+      return
     }
 
     const focusableElement = {
       el: element,
       group,
-      cachedNextElementByDirection: {}
+      ...options
     }
 
-    state.elements.add(element)
+    state.elements.set(element.id, focusableElement)
     const existentGroup = state.groups.get(group)
 
     if (!existentGroup) {
+      const elementsMap = new Map().set(element.id, focusableElement)
       state.groups.set(group, {
-        elements: [focusableElement],
+        elements: elementsMap,
         el: null as unknown as HTMLElement
       })
-    } else if (!existentGroup.elements.find(el => el.el === element)) {
-      existentGroup.elements.push(focusableElement)
+    } else {
+      existentGroup.elements.set(element.id, focusableElement)
     }
 
     if (!state.currentElement) {

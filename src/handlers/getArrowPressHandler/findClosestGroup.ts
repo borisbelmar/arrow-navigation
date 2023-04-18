@@ -1,4 +1,4 @@
-import type { FocusableElement, FocusableGroup, GroupMap } from '@/types.d'
+import type { FocusableElement, FocusableGroup } from '@/types.d'
 import { getEuclideanDistance, getReferencePointsByCenter, isEligibleCandidate } from './utils'
 
 interface Result {
@@ -8,7 +8,7 @@ interface Result {
 
 interface Props {
   currentElement: FocusableElement
-  candidateGroups: GroupMap
+  candidateGroups: Map<string, FocusableGroup>
   direction: string,
   threshold?: number
   isViewportSafe?: boolean

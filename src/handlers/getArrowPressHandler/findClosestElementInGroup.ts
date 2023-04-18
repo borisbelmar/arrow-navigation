@@ -14,6 +14,7 @@ interface Props {
   direction: string
   threshold?: number
   isViewportSafe?: boolean
+  allValidCandidates?: boolean
 }
 
 export default function findClosestElementInGroup ({
@@ -21,20 +22,21 @@ export default function findClosestElementInGroup ({
   currentFocusElement,
   direction,
   threshold = 2,
-  isViewportSafe = false
+  isViewportSafe = false,
+  allValidCandidates
 }: Props): FocusableElement | null {
   const result = candidateElements.reduce<Result>(
     (acc, candidate) => {
       if (
-        candidate.el === currentFocusElement.el
-        || !currentFocusElement.el
+        candidate.el === currentFocusElement?.el
+        || !currentFocusElement?.el
         || !candidate.el
       ) return acc
 
       const currentRect = currentFocusElement.el.getBoundingClientRect()
       const candidateRect = candidate.el.getBoundingClientRect()
 
-      if (!isEligibleCandidate({
+      if (!allValidCandidates && !isEligibleCandidate({
         direction,
         currentRect,
         candidateRect,

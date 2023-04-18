@@ -1,5 +1,5 @@
 {
-  "name": "@borisbelmar/arrow-navigation",
+  "name": "@arrow-navigation/core",
   "version": "0.1.0",
   "description": "Zero-dependency library to navigate through UI elements using the keyboard arrow keys built with Typescript",
   "main": "./dist/index.js",

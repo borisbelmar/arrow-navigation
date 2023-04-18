@@ -1,38 +1,56 @@
 export type Direction = 'up' | 'down' | 'left' | 'right'
 
-export type FocusType = 'auto' | 'manual'
+export type FocusType = 'first' | 'closest' | 'manual'
 
 export type Point = { x: number, y: number }
 
 export type ElementByDirection = {
-  [key in Direction]?: string
+  [key in Direction]?: string | null
 }
 
 export type FocusableElement = {
   el: HTMLElement
   group: string
-  cachedNextElementByDirection: ElementByDirection
   nextElementByDirection?: ElementByDirection
-  focusType?: FocusType
 }
 
 export type FocusableGroup = {
-  elements: FocusableElement[]
   el: HTMLElement
-  firstElement?: FocusableElement
-  lastElement?: FocusableElement
-  nextGroupByDirection?: ElementByDirection
-  keepAlive?: boolean
-  saveLast?: boolean
-  focusType?: FocusType
-  viewportSafe?: boolean
+  elements: Map<string, FocusableElement>
 }
 
-export type GroupMap = Map<string, FocusableGroup>
+export type FocusableGroupConfig = {
+  el: HTMLElement
+  firstElement?: string
+  nextGroupByDirection?: ElementByDirection
+  saveLast?: boolean
+  viewportSafe?: boolean
+  threshold?: number
+}
 
 export type ArrowNavigationState = {
   currentElement: FocusableElement | null,
-  groups: GroupMap,
-  groupsWithElements: GroupMap
-  elements: Set<HTMLElement>
+  groupsConfig: Map<string, FocusableGroupConfig>,
+  groups: Map<string, FocusableGroup>
+  elements: Map<string, FocusableElement>
+}
+
+// TODO: Apply all this
+export type ArrowNavigationOptions = {
+  onElementFocus?: (element: FocusableElement) => void
+  onElementBlur?: (element: FocusableElement) => void
+  onGroupFocus?: (group: FocusableGroup) => void
+  onGroupBlur?: (group: FocusableGroup) => void
+  onReachLastGroup?: (group: FocusableGroup) => void
+  debug?: boolean
+  errorOnReinit?: boolean
+}
+
+export type ArrowNavigationInstance = {
+  getFocusedElement: () => FocusableElement | null
+  setFocusElement: (id: string, group: string) => void
+  registerGroup: (element: HTMLElement, options?: Pick<FocusableGroupConfig, 'firstElement' | 'nextGroupByDirection' | 'saveLast'>) => void
+  registerElement: (element: HTMLElement, group: string, options?: Omit<FocusableElement, 'el' | 'group'>) => void
+  unregisterElement: (element: string | HTMLElement) => void
+  destroy: () => void
 }
