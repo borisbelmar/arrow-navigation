@@ -1,6 +1,7 @@
 import type { FocusableElement } from '@/types.d'
 import getEuclideanDistance from './getEuclideanDistance'
 import getReferencePointsByDirection from './getReferencePointsByDirection'
+import isElementDisabled from './isElementDisabled'
 import isEligibleCandidate from './isEligibleCandidate/isEligibleCandidate'
 
 interface Result {
@@ -35,6 +36,8 @@ export default function findClosestElementInGroup ({
 
       const currentRect = currentFocusElement.el.getBoundingClientRect()
       const candidateRect = candidate.el.getBoundingClientRect()
+
+      if (isElementDisabled(candidate.el)) return acc
 
       if (!allValidCandidates && !isEligibleCandidate({
         direction,

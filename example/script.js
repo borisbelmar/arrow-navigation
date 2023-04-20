@@ -14,7 +14,7 @@ Array.from(Array(6).keys()).forEach(index => {
   const button = document.createElement('button')
   group0Container.appendChild(button)
   button.setAttribute('id', `group-0-button-${index}`)
-  button.classList.add('bg-blue-500', 'text-white', 'w-16', 'h-16', 'rounded', 'focus:outline-none', 'flex', 'focus:bg-yellow-500', 'justify-center', 'items-center', 'text-2xl', 'font-bold')
+  button.classList.add('bg-blue-500', 'text-white', 'w-16', 'h-16', 'rounded', 'focus:outline-none', 'flex', 'focus:bg-yellow-500', 'justify-center', 'items-center', 'text-2xl', 'font-bold', 'disabled:opacity-50')
   button.innerText = index
   arrowNavigationApi.registerElement(button, 'group-0')
 })
@@ -37,7 +37,7 @@ const generateRightGroup = (groupIdx, qty) => {
     const button = document.createElement('button')
     groupContainer.appendChild(button)
     button.setAttribute('id', `group-${groupIdx}-button-${elementIndex}`)
-    button.classList.add('bg-blue-500', 'text-white', 'w-32', 'h-16', 'rounded', 'focus:outline-none', 'flex', 'focus:bg-yellow-500', 'justify-center', 'items-center', 'text-2xl', 'font-bold')
+    button.classList.add('bg-blue-500', 'text-white', 'w-32', 'h-16', 'rounded', 'focus:outline-none', 'flex', 'focus:bg-yellow-500', 'justify-center', 'items-center', 'text-2xl', 'font-bold', 'disabled:opacity-50')
     button.innerText = elementIndex
     arrowNavigationApi.registerElement(button, groupId)
   })
@@ -49,3 +49,7 @@ generateRightGroup(3, 4)
 generateRightGroup(4, 2)
 generateRightGroup(5, 1)
 generateRightGroup(6, 5)
+
+document.getElementById('group-0-button-3').setAttribute('disabled', true)
+document.getElementById('group-1-button-2').setAttribute('disabled', true)
+document.getElementById('group-3-button-0').setAttribute('disabled', true)

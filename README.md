@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![install size](https://packagephobia.com/badge?p=@arrow-navigation/core@1.1.0)](https://packagephobia.com/result?p=@arrow-navigation/core@1.1.0)
 
-Light (7.2kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
+Light (8kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
 ## Installation
 
