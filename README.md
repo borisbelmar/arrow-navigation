@@ -1,5 +1,8 @@
 # Arrow Navigation Core
 
+[![codecov](https://codecov.io/gh/borisbelmar/arrow-navigation/branch/main/graph/badge.svg?token=6EEWATKTFX)](https://codecov.io/gh/borisbelmar/arrow-navigation)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Light and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
 ## Installation
