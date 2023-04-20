@@ -67,6 +67,11 @@ export type ArrowNavigationInstance = {
   registerElement: (element: HTMLElement, group: string, options?: Omit<FocusableElement, 'el' | 'group'>) => void
   unregisterElement: (element: string | HTMLElement) => void
   destroy: () => void
+  getCurrentGroups: () => Set<string>
+  getGroupElements: (group: string) => Set<string>
+  getGroupConfig: (group: string) => FocusableGroupConfig | undefined
+  getRegisteredElements: () => Set<string>
+  getFocusedGroup: () => string | undefined
   /**
    * @deprecated
    * @returns The current state of the arrow navigation instance.
