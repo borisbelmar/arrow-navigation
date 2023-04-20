@@ -72,6 +72,21 @@ export function initArrowNavigation ({
       window.removeEventListener('keydown', onKeyPress)
       arrowNavigation = null
     },
+    getCurrentGroups () {
+      return new Set(state.groups.keys())
+    },
+    getGroupElements (group: string) {
+      return new Set(state.groups.get(group)?.elements.keys() || [])
+    },
+    getGroupConfig (group: string) {
+      return state.groupsConfig.get(group)
+    },
+    getRegisteredElements () {
+      return new Set(state.elements.keys())
+    },
+    getFocusedGroup () {
+      return state.currentElement?.group
+    },
     _forceNavigate (key) {
       if (!state.debug) return
       onKeyPress({
