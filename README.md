@@ -218,6 +218,90 @@ const api = getArrowNavigation()
 api.destroy()
 ```
 
+### getCurrentGroups
+
+Get the current groups ids (focusables).
+
+```typescript
+const api = getArrowNavigation()
+
+const container = document.createElement('div')
+const container2 = document.createElement('div')
+
+// Is important to keep a unique id for each group and his elements
+container.id = 'group-0'
+container2.id = 'group-1'
+
+api.registerGroup(container)
+api.registerGroup(container2)
+
+const currentGroups = api.getCurrentGroups() // Set { 'group-0', 'group-1' }
+```
+
+### getGroupElements
+
+Get a Set of elements ids of a group.
+
+```typescript
+const api = getArrowNavigation()
+
+const container = document.createElement('div')
+const element = document.createElement('button')
+const element2 = document.createElement('button')
+
+// Is important to keep a unique id for each group and his elements
+container.id = 'group-0'
+element.id = 'element-0-0'
+element2.id = 'element-0-1'
+
+api.registerGroup(container)
+api.registerElement(element, 'group-0')
+api.registerElement(element2, 'group-0')
+
+const groupElements = api.getGroupElements('group-0') // Set { 'element-0-0', 'element-0-1' }
+```
+
+### getGroupConfig
+
+Get the configuration of a group.
+
+```typescript
+const api = getArrowNavigation()
+
+const container = document.createElement('div')
+
+// Is important to keep a unique id for each group and his elements
+container.id = 'group-0'
+
+api.registerGroup(container)
+
+const groupConfig = api.getGroupConfig('group-0') // { viewportSafe: true, threshold: 0, keepFocus: false }
+```
+
+### getRegisteredElements
+
+Get a Set with all registered elements ids.
+
+```typescript
+const api = getArrowNavigation()
+
+const container = document.createElement('div')
+const element = document.createElement('button')
+const element2 = document.createElement('button')
+
+// Is important to keep a unique id for each group and his elements
+
+container.id = 'group-0'
+element.id = 'element-0-0'
+element2.id = 'element-0-1'
+
+api.registerGroup(container)
+api.registerElement(element, 'group-0')
+api.registerElement(element2, 'group-0')
+
+const registeredElements = api.getRegisteredElements() // Set { 'element-0-0', 'element-0-1' }
+```
+
 # Using with CDN
 
 You can use the module with a CDN. The module is available in the following URL:
@@ -225,7 +309,7 @@ You can use the module with a CDN. The module is available in the following URL:
 `https://cdn.jsdelivr.net/npm/@arrow-navigation/core@<version>/dist/dist.js`
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@arrow-navigation/core@1.0.1/dist/dist.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@arrow-navigation/core/dist/dist.js"></script>
 <script>
   window.arrowNavigation.init()
 
