@@ -2,9 +2,9 @@
 
 [![codecov](https://codecov.io/gh/borisbelmar/arrow-navigation/branch/main/graph/badge.svg?token=6EEWATKTFX)](https://codecov.io/gh/borisbelmar/arrow-navigation)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![install size](https://packagephobia.com/badge?p=@arrow-navigation/core@1.1.0)](https://packagephobia.com/result?p=@arrow-navigation/core@1.1.0)
+[![install size](https://packagephobia.com/badge?p=@arrow-navigation/core)](https://packagephobia.com/result?p=@arrow-navigation/core)
 
-Light (7.2kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
+Light (8kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
 ## Installation
 

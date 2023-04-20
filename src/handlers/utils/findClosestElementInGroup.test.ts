@@ -145,4 +145,20 @@ describe('findClosestElementInGroup', () => {
     })
     expect(closestElement4).toBe(group.elements.get('element-0-0'))
   })
+
+  it('should return the closest element, but not the disabled element', () => {
+    const group1 = state.groups.get('group-1') as FocusableGroup
+
+    group1.elements.get('element-1-1')?.el.setAttribute('disabled', '')
+
+    const closesElement = findClosestElementInGroup({
+      direction: 'right',
+      currentFocusElement: group1.elements.get('element-1-0') as FocusableElement,
+      candidateElements: Array.from(group1.elements.values()),
+      isViewportSafe: true,
+      allValidCandidates: false
+    })
+
+    expect(closesElement).toBe(group1.elements.get('element-1-2'))
+  })
 })
