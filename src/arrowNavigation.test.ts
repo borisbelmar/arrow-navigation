@@ -64,6 +64,17 @@ describe('arrowNavigation', () => {
     expect(state.groups.get('group-0')?.elements.get('element-0-2')?.el.focus).toHaveBeenCalled()
   })
 
+  it('should not forceNavigate if debug is disabled', () => {
+    initArrowNavigation()
+    const navigationApi = getArrowNavigation()
+    const state = getViewNavigationStateMock()
+    navigationApi._setState(state)
+
+    navigationApi._forceNavigate('ArrowDown')
+
+    expect(state.groups.get('group-0')?.elements.get('element-0-1')?.el.focus).not.toHaveBeenCalled()
+  })
+
   it('should return the focused element', () => {
     initArrowNavigation({ debug: true })
     const navigationApi = getArrowNavigation()
@@ -82,5 +93,80 @@ describe('arrowNavigation', () => {
     navigationApi._setState(state)
 
     expect(navigationApi._getState()).toEqual({ ...state, debug: true })
+  })
+
+  it('should return the state in non debug mode', () => {
+    initArrowNavigation()
+    const navigationApi = getArrowNavigation()
+
+    expect(navigationApi._getState()).toBeNull()
+  })
+
+  it('should return all the elements as a set', () => {
+    initArrowNavigation({ debug: true })
+    const state = getViewNavigationStateMock()
+    const navigationApi = getArrowNavigation()
+    navigationApi._setState(state)
+
+    expect(navigationApi.getRegisteredElements()).toEqual(new Set(state.elements.keys()))
+  })
+
+  it('should return all the elements in a group as set', () => {
+    initArrowNavigation({ debug: true })
+    const state = getViewNavigationStateMock()
+    const navigationApi = getArrowNavigation()
+    navigationApi._setState(state)
+
+    expect(navigationApi.getGroupElements('group-0')).toEqual(new Set(state.groups.get('group-0')?.elements.keys() || []))
+  })
+
+  it('should return all the groups as a set', () => {
+    initArrowNavigation({ debug: true })
+    const state = getViewNavigationStateMock()
+    const navigationApi = getArrowNavigation()
+    navigationApi._setState(state)
+
+    expect(navigationApi.getCurrentGroups()).toEqual(new Set(state.groups.keys()))
+  })
+
+  it('should return the focused group', () => {
+    initArrowNavigation({ debug: true })
+    const state = getViewNavigationStateMock()
+    const navigationApi = getArrowNavigation()
+    navigationApi._setState(state)
+
+    expect(navigationApi.getFocusedGroup()).toBe('group-0')
+  })
+
+  it('should return the group config', () => {
+    initArrowNavigation({ debug: true })
+    const state = getViewNavigationStateMock()
+    const navigationApi = getArrowNavigation()
+    navigationApi._setState(state)
+
+    expect(navigationApi.getGroupConfig('group-0')).toEqual(state.groupsConfig.get('group-0'))
+  })
+
+  it('should not set a new state if debug is false', () => {
+    initArrowNavigation()
+    const navigationApi = getArrowNavigation()
+    const state = getViewNavigationStateMock()
+
+    navigationApi._setState(state)
+    expect(navigationApi.getFocusedElement()).toBeNull()
+  })
+
+  it('should return an empty set if the group does not exist', () => {
+    initArrowNavigation({ debug: true })
+    const navigationApi = getArrowNavigation()
+
+    expect(navigationApi.getGroupElements('group-0')).toEqual(new Set())
+  })
+
+  it('should return undefined group if currentElement is not set', () => {
+    initArrowNavigation({ debug: true })
+    const navigationApi = getArrowNavigation()
+
+    expect(navigationApi.getFocusedGroup()).toBeUndefined()
   })
 })
