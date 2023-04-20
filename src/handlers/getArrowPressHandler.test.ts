@@ -18,6 +18,10 @@ describe('getArrowPressHandler', () => {
     }
   })
 
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('should return a function', () => {
     const handler = getArrowPressHandler(state, jest.fn(), {})
     expect(typeof handler).toBe('function')
@@ -32,14 +36,30 @@ describe('getArrowPressHandler', () => {
     expect(focusNextElement).toHaveBeenCalled()
   })
 
-  it('should log a warn message if not currentElement', () => {
+  it('should log a warn message if not currentElement and elements is empty', () => {
     const focusNextElement = jest.fn()
     state.currentElement = null
+    state.elements = new Map()
     const handler = getArrowPressHandler(state, focusNextElement, {})
 
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
     handler(event)
     expect(console.warn).toHaveBeenCalledWith(ERROR_MESSAGES.NO_ELEMENT_FOCUSED)
+  })
+
+  it('should focus a random element on map of elements if currentElement is null and elements is not empty', () => {
+    const focusNextElement = jest.fn()
+    state.currentElement = null
+    state.elements = new Map().set('element-0-0', {
+      el: document.createElement('button'),
+      group: 'group-0'
+    })
+    const handler = getArrowPressHandler(state, focusNextElement, {})
+
+    const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
+    handler(event)
+    expect(console.warn).not.toHaveBeenCalledWith(ERROR_MESSAGES.NO_ELEMENT_FOCUSED)
+    expect(focusNextElement).toHaveBeenCalled()
   })
 
   it('should not call the focusNextElement function if not a valid key', () => {

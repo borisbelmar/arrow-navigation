@@ -25,7 +25,12 @@ export default function getArrowPressHandler (
 
     const currentElement = state.currentElement
     if (!currentElement) {
-      console.warn(ERROR_MESSAGES.NO_ELEMENT_FOCUSED)
+      const firstRegisteredElement = state.elements.values().next().value
+      if (firstRegisteredElement) {
+        onChangeCurrentElement(firstRegisteredElement)
+      } else {
+        console.warn(ERROR_MESSAGES.NO_ELEMENT_FOCUSED)
+      }
       return
     }
 
