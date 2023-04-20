@@ -15,8 +15,6 @@ npm install --save @arrow-navigation/core
 yarn add @arrow-navigation/core
 ```
 
-For the moment, the module is not available in the browser via CD and window. You need to use a bundler like Webpack or Rollup to use it.
-
 ## Usage
 
 At the top of your application, you need to initialize the module. This will add the event listeners to the document and store the navigation state in a singleton instance.
@@ -218,3 +216,22 @@ const api = getArrowNavigation()
 
 api.destroy()
 ```
+
+# Using with CDN
+
+You can use the module with a CDN. The module is available in the following URL:
+
+`https://cdn.jsdelivr.net/npm/@arrow-navigation/core@<version>/dist/dist.js`
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@arrow-navigation/core@1.0.1/dist/dist.js"></script>
+<script>
+  window.arrowNavigation.init()
+
+  const arrowNavigationApi = window.arrowNavigation.get()
+
+  // Now you can use the arrowNavigationApi
+  // ...
+</script>
+```
+
