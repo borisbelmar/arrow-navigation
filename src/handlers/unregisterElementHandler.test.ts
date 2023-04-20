@@ -10,7 +10,7 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should unregister the element', () => {
-    const unregisterElement = unregisterElementHandler(state)
+    const unregisterElement = unregisterElementHandler(state, jest.fn())
 
     const element = document.createElement('div')
     element.id = 'element-0-3'
@@ -22,7 +22,7 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should delete the group if it is empty', () => {
-    const unregisterElement = unregisterElementHandler(state)
+    const unregisterElement = unregisterElementHandler(state, jest.fn())
 
     const element = document.createElement('div')
     element.id = 'element-4-0'
@@ -32,7 +32,7 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should not unregister the element if it is not registered', () => {
-    const unregisterElement = unregisterElementHandler(state)
+    const unregisterElement = unregisterElementHandler(state, jest.fn())
 
     const element = document.createElement('div')
     element.id = 'not-registered-element'
@@ -42,7 +42,7 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should unregister the element given the element id only', () => {
-    const unregisterElement = unregisterElementHandler(state)
+    const unregisterElement = unregisterElementHandler(state, jest.fn())
 
     const elementId = 'element-0-3'
     unregisterElement(elementId)
@@ -50,5 +50,16 @@ describe('unregisterElementHandler', () => {
     expect(state.elements.has(elementId)).toBe(false)
     expect(state.groups.get('group-0')?.elements.has(elementId)).toBe(false)
     expect(state.groups.get('group-0')?.elements.get('element-0-3')).toBeUndefined()
+  })
+
+  it('should focus the next element if the current element is unregistered', () => {
+    const onFocusChange = jest.fn()
+    const unregisterElement = unregisterElementHandler(state, onFocusChange)
+
+    const element = document.createElement('div')
+    element.id = 'element-0-0'
+    unregisterElement(element)
+
+    expect(onFocusChange).toHaveBeenCalledWith(state.groups.get('group-0')?.elements.get('element-0-1'))
   })
 })

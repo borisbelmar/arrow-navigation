@@ -1,4 +1,4 @@
-import getDOMRectMock from '../../../../../__mocks__/getDOMRect.mock'
+import getDOMRectMock from '../../../../__mocks__/getDOMRect.mock'
 import isElementPartiallyInViewport from './isElementPartiallyInViewport'
 
 describe('isElementPartiallyInViewport', () => {

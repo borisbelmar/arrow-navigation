@@ -1,7 +1,7 @@
-import getEuclideanDistance from './utils/getEuclideanDistance'
-import getReferencePointsByDirection from './utils/getReferencePointsByDirection'
 import type { FocusableElement } from '@/types.d'
-import isEligibleCandidate from './utils/isEligibleCandidate/isEligibleCandidate'
+import getEuclideanDistance from './getEuclideanDistance'
+import getReferencePointsByDirection from './getReferencePointsByDirection'
+import isEligibleCandidate from './isEligibleCandidate/isEligibleCandidate'
 
 interface Result {
   minDistance: number
@@ -11,7 +11,7 @@ interface Result {
 interface Props {
   currentFocusElement: FocusableElement
   candidateElements: FocusableElement[]
-  direction: string
+  direction: string | undefined
   threshold?: number
   isViewportSafe?: boolean
   allValidCandidates?: boolean
@@ -21,7 +21,7 @@ export default function findClosestElementInGroup ({
   candidateElements,
   currentFocusElement,
   direction,
-  threshold = 2,
+  threshold = 0,
   isViewportSafe = false,
   allValidCandidates
 }: Props): FocusableElement | null {

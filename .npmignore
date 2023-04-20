@@ -11,3 +11,4 @@ coverage
 .github
 .DS_Store
 .husky
+example

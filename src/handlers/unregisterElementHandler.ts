@@ -1,9 +1,21 @@
-import type { ArrowNavigationState } from '@/types.d'
+import type { ArrowNavigationState, FocusableElement } from '@/types.d'
+import focusNextElement from './utils/focusNextElement'
 
-export default function unregisterElementHandler (state: ArrowNavigationState) {
+export default function unregisterElementHandler (
+  state: ArrowNavigationState,
+  onChangeCurrentElement: (element: FocusableElement) => void
+) {
   return (element: HTMLElement | string) => {
     const elementId = typeof element === 'string' ? element : element.id
     const groupId = state.elements.get(elementId)?.group as string
+
+    if (elementId === state.currentElement?.el.id) {
+      focusNextElement({
+        direction: undefined,
+        state,
+        onChangeCurrentElement
+      })
+    }
 
     state.elements.delete(elementId)
 

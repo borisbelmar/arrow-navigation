@@ -1,5 +1,5 @@
 import isEligibleCandidate from './isEligibleCandidate'
-import getDOMRectMock from '../../../../__mocks__/getDOMRect.mock'
+import getDOMRectMock from '../../../__mocks__/getDOMRect.mock'
 
 describe('isEligibleCandidate', () => {
   const rect1 = getDOMRectMock(0, 0, 10, 10) as DOMRect
@@ -96,7 +96,7 @@ describe('isEligibleCandidate', () => {
     })).toBe(true)
   })
 
-  it('Is failing?', () => {
+  it('should not consider a valid candidate if not in direction ', () => {
     const rectA = getDOMRectMock(0, 0, 16, 52) as DOMRect
     const rectB = getDOMRectMock(16, 36, 52, 16) as DOMRect
 
@@ -114,5 +114,18 @@ describe('isEligibleCandidate', () => {
       direction: 'down',
       threshold
     })).toBe(false)
+  })
+
+  it('should not consider the direction if not defined', () => {
+    const rectA = getDOMRectMock(0, 0, 16, 52) as DOMRect
+    const rectB = getDOMRectMock(16, 36, 52, 16) as DOMRect
+
+    const threshold = 0
+    expect(isEligibleCandidate({
+      currentRect: rectA,
+      candidateRect: rectB,
+      direction: undefined,
+      threshold
+    })).toBe(true)
   })
 })

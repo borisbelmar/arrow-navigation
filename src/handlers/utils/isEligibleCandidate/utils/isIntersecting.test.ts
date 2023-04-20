@@ -1,5 +1,5 @@
 import { isXAxisIntersecting, isYAxisIntersecting } from './isIntersecting'
-import getDOMRectMock from '../../../../../__mocks__/getDOMRect.mock'
+import getDOMRectMock from '../../../../__mocks__/getDOMRect.mock'
 
 describe('Rectangular Intersection Functions', () => {
   test('isXAxisIntersecting without threshold', () => {

@@ -1,7 +1,7 @@
 import getAxisCenter from './getAxisCenter'
 
 export default function getReferencePointsByDirection (
-  direction: string,
+  direction: string | undefined,
   currentRect: DOMRect,
   candidateRect: DOMRect
 ) {
@@ -30,6 +30,9 @@ export default function getReferencePointsByDirection (
         b: { x: candidateRect.left, y: candidateCenter.y }
       }
     default:
-      throw new Error('Invalid direction provided')
+      return {
+        a: currentCenter,
+        b: candidateCenter
+      }
   }
 }

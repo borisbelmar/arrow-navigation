@@ -1,5 +1,5 @@
 import getEuclideanDistance from './getEuclideanDistance'
-import { Point } from '../../../types.d'
+import { Point } from '../../types.d'
 
 describe('getEuclideanDistance Function', () => {
   test('calculates the Euclidean distance between two points correctly', () => {

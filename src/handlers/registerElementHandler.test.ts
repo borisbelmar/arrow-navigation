@@ -11,7 +11,7 @@ describe('registerElementHandler', () => {
   it('should register the element on a new group', () => {
     const registerElement = registerElementHandler(state)
 
-    const element = document.createElement('div')
+    const element = document.createElement('button')
     element.id = 'element-5-0'
     registerElement(element, 'group-5')
 
@@ -37,14 +37,14 @@ describe('registerElementHandler', () => {
   it('should throw an error if the element id is not defined', () => {
     const registerElement = registerElementHandler(state)
 
-    const element = document.createElement('div')
+    const element = document.createElement('button')
     expect(() => registerElement(element, 'group-1')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
   })
 
   it('should throw an error if the group id is not defined', () => {
     const registerElement = registerElementHandler(state)
 
-    const element = document.createElement('div')
+    const element = document.createElement('button')
     element.id = 'element-1-0'
     expect(() => registerElement(element, '')).toThrowError(ERROR_MESSAGES.GROUP_REQUIRED)
   })
@@ -53,7 +53,7 @@ describe('registerElementHandler', () => {
     global.console.warn = jest.fn()
     const registerElement = registerElementHandler(state)
 
-    const element = document.createElement('div')
+    const element = document.createElement('button')
     element.id = 'element-0-0'
     registerElement(element, 'group-0')
 
@@ -66,10 +66,18 @@ describe('registerElementHandler', () => {
     state.currentElement = null
     const registerElement = registerElementHandler(state)
 
-    const element = document.createElement('div')
+    const element = document.createElement('button')
     element.id = 'element-5-0'
     registerElement(element, 'group-5')
 
     expect(state.currentElement).toBe(state.elements.get(element.id))
+  })
+
+  it('should throw an error if the element is not focusable', () => {
+    const registerElement = registerElementHandler(state)
+
+    const element = document.createElement('div')
+    element.id = 'element-5-0'
+    expect(() => registerElement(element, 'group-5')).toThrowError(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
   })
 })

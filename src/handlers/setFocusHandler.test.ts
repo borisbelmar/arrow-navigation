@@ -9,22 +9,20 @@ describe('setFocusHandler', () => {
   })
 
   it('should set the focus to the element', () => {
-    const setFocus = setFocusHandler(state)
+    const onChange = jest.fn()
+    const setFocus = setFocusHandler(state, onChange)
 
     setFocus('element-1-0')
 
-    expect(state.currentElement).toBe(state.groups.get('group-1')?.elements.get('element-1-0'))
-    expect(state.currentElement?.el.focus).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalled()
   })
 
   it('should not set the focus to the element if it is not registered', () => {
-    const setFocus = setFocusHandler(state)
-    const initialFocusedElement = state.currentElement;
+    const onChange = jest.fn()
+    const setFocus = setFocusHandler(state, onChange)
 
-    (state.currentElement?.el.focus as unknown as jest.Mock).mockClear()
     setFocus('not-registered-element')
 
-    expect(state.currentElement).toBe(initialFocusedElement)
-    expect(state.currentElement?.el.focus).not.toHaveBeenCalled()
+    expect(onChange).not.toHaveBeenCalled()
   })
 })

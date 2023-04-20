@@ -1,5 +1,5 @@
-import type { ArrowNavigationState, FocusableElement } from '@/types.d'
-import focusNextElement from './focusNextElement'
+import type { ArrowNavigationEvents, ArrowNavigationState, FocusableElement } from '@/types.d'
+import focusNextElement from './utils/focusNextElement'
 
 const keyToDirection: { [x: string]: string } = {
   ArrowLeft: 'left',
@@ -14,23 +14,26 @@ export const ERROR_MESSAGES = {
 
 export default function getArrowPressHandler (
   state: ArrowNavigationState,
-  onChangeCurrentElement: (element: FocusableElement) => void
+  onChangeCurrentElement: (element: FocusableElement) => void,
+  arrowNavigationEvents: ArrowNavigationEvents
 ) {
   return (event: KeyboardEvent) => {
+    const { key } = event
+    const direction = keyToDirection[key]
+
+    if (!direction) return
+
     const currentElement = state.currentElement
     if (!currentElement) {
       console.warn(ERROR_MESSAGES.NO_ELEMENT_FOCUSED)
       return
     }
 
-    const { key } = event
-
-    const direction = keyToDirection[key]
-
     focusNextElement({
       direction,
       state,
-      onChangeCurrentElement
+      onChangeCurrentElement,
+      arrowNavigationEvents
     })
   }
 }

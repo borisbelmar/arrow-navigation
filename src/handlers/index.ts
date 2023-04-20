@@ -1,4 +1,4 @@
-export { default as getArrowPressHandler } from './getArrowPressHandler/getArrowPressHandler'
+export { default as getArrowPressHandler } from './getArrowPressHandler'
 export { default as registerElementHandler } from './registerElementHandler'
 export { default as registerGroupHandler } from './registerGroupHandler'
 export { default as setFocusHandler } from './setFocusHandler'

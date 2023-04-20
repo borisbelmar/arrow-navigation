@@ -1,5 +1,7 @@
 import type { FocusableElement, FocusableGroup } from '@/types.d'
-import { getEuclideanDistance, getReferencePointsByCenter, isEligibleCandidate } from './utils'
+import getEuclideanDistance from './getEuclideanDistance'
+import getReferencePointsByCenter from './getReferencePointsByCenter'
+import isEligibleCandidate from './isEligibleCandidate/isEligibleCandidate'
 
 interface Result {
   minDistance: number
@@ -9,9 +11,10 @@ interface Result {
 interface Props {
   currentElement: FocusableElement
   candidateGroups: Map<string, FocusableGroup>
-  direction: string,
+  direction: string | undefined,
   threshold?: number
   isViewportSafe?: boolean
+  allValidCandidates?: boolean
 }
 
 export default function findClosestGroup ({
@@ -19,7 +22,8 @@ export default function findClosestGroup ({
   threshold = 2,
   candidateGroups,
   currentElement,
-  direction
+  direction,
+  allValidCandidates
 }: Props): FocusableGroup | null {
   const groupIdsArray = Array.from(candidateGroups.keys())
 
@@ -38,7 +42,7 @@ export default function findClosestGroup ({
       const currentGroupRect = currentGroup.el.getBoundingClientRect()
       const candidateGroupRect = candidate.el.getBoundingClientRect()
 
-      if (!isEligibleCandidate({
+      if (!allValidCandidates && !isEligibleCandidate({
         direction,
         currentRect: currentGroupRect,
         candidateRect: candidateGroupRect,

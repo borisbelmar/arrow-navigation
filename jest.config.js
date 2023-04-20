@@ -8,6 +8,7 @@ module.exports = {
       tsconfig: 'tsconfig.json'
     }]
   },
+  watchPathIgnorePatterns: ['node_modules', 'dist', 'example', 'lib'],
   testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/?(*.)+(spec|test).+(ts|tsx|js)'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
@@ -17,6 +18,7 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/**/index.{ts,tsx}',
+    '!src/**/dist.ts',
     '!src/**/stories.{ts,tsx}',
     '!src/**/types.{ts,tsx}',
     '!src/**/mock.{ts,tsx}',

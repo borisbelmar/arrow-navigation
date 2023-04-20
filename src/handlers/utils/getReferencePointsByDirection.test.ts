@@ -1,5 +1,5 @@
 import getReferencePointsByDirection from './getReferencePointsByDirection'
-import getDOMRectMock from '../../../__mocks__/getDOMRect.mock'
+import getDOMRectMock from '../../__mocks__/getDOMRect.mock'
 
 describe('getReferencePointsByDirection Function', () => {
   const rect1 = getDOMRectMock(20, 64, 30, 30) as DOMRect
@@ -7,7 +7,7 @@ describe('getReferencePointsByDirection Function', () => {
   const rect3 = getDOMRectMock(60, 0, 20, 20) as DOMRect
   const rect4 = getDOMRectMock(70, 40, 30, 30) as DOMRect
 
-  test('calculates the reference points by direction correctly', () => {
+  it('calculates the reference points by direction correctly', () => {
     expect(getReferencePointsByDirection('up', rect1, rect2)).toEqual({
       a: { x: 35, y: 64 },
       b: { x: 25, y: 50 }
@@ -29,9 +29,10 @@ describe('getReferencePointsByDirection Function', () => {
     })
   })
 
-  test('throws an error for invalid direction', () => {
-    expect(() => getReferencePointsByDirection('invalid', rect1, rect2)).toThrow(
-      'Invalid direction provided'
-    )
+  it('should return center reference points if not direction', () => {
+    expect(getReferencePointsByDirection(undefined, rect1, rect2)).toEqual({
+      a: { x: 35, y: 79 },
+      b: { x: 25, y: 25 }
+    })
   })
 })

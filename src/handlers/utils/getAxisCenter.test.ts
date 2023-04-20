@@ -1,5 +1,5 @@
 import getAxisCenter from './getAxisCenter'
-import getDOMRectMock from '../../../__mocks__/getDOMRect.mock'
+import getDOMRectMock from '../../__mocks__/getDOMRect.mock'
 
 describe('getAxisCenter Function', () => {
   test('calculates the axis center of a rectangle correctly', () => {

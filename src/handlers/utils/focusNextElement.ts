@@ -1,17 +1,20 @@
-import type { ArrowNavigationState, Direction, FocusableElement, FocusableGroup } from '@/types.d'
+import type { ArrowNavigationEvents, ArrowNavigationState, Direction, FocusableElement, FocusableGroup } from '@/types.d'
 import findClosestElementInGroup from './findClosestElementInGroup'
 import focusNextGroupElement from './focusNextGroupElement'
 
 interface Props {
-  direction: string
+  direction: string | undefined
   state: ArrowNavigationState
   onChangeCurrentElement: (element: FocusableElement) => void
+  // TODO: onReachLastElement implementation pending
+  arrowNavigationEvents?: ArrowNavigationEvents
 }
 
 export default function focusNextElement ({
   direction,
   state,
-  onChangeCurrentElement
+  onChangeCurrentElement,
+  arrowNavigationEvents
 }: Props) {
   const currentElement = state.currentElement as FocusableElement
   const currentGroup = state.groups.get(currentElement.group) as FocusableGroup
@@ -36,11 +39,12 @@ export default function focusNextElement ({
 
   if (nextElement) {
     onChangeCurrentElement(nextElement)
-  } else {
+  } else if (!currentGroupConfig?.keepFocus) {
     focusNextGroupElement({
       direction,
       state,
-      onChangeCurrentElement
+      onChangeCurrentElement,
+      arrowNavigationEvents
     })
   }
 }

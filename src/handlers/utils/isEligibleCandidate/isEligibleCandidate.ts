@@ -2,7 +2,7 @@ import isElementInDirection from './utils/isElementInDirection'
 import isElementPartiallyInViewport from './utils/isElementPartiallyInViewport'
 
 interface Props {
-  direction: string
+  direction?: string
   currentRect: DOMRect
   candidateRect: DOMRect
   isViewportSafe?: boolean
@@ -17,7 +17,7 @@ export default function isEligibleCandidate ({
   threshold
 }: Props): boolean {
   return (
-    isElementInDirection({ direction, currentRect, candidateRect, threshold })
+    (direction ? isElementInDirection({ direction, currentRect, candidateRect, threshold }) : true)
     && (isViewportSafe ? isElementPartiallyInViewport(candidateRect, window) : true)
   )
 }

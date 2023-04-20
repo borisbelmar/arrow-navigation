@@ -1,14 +1,15 @@
-import type { ArrowNavigationState } from '@/types.d'
+import type { ArrowNavigationState, FocusableElement } from '@/types.d'
 
-export default function setFocusHandler (state: ArrowNavigationState) {
+export default function setFocusHandler (
+  state: ArrowNavigationState,
+  onChangeCurrentElement: (element: FocusableElement) => void
+) {
   return (id: string) => {
     const focusableElement = state.elements.get(id)
 
     if (!focusableElement) {
       return
     }
-    // eslint-disable-next-line no-param-reassign
-    state.currentElement = focusableElement
-    focusableElement.el.focus()
+    onChangeCurrentElement(focusableElement)
   }
 }

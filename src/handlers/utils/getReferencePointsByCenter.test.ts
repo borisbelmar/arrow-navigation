@@ -1,5 +1,5 @@
 import getReferencePointsByCenter from './getReferencePointsByCenter'
-import getDOMRectMock from '../../../__mocks__/getDOMRect.mock'
+import getDOMRectMock from '../../__mocks__/getDOMRect.mock'
 
 describe('getReferencePointsByCenter Function', () => {
   test('calculates the reference points by center correctly', () => {
