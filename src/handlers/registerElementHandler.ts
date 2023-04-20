@@ -41,12 +41,13 @@ export default function registerElementHandler (state: ArrowNavigationState) {
 
     state.elements.set(element.id, focusableElement)
     const existentGroup = state.groups.get(group)
+    const existentGroupConfig = state.groupsConfig.get(group)
 
     if (!existentGroup) {
       const elementsMap = new Map().set(element.id, focusableElement)
       state.groups.set(group, {
         elements: elementsMap,
-        el: null as unknown as HTMLElement
+        el: existentGroupConfig?.el || null as unknown as HTMLElement
       })
     } else {
       existentGroup.elements.set(element.id, focusableElement)

@@ -80,4 +80,21 @@ describe('registerElementHandler', () => {
     element.id = 'element-5-0'
     expect(() => registerElement(element, 'group-5')).toThrowError(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
   })
+
+  it('should keep the group element if the groups doesnt exists but config exists', () => {
+    const registerElement = registerElementHandler(state)
+
+    const group = document.createElement('div')
+    group.id = 'group-10'
+
+    state.groupsConfig.set(group.id, {
+      el: group
+    })
+
+    const element = document.createElement('button')
+    element.id = 'element-10-0'
+    registerElement(element, 'group-10')
+
+    expect(state.groups.get('group-10')?.el).toBe(group)
+  })
 })
