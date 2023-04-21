@@ -6,3 +6,5 @@ export { default as isEligibleCandidate } from './isEligibleCandidate/isEligible
 export { default as findClosestElementInGroup } from './findClosestElementInGroup'
 export { default as findClosestGroup } from './findClosestGroup'
 export { default as isFocusableElement } from './isFocusableElement'
+export { default as findNextElement } from './findNextElement'
+export { default as findNextGroup } from './findNextGroup'

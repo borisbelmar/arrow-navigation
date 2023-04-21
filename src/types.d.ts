@@ -64,6 +64,8 @@ export type ArrowNavigationInstance = {
   getGroupConfig: (group: string) => FocusableGroupConfig | undefined
   getRegisteredElements: () => Set<string>
   getFocusedGroup: () => string | undefined
+  getNextElement: (direction: Direction, inGroup?: boolean) => string | null
+  getNextGroup: (direction: Direction) => string | null
   on: EventEmitter['on']
   off: EventEmitter['off']
   /**
