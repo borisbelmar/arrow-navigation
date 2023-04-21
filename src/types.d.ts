@@ -18,7 +18,7 @@ export type FocusableElement = {
   onBlur?: () => void
 }
 
-type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group'>
+export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group'>
 
 export type FocusableGroup = {
   el: HTMLElement
@@ -37,7 +37,7 @@ export type FocusableGroupConfig = {
   keepFocus?: boolean
 }
 
-type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el'>
+export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el'>
 
 export type ArrowNavigationState = {
   currentElement: FocusableElement | null,
