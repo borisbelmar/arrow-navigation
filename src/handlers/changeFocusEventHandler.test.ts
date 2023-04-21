@@ -1,12 +1,16 @@
+import EVENTS from '@/config/events'
+import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
 import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../types.d'
 import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
 import changeFocusEventHandler from './changeFocusEventHandler'
 
 describe('changeFocusEventHandler', () => {
   let state: ArrowNavigationState
+  let emitter: EventEmitter
 
   beforeEach(() => {
     state = getViewNavigationStateMock()
+    emitter = createEventEmitter()
   })
 
   it('should not call any event if not element setted', () => {
@@ -16,7 +20,7 @@ describe('changeFocusEventHandler', () => {
     changeFocusEventHandler(
       nextElement,
       state,
-      {}
+      emitter.emit
     )
   })
 
@@ -31,10 +35,15 @@ describe('changeFocusEventHandler', () => {
       onGroupFocus: jest.fn()
     }
 
+    emitter.on(EVENTS.ELEMENT_FOCUS, events.onElementFocus)
+    emitter.on(EVENTS.ELEMENT_BLUR, events.onElementBlur)
+    emitter.on(EVENTS.GROUP_BLUR, events.onGroupBlur)
+    emitter.on(EVENTS.GROUP_FOCUS, events.onGroupFocus)
+
     changeFocusEventHandler(
       nextElement,
       state,
-      events
+      emitter.emit
     )
 
     expect(events.onElementFocus).toHaveBeenCalledWith(nextElement)
@@ -63,7 +72,7 @@ describe('changeFocusEventHandler', () => {
     changeFocusEventHandler(
       nextElement,
       state,
-      {}
+      emitter.emit
     )
 
     expect(currentGroupConfig.onBlur).toHaveBeenCalled()
@@ -85,13 +94,22 @@ describe('changeFocusEventHandler', () => {
       onElementFocus: jest.fn(),
       onElementBlur: jest.fn(),
       onGroupBlur: jest.fn(),
-      onGroupFocus: jest.fn()
+      onGroupFocus: jest.fn(),
+      onCurrentElementChange: jest.fn(),
+      onCurrentGroupChange: jest.fn()
     }
+
+    emitter.on(EVENTS.ELEMENT_FOCUS, events.onElementFocus)
+    emitter.on(EVENTS.ELEMENT_BLUR, events.onElementBlur)
+    emitter.on(EVENTS.GROUP_BLUR, events.onGroupBlur)
+    emitter.on(EVENTS.GROUP_FOCUS, events.onGroupFocus)
+    emitter.on(EVENTS.CURRENT_ELEMENT_CHANGE, events.onCurrentElementChange)
+    emitter.on(EVENTS.CURRENT_GROUP_CHANGE, events.onCurrentGroupChange)
 
     changeFocusEventHandler(
       nextElement,
       state,
-      events
+      emitter.emit
     )
 
     expect(events.onElementFocus).toHaveBeenCalledWith(nextElement)

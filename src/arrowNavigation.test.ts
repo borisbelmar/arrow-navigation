@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { initArrowNavigation, getArrowNavigation, ERROR_MESSAGES } from './arrowNavigation'
+import EVENTS from './config/events'
 import getViewNavigationStateMock from './__mocks__/viewNavigationState.mock'
 
 describe('arrowNavigation', () => {
@@ -168,5 +169,27 @@ describe('arrowNavigation', () => {
     const navigationApi = getArrowNavigation()
 
     expect(navigationApi.getFocusedGroup()).toBeUndefined()
+  })
+
+  it('should register and unregister an event listener', () => {
+    initArrowNavigation({ debug: true })
+
+    const navigationApi = getArrowNavigation()
+
+    navigationApi._setState(getViewNavigationStateMock())
+
+    const listener = jest.fn()
+
+    navigationApi.on(EVENTS.CURRENT_ELEMENT_CHANGE, listener)
+
+    navigationApi._forceNavigate('ArrowDown')
+
+    expect(listener).toHaveBeenCalled()
+
+    navigationApi.off(EVENTS.CURRENT_ELEMENT_CHANGE, listener)
+
+    navigationApi._forceNavigate('ArrowDown')
+
+    expect(listener).toHaveBeenCalledTimes(1)
   })
 })

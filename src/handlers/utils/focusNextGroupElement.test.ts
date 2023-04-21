@@ -21,7 +21,7 @@ describe('focusNextGroupElement', () => {
       state.currentElement = element
     })
 
-    focusNextGroupElement({ direction: 'right', state, onChangeCurrentElement: onFocusChange, arrowNavigationEvents: {} })
+    focusNextGroupElement({ direction: 'right', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(nextGroup.elements.get('element-1-0'))
     expect(onFocusChange).toHaveBeenCalledWith(nextGroup.elements.get('element-1-0'))
@@ -45,8 +45,7 @@ describe('focusNextGroupElement', () => {
     focusNextGroupElement({
       direction: 'right',
       state,
-      onChangeCurrentElement: onFocusChange,
-      arrowNavigationEvents: {}
+      onChangeCurrentElement: onFocusChange
     })
 
     expect(state.currentElement).toBe(nextGroup.elements.get('element-2-0'))
@@ -69,8 +68,7 @@ describe('focusNextGroupElement', () => {
     focusNextGroupElement({
       direction: 'right',
       state,
-      onChangeCurrentElement: onFocusChange,
-      arrowNavigationEvents: {}
+      onChangeCurrentElement: onFocusChange
     })
 
     expect(state.currentElement).toBe(nextGroup.elements.get('element-1-2'))
@@ -87,8 +85,7 @@ describe('focusNextGroupElement', () => {
     focusNextGroupElement({
       direction: 'right',
       state,
-      onChangeCurrentElement: onFocusChange,
-      arrowNavigationEvents: {}
+      onChangeCurrentElement: onFocusChange
     })
 
     expect(onFocusChange).not.toHaveBeenCalled()
@@ -109,8 +106,7 @@ describe('focusNextGroupElement', () => {
     focusNextGroupElement({
       direction: 'right',
       state,
-      onChangeCurrentElement: onFocusChange,
-      arrowNavigationEvents: {}
+      onChangeCurrentElement: onFocusChange
     })
 
     expect(onFocusChange).not.toHaveBeenCalled()
@@ -130,8 +126,7 @@ describe('focusNextGroupElement', () => {
     focusNextGroupElement({
       direction: 'right',
       state,
-      onChangeCurrentElement: onFocusChange,
-      arrowNavigationEvents: {}
+      onChangeCurrentElement: onFocusChange
     })
 
     expect(state.currentElement).toBe(nextGroup.elements.get('element-1-0'))
