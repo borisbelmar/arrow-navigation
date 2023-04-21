@@ -23,13 +23,13 @@ describe('getArrowPressHandler', () => {
   })
 
   it('should return a function', () => {
-    const handler = getArrowPressHandler(state, jest.fn(), {})
+    const handler = getArrowPressHandler(state, jest.fn())
     expect(typeof handler).toBe('function')
   })
 
   it('should call the focusNextElement function', () => {
     const focusNextElement = jest.fn()
-    const handler = getArrowPressHandler(state, focusNextElement, {})
+    const handler = getArrowPressHandler(state, focusNextElement)
 
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
     handler(event)
@@ -40,7 +40,7 @@ describe('getArrowPressHandler', () => {
     const focusNextElement = jest.fn()
     state.currentElement = null
     state.elements = new Map()
-    const handler = getArrowPressHandler(state, focusNextElement, {})
+    const handler = getArrowPressHandler(state, focusNextElement)
 
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
     handler(event)
@@ -54,7 +54,7 @@ describe('getArrowPressHandler', () => {
       el: document.createElement('button'),
       group: 'group-0'
     })
-    const handler = getArrowPressHandler(state, focusNextElement, {})
+    const handler = getArrowPressHandler(state, focusNextElement)
 
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown' })
     handler(event)
@@ -64,7 +64,7 @@ describe('getArrowPressHandler', () => {
 
   it('should not call the focusNextElement function if not a valid key', () => {
     const focusNextElement = jest.fn()
-    const handler = getArrowPressHandler(state, focusNextElement, {})
+    const handler = getArrowPressHandler(state, focusNextElement)
 
     const event = new KeyboardEvent('keydown', { key: 'Enter' })
     handler(event)

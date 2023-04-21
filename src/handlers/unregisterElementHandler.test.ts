@@ -1,16 +1,19 @@
-import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
-import { ArrowNavigationState } from '../types.d'
+import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
+import { ArrowNavigationState } from '@/types.d'
+import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
 import unregisterElementHandler from './unregisterElementHandler'
 
 describe('unregisterElementHandler', () => {
   let state: ArrowNavigationState
+  let emitter: EventEmitter
 
   beforeEach(() => {
     state = getViewNavigationStateMock()
+    emitter = createEventEmitter()
   })
 
   it('should unregister the element', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn())
+    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
 
     const element = document.createElement('div')
     element.id = 'element-0-3'
@@ -22,7 +25,7 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should delete the group if it is empty', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn())
+    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
 
     const element = document.createElement('div')
     element.id = 'element-4-0'
@@ -32,7 +35,7 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should not unregister the element if it is not registered', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn())
+    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
 
     const element = document.createElement('div')
     element.id = 'not-registered-element'
@@ -42,7 +45,7 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should unregister the element given the element id only', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn())
+    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
 
     const elementId = 'element-0-3'
     unregisterElement(elementId)
@@ -54,7 +57,7 @@ describe('unregisterElementHandler', () => {
 
   it('should focus the next element if the current element is unregistered', () => {
     const onFocusChange = jest.fn()
-    const unregisterElement = unregisterElementHandler(state, onFocusChange)
+    const unregisterElement = unregisterElementHandler(state, onFocusChange, emitter.emit)
 
     const element = document.createElement('div')
     element.id = 'element-0-0'

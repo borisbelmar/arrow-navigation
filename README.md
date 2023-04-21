@@ -62,9 +62,9 @@ mainElement.appendChild(buttonElement2)
 navigationApi.registerElement(buttonElement2)
 ```
 
-## API
+# API
 
-### initArrowNavigation
+## initArrowNavigation
 
 Initialize the module. This will add the event listeners to the document and store the navigation state in a singleton instance.
 
@@ -301,6 +301,46 @@ api.registerElement(element2, 'group-0')
 
 const registeredElements = api.getRegisteredElements() // Set { 'element-0-0', 'element-0-1' }
 ```
+
+## Events
+
+The API implements an Event Emitter to listen to events. The events are accessible through the `on` and `off` methods. All the events can be accesed through the `ArrowNavigationEvents` enum.
+
+### current-element:change
+
+This event is triggered when the current element is changed. The event will receive the new element as a parameter.
+
+### current-group:change
+
+This event is triggered when the current group is changed. The event will receive the new group as a parameter.
+
+### element:focus
+
+This event is triggered when an element is focused. The event will receive the element as a parameter.
+
+### element:blur
+
+This event is triggered when an element is blurred. The event will receive the element as a parameter.
+
+### group:focus
+
+This event is triggered when a group is focused. The event will receive the group as a parameter.
+
+### group:blur
+
+This event is triggered when a group is blurred. The event will receive the group as a parameter.
+
+### groups:change
+
+This event is triggered when the groups are changed. The event will receive the groups as a parameter.
+
+### elements:change
+
+This event is triggered when the elements are changed. The event will receive the elements as a parameter.
+
+### groups-config:change
+
+This event is triggered when the groups configuration is changed. The event will receive the groups configuration as a parameter.
 
 # Using with CDN
 
