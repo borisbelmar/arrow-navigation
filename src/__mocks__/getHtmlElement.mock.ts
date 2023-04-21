@@ -17,10 +17,12 @@ export default function getHtmlElementMock ({
   width = 0,
   height = 0
 }: Props): HTMLElement {
-  return {
-    id,
-    tagName,
-    getBoundingClientRect: jest.fn(() => getDOMRectMock(x, y, width, height)),
-    focus: jest.fn()
-  } as unknown as HTMLElement
+  const getBoundingClientRect = jest.fn(() => getDOMRectMock(x, y, width, height))
+  const focus = jest.fn()
+
+  const element = document.createElement(tagName)
+  element.id = id
+  element.getBoundingClientRect = getBoundingClientRect
+  element.focus = focus
+  return element
 }
