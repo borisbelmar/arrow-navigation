@@ -34,9 +34,9 @@
   },
   "settings": {
     "import/resolver": {
-      "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".ts"]
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./tsconfig.json"
       }
     }
   }

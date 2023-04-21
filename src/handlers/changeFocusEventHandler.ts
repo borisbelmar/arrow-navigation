@@ -1,9 +1,11 @@
-import type { ArrowNavigationEvents, ArrowNavigationState, FocusableElement } from '@/types.d'
+import EVENTS from '@/config/events'
+import type { EventEmitter } from '@/utils/createEventEmitter'
+import type { ArrowNavigationState, FocusableElement } from '@/types.d'
 
 export default function changeFocusEventHandler (
   nextElement: FocusableElement,
   state: ArrowNavigationState,
-  events: ArrowNavigationEvents
+  emit: EventEmitter['emit']
 ) {
   const prevElement = state.currentElement
   const sameGroup = prevElement?.group === nextElement.group
@@ -14,18 +16,20 @@ export default function changeFocusEventHandler (
 
     if (prevGroup) {
       prevGroup.onBlur?.()
-      events.onGroupBlur?.(prevGroup)
+      emit(EVENTS.GROUP_BLUR, prevGroup)
     }
 
     if (nextGroup) {
       nextGroup.onFocus?.()
-      events.onGroupFocus?.(nextGroup)
+      emit(EVENTS.GROUP_FOCUS, nextGroup)
+      emit(EVENTS.CURRENT_GROUP_CHANGE, nextGroup)
     }
   }
   if (prevElement) {
     prevElement.onBlur?.()
-    events.onElementBlur?.(prevElement)
+    emit(EVENTS.ELEMENT_BLUR, prevElement)
   }
   nextElement.onFocus?.()
-  events.onElementFocus?.(nextElement)
+  emit(EVENTS.ELEMENT_FOCUS, nextElement)
+  emit(EVENTS.CURRENT_ELEMENT_CHANGE, nextElement)
 }

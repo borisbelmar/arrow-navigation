@@ -1,7 +1,8 @@
-import type { ArrowNavigationState, FocusableElement } from '@/types.d'
+import EVENTS from '@/config/events'
+import type { ArrowNavigationState, FocusableElementOptions } from '@/types.d'
+import { EventEmitter } from '@/utils/createEventEmitter'
+import isElementDisabled from './utils/isElementDisabled'
 import isFocusableElement from './utils/isFocusableElement'
-
-type Options = Omit<FocusableElement, 'el' | 'group'>
 
 export const ERROR_MESSAGES = {
   GROUP_REQUIRED: 'Group is required',
@@ -10,11 +11,14 @@ export const ERROR_MESSAGES = {
   ELEMENT_NOT_FOCUSABLE: (id: string) => `Element with id ${id} is not focusable. Check if you are not registering an element that is not focusable.`
 }
 
-export default function registerElementHandler (state: ArrowNavigationState) {
+export default function registerElementHandler (
+  state: ArrowNavigationState,
+  emit: EventEmitter['emit']
+) {
   return (
     element: HTMLElement,
     group: string,
-    options?: Options
+    options?: FocusableElementOptions
   ) => {
     if (!group) {
       throw new Error(ERROR_MESSAGES.GROUP_REQUIRED)
@@ -40,6 +44,8 @@ export default function registerElementHandler (state: ArrowNavigationState) {
     }
 
     state.elements.set(element.id, focusableElement)
+    emit(EVENTS.ELEMENTS_CHANGED, state.elements)
+
     const existentGroup = state.groups.get(group)
     const existentGroupConfig = state.groupsConfig.get(group)
 
@@ -49,11 +55,14 @@ export default function registerElementHandler (state: ArrowNavigationState) {
         elements: elementsMap,
         el: existentGroupConfig?.el || null as unknown as HTMLElement
       })
+      emit(EVENTS.GROUPS_CHANGED, state.groups)
     } else {
       existentGroup.elements.set(element.id, focusableElement)
     }
 
-    if (!state.currentElement) {
+    if (!state.currentElement && !isElementDisabled(focusableElement.el)) {
+      emit(EVENTS.CURRENT_ELEMENT_CHANGE, focusableElement)
+      emit(EVENTS.CURRENT_GROUP_CHANGE, state.groupsConfig.get(group))
       // eslint-disable-next-line no-param-reassign
       state.currentElement = focusableElement
       element.focus()

@@ -1,3 +1,5 @@
+import type { EventEmitter } from './utils/createEventEmitter'
+
 export type Direction = 'up' | 'down' | 'left' | 'right'
 
 export type FocusType = 'first' | 'closest' | 'manual'
@@ -16,6 +18,8 @@ export type FocusableElement = {
   onBlur?: () => void
 }
 
+type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group'>
+
 export type FocusableGroup = {
   el: HTMLElement
   elements: Map<string, FocusableElement>
@@ -33,6 +37,8 @@ export type FocusableGroupConfig = {
   keepFocus?: boolean
 }
 
+type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el'>
+
 export type ArrowNavigationState = {
   currentElement: FocusableElement | null,
   groupsConfig: Map<string, FocusableGroupConfig>
@@ -41,24 +47,10 @@ export type ArrowNavigationState = {
   debug?: boolean
 }
 
-export type ElementEvents = {
-  onElementFocus?: (element: FocusableElement) => void
-  onElementBlur?: (element: FocusableElement) => void
-  onReachLastElement?: (direction: Direction, element: FocusableElement) => void
-}
-
-export type GroupEvents = {
-  onGroupFocus?: (group: FocusableGroupConfig) => void
-  onGroupBlur?: (group: FocusableGroupConfig) => void
-  onReachLastGroup?: (direction: Direction, group: FocusableGroup) => void
-}
-
-export type ArrowNavigationEvents = ElementEvents & GroupEvents
-
 export type ArrowNavigationOptions = {
   debug?: boolean
   errorOnReinit?: boolean
-} & ArrowNavigationEvents
+}
 
 export type ArrowNavigationInstance = {
   getFocusedElement: () => FocusableElement | null
@@ -72,6 +64,10 @@ export type ArrowNavigationInstance = {
   getGroupConfig: (group: string) => FocusableGroupConfig | undefined
   getRegisteredElements: () => Set<string>
   getFocusedGroup: () => string | undefined
+  getNextElement: (direction: Direction, inGroup?: boolean) => string | null
+  getNextGroup: (direction: Direction) => string | null
+  on: EventEmitter['on']
+  off: EventEmitter['off']
   /**
    * @deprecated
    * @returns The current state of the arrow navigation instance.

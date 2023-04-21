@@ -1,9 +1,12 @@
+import EVENTS from '@/config/events'
 import type { ArrowNavigationState, FocusableElement } from '@/types.d'
+import { EventEmitter } from '@/utils/createEventEmitter'
 import focusNextElement from './utils/focusNextElement'
 
 export default function unregisterElementHandler (
   state: ArrowNavigationState,
-  onChangeCurrentElement: (element: FocusableElement) => void
+  onChangeCurrentElement: (element: FocusableElement) => void,
+  emit: EventEmitter['emit']
 ) {
   return (element: HTMLElement | string) => {
     const elementId = typeof element === 'string' ? element : element.id
@@ -18,6 +21,7 @@ export default function unregisterElementHandler (
     }
 
     state.elements.delete(elementId)
+    emit(EVENTS.ELEMENTS_CHANGED, state.elements)
 
     const focusableGroup = state.groups.get(groupId)
 
@@ -29,6 +33,7 @@ export default function unregisterElementHandler (
 
     if (focusableGroup.elements.size === 0) {
       state.groups.delete(groupId)
+      emit(EVENTS.GROUPS_CHANGED, state.groups)
     }
   }
 }

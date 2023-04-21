@@ -1,4 +1,4 @@
-import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../../types.d'
+import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '@/types.d'
 import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
 import focusNextElement from './focusNextElement'
 
@@ -19,7 +19,7 @@ describe('focusNextElement', () => {
       state.currentElement = element
     })
 
-    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange, arrowNavigationEvents: {} })
+    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(currentGroup.elements.get('element-0-1'))
     expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-1'))
@@ -38,7 +38,7 @@ describe('focusNextElement', () => {
       state.currentElement = element
     })
 
-    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange, arrowNavigationEvents: {} })
+    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(currentGroup.elements.get('element-0-2'))
     expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-2'))
@@ -57,7 +57,7 @@ describe('focusNextElement', () => {
       state.currentElement = element
     })
 
-    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange, arrowNavigationEvents: {} })
+    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
     expect(onFocusChange).not.toHaveBeenCalled()
   })
@@ -70,7 +70,7 @@ describe('focusNextElement', () => {
       state.currentElement = element
     })
 
-    focusNextElement({ direction: 'right', state, onChangeCurrentElement: onFocusChange, arrowNavigationEvents: {} })
+    focusNextElement({ direction: 'right', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(state.elements.get('element-1-0'))
     expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-1-0'))
@@ -85,7 +85,7 @@ describe('focusNextElement', () => {
       state.currentElement = element
     })
 
-    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange, arrowNavigationEvents: {} })
+    focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(state.elements.get('element-0-1'))
     expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-0-1'))
@@ -104,8 +104,7 @@ describe('focusNextElement', () => {
     focusNextElement({
       direction: 'right',
       state,
-      onChangeCurrentElement: onFocusChange,
-      arrowNavigationEvents: {}
+      onChangeCurrentElement: onFocusChange
     })
 
     expect(state.currentElement).toBe(currentGroup.elements.get('element-0-0'))

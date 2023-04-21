@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
+import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, FocusableElement } from '@/types.d'
 import {
   getArrowPressHandler,
+  getNextElementHandler,
+  getNextGroupHandler,
   registerElementHandler,
   registerGroupHandler,
   setFocusHandler,
   unregisterElementHandler
 } from './handlers'
-import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, FocusableElement } from '@/types.d'
 import changeFocusEventHandler from './handlers/changeFocusEventHandler'
+import createEventEmitter from './utils/createEventEmitter'
 
 let arrowNavigation: ArrowNavigationInstance | null
 
@@ -19,12 +22,7 @@ export const ERROR_MESSAGES = {
 
 export function initArrowNavigation ({
   errorOnReinit = false,
-  debug = false,
-  onElementBlur,
-  onElementFocus,
-  onGroupBlur,
-  onGroupFocus,
-  onReachLastGroup
+  debug = false
 }: ArrowNavigationOptions = {}) {
   const state: ArrowNavigationState = {
     currentElement: null,
@@ -33,17 +31,10 @@ export function initArrowNavigation ({
     elements: new Map(),
     debug
   }
-
-  const events = {
-    onElementBlur,
-    onElementFocus,
-    onGroupBlur,
-    onGroupFocus,
-    onReachLastGroup
-  }
+  const emitter = createEventEmitter()
 
   const changeFocusElementHandler = (nextElement: FocusableElement) => {
-    changeFocusEventHandler(nextElement, state, events)
+    changeFocusEventHandler(nextElement, state, emitter.emit)
     state.currentElement = nextElement
     nextElement.el.focus()
   }
@@ -58,16 +49,16 @@ export function initArrowNavigation ({
     arrowNavigation.destroy()
   }
 
-  const onKeyPress = getArrowPressHandler(state, changeFocusElementHandler, events)
+  const onKeyPress = getArrowPressHandler(state, changeFocusElementHandler)
 
   window.addEventListener('keydown', onKeyPress)
 
   arrowNavigation = {
     getFocusedElement: () => state.currentElement,
     setFocusElement: setFocusHandler(state, changeFocusElementHandler),
-    registerGroup: registerGroupHandler(state),
-    registerElement: registerElementHandler(state),
-    unregisterElement: unregisterElementHandler(state, changeFocusElementHandler),
+    registerGroup: registerGroupHandler(state, emitter.emit),
+    registerElement: registerElementHandler(state, emitter.emit),
+    unregisterElement: unregisterElementHandler(state, changeFocusElementHandler, emitter.emit),
     destroy () {
       window.removeEventListener('keydown', onKeyPress)
       arrowNavigation = null
@@ -87,6 +78,8 @@ export function initArrowNavigation ({
     getFocusedGroup () {
       return state.currentElement?.group
     },
+    getNextElement: getNextElementHandler(state),
+    getNextGroup: getNextGroupHandler(state),
     _forceNavigate (key) {
       if (!state.debug) return
       onKeyPress({
@@ -103,7 +96,9 @@ export function initArrowNavigation ({
       state.groups = newState.groups
       state.groupsConfig = newState.groupsConfig
       state.elements = newState.elements
-    }
+    },
+    on: emitter.on,
+    off: emitter.off
   }
 
   return arrowNavigation

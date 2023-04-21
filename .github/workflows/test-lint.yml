@@ -3,7 +3,6 @@ name: Lint and Test
 on:
   push:
     branches:
-      - main
       - develop
 
 jobs:
