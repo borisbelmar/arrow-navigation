@@ -2,6 +2,8 @@
 import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, FocusableElement } from '@/types.d'
 import {
   getArrowPressHandler,
+  getNextElementHandler,
+  getNextGroupHandler,
   registerElementHandler,
   registerGroupHandler,
   setFocusHandler,
@@ -76,6 +78,8 @@ export function initArrowNavigation ({
     getFocusedGroup () {
       return state.currentElement?.group
     },
+    getNextElement: getNextElementHandler(state),
+    getNextGroup: getNextGroupHandler(state),
     _forceNavigate (key) {
       if (!state.debug) return
       onKeyPress({
