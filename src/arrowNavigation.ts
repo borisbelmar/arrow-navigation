@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, FocusableElement } from '@/types.d'
+import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, Direction, FocusableElement } from '@/types.d'
 import {
   getArrowPressHandler,
   getNextElementHandler,
@@ -33,10 +33,17 @@ export function initArrowNavigation ({
   }
   const emitter = createEventEmitter()
 
-  const changeFocusElementHandler = (nextElement: FocusableElement) => {
-    changeFocusEventHandler(nextElement, state, emitter.emit)
+  const changeFocusElementHandler = (nextElement: FocusableElement, direction?: Direction) => {
+    const prevElement = state.currentElement
     state.currentElement = nextElement
     nextElement.el.focus()
+    changeFocusEventHandler({
+      nextElement,
+      prevElement,
+      direction,
+      state,
+      emit: emitter.emit
+    })
   }
 
   if (arrowNavigation) {

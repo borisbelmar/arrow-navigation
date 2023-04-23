@@ -1,8 +1,8 @@
-import type { ArrowNavigationState, FocusableElement } from '@/types.d'
+import type { ArrowNavigationState, Direction, FocusableElement } from '@/types.d'
 
 export default function setFocusHandler (
   state: ArrowNavigationState,
-  onChangeCurrentElement: (element: FocusableElement) => void
+  onChangeCurrentElement: (element: FocusableElement, direction?: Direction) => void
 ) {
   return (id: string) => {
     const focusableElement = state.elements.get(id)

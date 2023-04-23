@@ -6,20 +6,22 @@ interface Props {
   direction: string | undefined
   state: ArrowNavigationState,
   inGroup?: boolean
+  fromElement?: FocusableElement
 }
 
 export default function findNextElement ({
+  fromElement,
   direction,
   state,
   inGroup = false
 }: Props): FocusableElement | null {
-  const currentElement = state.currentElement as FocusableElement
-  const currentGroup = state.groups.get(currentElement?.group) as FocusableGroup
-  const currentGroupConfig = state.groupsConfig.get(currentElement?.group)
+  const selectedElement = fromElement || state.currentElement as FocusableElement
+  const fromGroup = state.groups.get(selectedElement?.group) as FocusableGroup
+  const fromGroupConfig = state.groupsConfig.get(selectedElement?.group)
   let nextElement: FocusableElement | null = null
 
-  if (currentElement?.nextElementByDirection) {
-    const nextElementId = currentElement.nextElementByDirection[direction as Direction]
+  if (selectedElement?.nextElementByDirection) {
+    const nextElementId = selectedElement.nextElementByDirection[direction as Direction]
 
     if (nextElementId === null) return null
 
@@ -27,10 +29,10 @@ export default function findNextElement ({
   } else {
     nextElement = findClosestElementInGroup({
       direction,
-      candidateElements: Array.from(currentGroup?.elements.values() || []),
-      currentFocusElement: currentElement,
-      threshold: currentGroupConfig?.threshold,
-      isViewportSafe: currentGroupConfig?.viewportSafe
+      candidateElements: Array.from(fromGroup?.elements.values() || []),
+      currentFocusElement: selectedElement,
+      threshold: fromGroupConfig?.threshold,
+      isViewportSafe: fromGroupConfig?.viewportSafe
     })
   }
 
@@ -38,12 +40,13 @@ export default function findNextElement ({
     return nextElement
   }
 
-  if (!inGroup && !currentGroupConfig?.keepFocus) {
-    return findNextGroupElement({
-      direction,
-      state
-    })
+  if (inGroup || fromGroupConfig?.keepFocus) {
+    return null
   }
 
-  return null
+  return findNextGroupElement({
+    fromElement: selectedElement,
+    direction,
+    state
+  })
 }

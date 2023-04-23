@@ -3,16 +3,17 @@ import findClosestElementInGroup from './findClosestElementInGroup'
 import findNextGroup from './findNextGroup'
 
 interface Props {
+  fromElement: FocusableElement
   direction: string | undefined
   state: ArrowNavigationState
 }
 
 export default function findNextGroupElement ({
+  fromElement,
   direction,
   state
 }: Props): FocusableElement | null {
-  const currentFocusElement = state.currentElement as FocusableElement
-  const nextGroup = findNextGroup({ direction, state })
+  const nextGroup = findNextGroup({ fromElement, direction, state })
 
   if (nextGroup) {
     const config = state.groupsConfig.get(nextGroup.el.id) as FocusableGroupConfig
@@ -25,7 +26,7 @@ export default function findNextGroupElement ({
     const closestElement = findClosestElementInGroup({
       direction,
       candidateElements: Array.from(nextGroup.elements.values()),
-      currentFocusElement,
+      currentFocusElement: fromElement,
       threshold: config?.threshold,
       isViewportSafe: config?.viewportSafe,
       allValidCandidates: true

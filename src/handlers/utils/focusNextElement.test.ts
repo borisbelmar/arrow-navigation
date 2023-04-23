@@ -22,7 +22,7 @@ describe('focusNextElement', () => {
     focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(currentGroup.elements.get('element-0-1'))
-    expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-1'))
+    expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-1'), 'down')
   })
 
   it('should focus the next element with manual next element', () => {
@@ -41,7 +41,7 @@ describe('focusNextElement', () => {
     focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(currentGroup.elements.get('element-0-2'))
-    expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-2'))
+    expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-2'), 'down')
   })
 
   it('should focus nothing with manual null', () => {
@@ -73,7 +73,7 @@ describe('focusNextElement', () => {
     focusNextElement({ direction: 'right', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(state.elements.get('element-1-0'))
-    expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-1-0'))
+    expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-1-0'), 'right')
   })
 
   it('should works normally if there no current group config', () => {
@@ -88,7 +88,7 @@ describe('focusNextElement', () => {
     focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
     expect(state.currentElement).toBe(state.elements.get('element-0-1'))
-    expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-0-1'))
+    expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-0-1'), 'down')
   })
 
   it('should keep the focus on group if keepFocus is true on currentGroup', () => {
