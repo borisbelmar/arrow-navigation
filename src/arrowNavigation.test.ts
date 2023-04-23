@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { initArrowNavigation, getArrowNavigation, ERROR_MESSAGES } from './arrowNavigation'
 import EVENTS from './config/events'
+import { Direction } from './types'
 import getViewNavigationStateMock from './__mocks__/viewNavigationState.mock'
 
 describe('arrowNavigation', () => {
@@ -191,5 +192,28 @@ describe('arrowNavigation', () => {
     navigationApi._forceNavigate('ArrowDown')
 
     expect(listener).toHaveBeenCalledTimes(1)
+  })
+
+  it('check correct time on current reassigned and event consumption', () => {
+    initArrowNavigation({ debug: true })
+
+    const navigationApi = getArrowNavigation()
+
+    navigationApi._setState(getViewNavigationStateMock())
+
+    navigationApi.setFocusElement('element-0-2', 'group-0')
+
+    const listener = jest.fn()
+
+    navigationApi.on(EVENTS.CURRENT_ELEMENT_CHANGE, (el, direction) => {
+      if (!navigationApi.getNextElement({ direction: direction as Direction, inGroup: true })) {
+        listener('last')
+      }
+    })
+
+    navigationApi._forceNavigate('ArrowDown')
+
+    expect(listener).toHaveBeenCalledWith('last')
+    expect(navigationApi.getFocusedElement()?.el.id).toBe('element-0-3')
   })
 })

@@ -52,6 +52,25 @@ export type ArrowNavigationOptions = {
   errorOnReinit?: boolean
 }
 
+export type GetNextOptions = {
+  direction: Direction
+  elementId?: string
+}
+
+export type GetNextGroupOptions = GetNextOptions
+
+export type GetNextElementOptions = GetNextOptions & {
+  inGroup?: boolean
+}
+
+export type ChangeFocusEventHandlerOptions = {
+  nextElement: FocusableElement | null,
+  prevElement: FocusableElement | null,
+  direction: Direction | undefined,
+  state: ArrowNavigationState,
+  emit: EventEmitter['emit']
+}
+
 export type ArrowNavigationInstance = {
   getFocusedElement: () => FocusableElement | null
   setFocusElement: (id: string, group: string) => void
@@ -64,8 +83,8 @@ export type ArrowNavigationInstance = {
   getGroupConfig: (group: string) => FocusableGroupConfig | undefined
   getRegisteredElements: () => Set<string>
   getFocusedGroup: () => string | undefined
-  getNextElement: (direction: Direction, inGroup?: boolean) => string | null
-  getNextGroup: (direction: Direction) => string | null
+  getNextElement: (opts: GetNextElementOptions) => string | null
+  getNextGroup: (opts: GetNextGroupOptions) => string | null
   on: EventEmitter['on']
   off: EventEmitter['off']
   /**

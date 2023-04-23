@@ -1,10 +1,10 @@
-import type { ArrowNavigationState, FocusableElement } from '@/types.d'
+import type { ArrowNavigationState, Direction, FocusableElement } from '@/types.d'
 import findNextElement from './findNextElement'
 
 interface Props {
   direction: string | undefined
   state: ArrowNavigationState
-  onChangeCurrentElement: (element: FocusableElement) => void
+  onChangeCurrentElement: (element: FocusableElement, dir: Direction) => void
 }
 
 export default function focusNextElement ({
@@ -15,6 +15,6 @@ export default function focusNextElement ({
   const nextElement = findNextElement({ direction, state })
 
   if (nextElement) {
-    onChangeCurrentElement(nextElement)
+    onChangeCurrentElement(nextElement, direction as Direction)
   }
 }

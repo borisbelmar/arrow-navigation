@@ -304,7 +304,7 @@ const registeredElements = api.getRegisteredElements() // Set { 'element-0-0', '
 
 ### getNextElement
 
-Get the next best candidate element id by direction. You can pass an optional boolean second parameter to specify if the element should be in the same group or not.
+Get the next best candidate element id by direction. You can pass an optional boolean option called inGroup to specify if the element should be in the same group or not. You can pass an optional elementId to specify the element where the navigation should be considered.
 
 ```typescript
 const api = getArrowNavigation()
@@ -323,12 +323,14 @@ api.registerGroup(container)
 api.registerElement(element, 'group-0')
 api.registerElement(element2, 'group-0')
 
-const registeredElements = api.getNextElement('right') // 'element-0-1'
+const registeredElements = api.getNextElement({ direction: 'right', inGroup: true }) // 'element-0-1'
+// or
+const registeredElements = api.getNextElement({ elementId: 'element-0-0', direction: 'right', inGroup: false }) // 'element-0-1'
 ```
 
 ### getNextGroup
 
-Get the next best candidate group id by direction.
+Get the next best candidate group id by direction. You can pass an optional elementId to specify the element where the navigation should be considered.
 
 ```typescript
 
@@ -357,7 +359,9 @@ api.registerElement(element2, 'group-0')
 api.registerElement(element3, 'group-1')
 api.registerElement(element4, 'group-1')
 
-const nextGroup = api.getNextGroup('down') // 'group-1'
+const nextGroup = api.getNextGroup({ direction: 'down' }) // 'group-1'
+// or
+const nextGroup = api.getNextGroup({ groupId: 'group-0', direction: 'down' }) // 'group-1'
 ```
 
 ## Events
@@ -366,27 +370,27 @@ The API implements an Event Emitter to listen to events. The events are accessib
 
 ### current-element:change
 
-This event is triggered when the current element is changed. The event will receive the new element as a parameter.
+This event is triggered when the current element is changed. The event will receive the new element as first parameter and direction as second parameter.
 
 ### current-group:change
 
-This event is triggered when the current group is changed. The event will receive the new group as a parameter.
+This event is triggered when the current group is changed. The event will receive the new group as first parameter and direction as second parameter.
 
 ### element:focus
 
-This event is triggered when an element is focused. The event will receive the element as a parameter.
+This event is triggered when an element is focused. The event will receive the element as first parameter and direction as second parameter.
 
 ### element:blur
 
-This event is triggered when an element is blurred. The event will receive the element as a parameter.
+This event is triggered when an element is blurred. The event will receive the element as first parameter and direction as second parameter.
 
 ### group:focus
 
-This event is triggered when a group is focused. The event will receive the group as a parameter.
+This event is triggered when a group is focused. The event will receive the group as first parameter and direction as second parameter.
 
 ### group:blur
 
-This event is triggered when a group is blurred. The event will receive the group as a parameter.
+This event is triggered when a group is blurred. The event will receive the group as first parameter and direction as second parameter.
 
 ### groups:change
 

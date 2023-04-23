@@ -19,7 +19,7 @@ function createEventEmitter (): EventEmitter {
   function off<T extends Callback> (eventName: string, callback?: T): void {
     if (events[eventName]) {
       if (!callback) {
-        delete events[eventName]
+        events[eventName] = []
         return
       }
       events[eventName] = events[eventName].filter(cb => cb !== callback)

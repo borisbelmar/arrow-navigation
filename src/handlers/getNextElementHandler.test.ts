@@ -12,21 +12,21 @@ describe('getNextElementHandler', () => {
   it('should return the next element id', () => {
     state.currentElement = state.elements.get('element-0-0') as FocusableElement
     const handler = getNextElementHandler(state)
-    expect(handler('down')).toBe('element-0-1')
+    expect(handler({ direction: 'down' })).toBe('element-0-1')
   })
 
   it('should return null if the element doesnt exist', () => {
     state.currentElement = state.elements.get('non-existent') as FocusableElement
     const handler = getNextElementHandler(state)
-    expect(handler('right')).toBe(null)
+    expect(handler({ direction: 'right' })).toBe(null)
   })
 
   it('should return the next element id on current group', () => {
     state.currentElement = state.elements.get('element-0-0') as FocusableElement
     const handler = getNextElementHandler(state)
-    expect(handler('right', true)).toBe(null)
+    expect(handler({ direction: 'right', inGroup: true })).toBe(null)
 
     state.currentElement = state.elements.get('element-0-0') as FocusableElement
-    expect(handler('down', true)).toBe('element-0-1')
+    expect(handler({ direction: 'down', inGroup: true })).toBe('element-0-1')
   })
 })

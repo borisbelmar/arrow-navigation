@@ -63,6 +63,6 @@ describe('unregisterElementHandler', () => {
     element.id = 'element-0-0'
     unregisterElement(element)
 
-    expect(onFocusChange).toHaveBeenCalledWith(state.groups.get('group-0')?.elements.get('element-0-1'))
+    expect(onFocusChange).toHaveBeenCalledWith(state.groups.get('group-0')?.elements.get('element-0-1'), undefined)
   })
 })

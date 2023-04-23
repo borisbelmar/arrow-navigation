@@ -61,11 +61,11 @@ export default function registerElementHandler (
     }
 
     if (!state.currentElement && !isElementDisabled(focusableElement.el)) {
-      emit(EVENTS.CURRENT_ELEMENT_CHANGE, focusableElement)
-      emit(EVENTS.CURRENT_GROUP_CHANGE, state.groupsConfig.get(group))
       // eslint-disable-next-line no-param-reassign
       state.currentElement = focusableElement
       element.focus()
+      emit(EVENTS.CURRENT_ELEMENT_CHANGE, focusableElement)
+      emit(EVENTS.CURRENT_GROUP_CHANGE, state.groupsConfig.get(group))
     }
   }
 }
