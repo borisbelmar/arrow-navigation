@@ -14,18 +14,24 @@ describe('changeFocusEventHandler', () => {
   })
 
   it('should not call any event if not element setted', () => {
-    state.currentElement = state.groups.get('group-0')?.elements.get('element-0-0') as FocusableElement
-    const nextElement = state.groups.get('group-0')?.elements.get('element-0-1') as FocusableElement
+    const prevElement = null
+    const nextElement = null
 
-    changeFocusEventHandler(
+    const emitMock = jest.fn()
+
+    changeFocusEventHandler({
       nextElement,
+      prevElement,
+      direction: 'down',
       state,
-      emitter.emit
-    )
+      emit: emitMock
+    })
+
+    expect(emitMock).not.toHaveBeenCalled()
   })
 
   it('should call onElementFocus, onElementBlur, onGroupBlur and onGroupFocus correctly', () => {
-    state.currentElement = state.groups.get('group-0')?.elements.get('element-0-0') as FocusableElement
+    const prevElement = state.groups.get('group-0')?.elements.get('element-0-0') as FocusableElement
     const nextElement = state.groups.get('group-1')?.elements.get('element-1-0') as FocusableElement
 
     const events = {
@@ -40,26 +46,28 @@ describe('changeFocusEventHandler', () => {
     emitter.on(EVENTS.GROUP_BLUR, events.onGroupBlur)
     emitter.on(EVENTS.GROUP_FOCUS, events.onGroupFocus)
 
-    changeFocusEventHandler(
+    changeFocusEventHandler({
       nextElement,
+      prevElement,
+      direction: 'down',
       state,
-      emitter.emit
-    )
+      emit: emitter.emit
+    })
 
-    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement)
-    expect(events.onElementBlur).toHaveBeenCalledWith(state.currentElement as FocusableElement)
-    expect(events.onGroupBlur).toHaveBeenCalledWith(state.groupsConfig.get('group-0'))
-    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'))
+    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down')
+    expect(events.onElementBlur).toHaveBeenCalledWith(state.currentElement as FocusableElement, 'down')
+    expect(events.onGroupBlur).toHaveBeenCalledWith(state.groupsConfig.get('group-0'), 'down')
+    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down')
   })
 
   it('should call onFocus and onBlur on group and element', () => {
     const currentGroup = state.groups.get('group-0') as FocusableGroup
     const currentGroupConfig = state.groupsConfig.get('group-0') as FocusableGroupConfig
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    const prevElement = currentGroup.elements.get('element-0-0') as FocusableElement
     currentGroupConfig.onFocus = jest.fn()
     currentGroupConfig.onBlur = jest.fn()
-    state.currentElement.onFocus = jest.fn()
-    state.currentElement.onBlur = jest.fn()
+    prevElement.onFocus = jest.fn()
+    prevElement.onBlur = jest.fn()
 
     const nextGroup = state.groups.get('group-1') as FocusableGroup
     const nextGroupConfig = state.groupsConfig.get('group-1') as FocusableGroupConfig
@@ -69,16 +77,18 @@ describe('changeFocusEventHandler', () => {
     nextElement.onFocus = jest.fn()
     nextElement.onBlur = jest.fn()
 
-    changeFocusEventHandler(
+    changeFocusEventHandler({
       nextElement,
+      prevElement,
+      direction: 'down',
       state,
-      emitter.emit
-    )
+      emit: emitter.emit
+    })
 
     expect(currentGroupConfig.onBlur).toHaveBeenCalled()
     expect(currentGroupConfig.onFocus).not.toHaveBeenCalled()
-    expect(state.currentElement.onBlur).toHaveBeenCalled()
-    expect(state.currentElement.onFocus).not.toHaveBeenCalled()
+    expect(prevElement.onBlur).toHaveBeenCalled()
+    expect(prevElement.onFocus).not.toHaveBeenCalled()
 
     expect(nextGroupConfig.onFocus).toHaveBeenCalled()
     expect(nextGroupConfig.onBlur).not.toHaveBeenCalled()
@@ -87,7 +97,7 @@ describe('changeFocusEventHandler', () => {
   })
 
   it('should not call onBlur if no prevGroup', () => {
-    state.currentElement = null
+    const prevElement = null
     const nextElement = state.groups.get('group-1')?.elements.get('element-1-0') as FocusableElement
 
     const events = {
@@ -106,15 +116,17 @@ describe('changeFocusEventHandler', () => {
     emitter.on(EVENTS.CURRENT_ELEMENT_CHANGE, events.onCurrentElementChange)
     emitter.on(EVENTS.CURRENT_GROUP_CHANGE, events.onCurrentGroupChange)
 
-    changeFocusEventHandler(
+    changeFocusEventHandler({
       nextElement,
+      prevElement,
+      direction: 'down',
       state,
-      emitter.emit
-    )
+      emit: emitter.emit
+    })
 
-    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement)
+    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down')
     expect(events.onElementBlur).not.toHaveBeenCalled()
     expect(events.onGroupBlur).not.toHaveBeenCalled()
-    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'))
+    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down')
   })
 })

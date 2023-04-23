@@ -13,11 +13,11 @@ describe('findNextGroupElement', () => {
 
   it('should return the next group element without options', () => {
     const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    const fromElement = currentGroup.elements.get('element-0-0') as FocusableElement
 
     const nextGroup = state.groups.get('group-1') as FocusableGroup
 
-    const element = findNextGroupElement({ direction: 'right', state })
+    const element = findNextGroupElement({ fromElement, direction: 'right', state })
 
     expect(element).toBe(nextGroup.elements.get('element-1-0'))
   })
@@ -31,9 +31,10 @@ describe('findNextGroupElement', () => {
       }
     })
     const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    const fromElement = currentGroup.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      fromElement,
       direction: 'right',
       state
     })
@@ -47,10 +48,10 @@ describe('findNextGroupElement', () => {
       el: nextGroup.el as HTMLElement,
       firstElement: 'element-1-2'
     })
-    const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    const fromElement = state.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      fromElement,
       direction: 'right',
       state
     })
@@ -59,12 +60,13 @@ describe('findNextGroupElement', () => {
   })
 
   it('should return null if the currentGroup doesnt exists', () => {
-    state.currentElement = {
+    const fromElement = {
       el: document.createElement('div'),
       group: 'non-existing-group'
     }
 
     const element = findNextGroupElement({
+      fromElement,
       direction: 'right',
       state
     })
@@ -80,9 +82,10 @@ describe('findNextGroupElement', () => {
       }
     })
     const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    const fromElement = currentGroup.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      fromElement,
       direction: 'right',
       state
     })
@@ -92,12 +95,13 @@ describe('findNextGroupElement', () => {
 
   it('should return closest if next group config is not setted', () => {
     const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    const fromElement = currentGroup.elements.get('element-0-0') as FocusableElement
 
     const nextGroup = state.groups.get('group-1') as FocusableGroup
     state.groupsConfig.delete('group-1')
 
     const element = findNextGroupElement({
+      fromElement,
       direction: 'right',
       state
     })

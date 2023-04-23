@@ -1,8 +1,10 @@
-import { ArrowNavigationState, Direction } from '..'
+import { GetNextGroupOptions } from '@/types'
+import { ArrowNavigationState, FocusableElement } from '..'
 import { findNextGroup } from './utils'
 
 export default function getNextGroupHandler (state: ArrowNavigationState) {
-  return (direction: Direction) => findNextGroup({
+  return ({ direction, elementId }: GetNextGroupOptions) => findNextGroup({
+    fromElement: state.elements.get(elementId || '') as FocusableElement,
     direction,
     state
   })?.el.id ?? null

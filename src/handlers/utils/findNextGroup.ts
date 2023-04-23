@@ -4,15 +4,17 @@ import findClosestGroup from './findClosestGroup'
 interface Props {
   direction: string | undefined
   state: ArrowNavigationState
+  fromElement?: FocusableElement
 }
 
 export default function findNextGroup ({
+  fromElement,
   direction,
   state
 }: Props): FocusableGroup | null {
-  const currentFocusElement = state.currentElement as FocusableElement
+  const selectedElement = fromElement || state.currentElement as FocusableElement
   const groups = state.groups
-  const currentGroupConfig = state.groupsConfig.get(currentFocusElement?.group)
+  const currentGroupConfig = state.groupsConfig.get(selectedElement?.group)
 
   if (currentGroupConfig?.nextGroupByDirection) {
     const nextGroupId = currentGroupConfig.nextGroupByDirection[direction as Direction]
@@ -28,7 +30,7 @@ export default function findNextGroup ({
 
   return findClosestGroup({
     direction,
-    currentElement: currentFocusElement,
+    currentElement: selectedElement,
     candidateGroups: groups
   })
 }
