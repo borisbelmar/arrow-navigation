@@ -1,6 +1,6 @@
 import EVENTS from '@/config/events'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
-import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../types.d'
+import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../types'
 import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
 import changeFocusEventHandler from './changeFocusEventHandler'
 

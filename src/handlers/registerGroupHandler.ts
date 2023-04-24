@@ -1,5 +1,5 @@
 import EVENTS from '@/config/events'
-import type { ArrowNavigationState, FocusableGroup, FocusableGroupOptions } from '@/types.d'
+import type { ArrowNavigationState, FocusableGroup, FocusableGroupOptions } from '@/types'
 import { EventEmitter } from '@/utils/createEventEmitter'
 
 const defaultGroupConfig: FocusableGroupOptions = {

@@ -1,4 +1,4 @@
-import type { ArrowNavigationState, Direction, FocusableElement } from '@/types.d'
+import type { ArrowNavigationState, Direction, FocusableElement } from '@/types'
 
 export default function setFocusHandler (
   state: ArrowNavigationState,

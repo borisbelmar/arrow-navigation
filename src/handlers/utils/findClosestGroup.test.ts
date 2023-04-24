@@ -1,5 +1,5 @@
 import findClosestGroup from './findClosestGroup'
-import { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types.d'
+import { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types'
 import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
 
 describe('findClosestGroup', () => {

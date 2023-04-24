@@ -1,5 +1,5 @@
 import EVENTS from '@/config/events'
-import type { ChangeFocusEventHandlerOptions } from '@/types.d'
+import type { ChangeFocusEventHandlerOptions } from '@/types'
 
 export default function changeFocusEventHandler ({
   nextElement,

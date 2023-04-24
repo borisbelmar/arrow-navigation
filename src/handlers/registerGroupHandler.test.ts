@@ -1,5 +1,5 @@
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
-import { ArrowNavigationState, FocusableGroup } from '../types.d'
+import { ArrowNavigationState, FocusableGroup } from '../types'
 import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
 import registerGroupHandler, { ERROR_MESSAGES } from './registerGroupHandler'
 

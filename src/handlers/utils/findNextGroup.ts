@@ -1,4 +1,4 @@
-import type { ArrowNavigationState, Direction, FocusableElement, FocusableGroup } from '@/types.d'
+import type { ArrowNavigationState, Direction, FocusableElement, FocusableGroup } from '@/types'
 import findClosestGroup from './findClosestGroup'
 
 interface Props {

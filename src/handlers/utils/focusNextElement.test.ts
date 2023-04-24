@@ -1,4 +1,4 @@
-import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '@/types.d'
+import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '@/types'
 import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
 import focusNextElement from './focusNextElement'
 
