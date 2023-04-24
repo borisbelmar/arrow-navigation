@@ -1,4 +1,4 @@
-import type { ArrowNavigationState, FocusableElement, FocusableGroupConfig } from '@/types.d'
+import type { ArrowNavigationState, FocusableElement, FocusableGroupConfig } from '@/types'
 import findClosestElementInGroup from './findClosestElementInGroup'
 import findNextGroup from './findNextGroup'
 

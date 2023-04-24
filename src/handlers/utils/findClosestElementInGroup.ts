@@ -1,4 +1,4 @@
-import type { FocusableElement } from '@/types.d'
+import type { FocusableElement } from '@/types'
 import getEuclideanDistance from './getEuclideanDistance'
 import getReferencePointsByDirection from './getReferencePointsByDirection'
 import isElementDisabled from './isElementDisabled'

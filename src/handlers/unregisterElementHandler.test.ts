@@ -1,5 +1,5 @@
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
-import { ArrowNavigationState } from '@/types.d'
+import { ArrowNavigationState } from '@/types'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
 import unregisterElementHandler from './unregisterElementHandler'
 

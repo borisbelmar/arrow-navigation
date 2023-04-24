@@ -1,4 +1,4 @@
-import type { Point } from '@/types.d'
+import type { Point } from '@/types'
 
 export default function getEuclideanDistance (
   pointA: Point,
