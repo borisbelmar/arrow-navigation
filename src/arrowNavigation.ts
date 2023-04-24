@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, Direction, FocusableElement } from '@/types.d'
+import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, Direction, FocusableElement } from '@/types'
 import {
   getArrowPressHandler,
   getNextElementHandler,

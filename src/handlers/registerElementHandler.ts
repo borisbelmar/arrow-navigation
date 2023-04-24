@@ -1,5 +1,5 @@
 import EVENTS from '@/config/events'
-import type { ArrowNavigationState, FocusableElementOptions } from '@/types.d'
+import type { ArrowNavigationState, FocusableElementOptions } from '@/types'
 import { EventEmitter } from '@/utils/createEventEmitter'
 import isElementDisabled from './utils/isElementDisabled'
 import isFocusableElement from './utils/isFocusableElement'

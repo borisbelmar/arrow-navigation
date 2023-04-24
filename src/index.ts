@@ -13,4 +13,4 @@ export type {
   Direction,
   FocusableElementOptions,
   FocusableGroupOptions
-} from './types.d'
+} from './types'

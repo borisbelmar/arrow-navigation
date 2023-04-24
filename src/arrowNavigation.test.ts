@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { initArrowNavigation, getArrowNavigation, ERROR_MESSAGES } from './arrowNavigation'
 import EVENTS from './config/events'
-import { Direction } from './types'
+import type { Direction, FocusableElement } from './types'
 import getViewNavigationStateMock from './__mocks__/viewNavigationState.mock'
 
 describe('arrowNavigation', () => {
@@ -205,7 +205,10 @@ describe('arrowNavigation', () => {
 
     const listener = jest.fn()
 
-    navigationApi.on(EVENTS.CURRENT_ELEMENT_CHANGE, (el, direction) => {
+    navigationApi.on(EVENTS.CURRENT_ELEMENT_CHANGE, (
+      _el: FocusableElement,
+      direction: Direction
+    ) => {
       if (!navigationApi.getNextElement({ direction: direction as Direction, inGroup: true })) {
         listener('last')
       }

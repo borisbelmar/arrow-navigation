@@ -1,4 +1,4 @@
-import { ArrowNavigationState } from '../types.d'
+import { ArrowNavigationState } from '../types'
 import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
 import setFocusHandler from './setFocusHandler'
 

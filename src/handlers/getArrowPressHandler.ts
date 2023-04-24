@@ -1,4 +1,4 @@
-import type { ArrowNavigationState, Direction, FocusableElement } from '@/types.d'
+import type { ArrowNavigationState, Direction, FocusableElement } from '@/types'
 import focusNextElement from './utils/focusNextElement'
 
 const keyToDirection: { [x: string]: string } = {

@@ -1,4 +1,4 @@
-import type { ArrowNavigationState, FocusableGroup } from '@/types.d'
+import type { ArrowNavigationState, FocusableGroup } from '@/types'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
 import registerElementHandler, { ERROR_MESSAGES } from './registerElementHandler'

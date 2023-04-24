@@ -1,4 +1,4 @@
-import type { FocusableElement, FocusableGroup } from '@/types.d'
+import type { FocusableElement, FocusableGroup } from '@/types'
 import getEuclideanDistance from './getEuclideanDistance'
 import getReferencePointsByCenter from './getReferencePointsByCenter'
 import isEligibleCandidate from './isEligibleCandidate/isEligibleCandidate'
