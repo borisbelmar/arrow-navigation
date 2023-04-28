@@ -10,12 +10,25 @@ export type ElementByDirection = {
   [key in Direction]?: string | null
 }
 
+type EventResult<T> = {
+  current: T | undefined | null
+  direction: Direction | undefined | null
+}
+
+type FocusEventResult<T> = EventResult<T> & {
+  prev: T | undefined | null
+}
+
+type BlurEventResult<T> = EventResult<T> & {
+  next: T | undefined | null
+}
+
 export type FocusableElement = {
   el: HTMLElement
   group: string
   nextElementByDirection?: ElementByDirection
-  onFocus?: () => void
-  onBlur?: () => void
+  onFocus?: (result: FocusEventResult<FocusableElement>) => void
+  onBlur?: (result: BlurEventResult<FocusableElement>) => void
 }
 
 export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group'>
@@ -32,8 +45,8 @@ export type FocusableGroupConfig = {
   saveLast?: boolean
   viewportSafe?: boolean
   threshold?: number
-  onFocus?: () => void
-  onBlur?: () => void
+  onFocus?: (result: FocusEventResult<FocusableGroupConfig>) => void
+  onBlur?: (result: BlurEventResult<FocusableGroupConfig>) => void
   keepFocus?: boolean
 }
 

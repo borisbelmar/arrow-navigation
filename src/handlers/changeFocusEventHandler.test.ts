@@ -54,10 +54,10 @@ describe('changeFocusEventHandler', () => {
       emit: emitter.emit
     })
 
-    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down')
-    expect(events.onElementBlur).toHaveBeenCalledWith(state.currentElement as FocusableElement, 'down')
-    expect(events.onGroupBlur).toHaveBeenCalledWith(state.groupsConfig.get('group-0'), 'down')
-    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down')
+    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down', prevElement)
+    expect(events.onElementBlur).toHaveBeenCalledWith(state.currentElement as FocusableElement, 'down', nextElement)
+    expect(events.onGroupBlur).toHaveBeenCalledWith(state.groupsConfig.get('group-0'), 'down', state.groupsConfig.get('group-1'))
+    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down', state.groupsConfig.get('group-0'))
   })
 
   it('should call onFocus and onBlur on group and element', () => {
@@ -85,14 +85,30 @@ describe('changeFocusEventHandler', () => {
       emit: emitter.emit
     })
 
-    expect(currentGroupConfig.onBlur).toHaveBeenCalled()
+    expect(currentGroupConfig.onBlur).toHaveBeenCalledWith({
+      direction: 'down',
+      current: currentGroupConfig,
+      next: nextGroupConfig
+    })
     expect(currentGroupConfig.onFocus).not.toHaveBeenCalled()
-    expect(prevElement.onBlur).toHaveBeenCalled()
+    expect(prevElement.onBlur).toHaveBeenCalledWith({
+      direction: 'down',
+      current: prevElement,
+      next: nextElement
+    })
     expect(prevElement.onFocus).not.toHaveBeenCalled()
 
-    expect(nextGroupConfig.onFocus).toHaveBeenCalled()
+    expect(nextGroupConfig.onFocus).toHaveBeenCalledWith({
+      direction: 'down',
+      current: nextGroupConfig,
+      prev: currentGroupConfig
+    })
     expect(nextGroupConfig.onBlur).not.toHaveBeenCalled()
-    expect(nextElement.onFocus).toHaveBeenCalled()
+    expect(nextElement.onFocus).toHaveBeenCalledWith({
+      direction: 'down',
+      current: nextElement,
+      prev: prevElement
+    })
     expect(nextElement.onBlur).not.toHaveBeenCalled()
   })
 
@@ -124,9 +140,9 @@ describe('changeFocusEventHandler', () => {
       emit: emitter.emit
     })
 
-    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down')
+    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down', null)
     expect(events.onElementBlur).not.toHaveBeenCalled()
     expect(events.onGroupBlur).not.toHaveBeenCalled()
-    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down')
+    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down', undefined)
   })
 })
