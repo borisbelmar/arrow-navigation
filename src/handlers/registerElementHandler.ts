@@ -1,6 +1,6 @@
 import EVENTS from '@/config/events'
-import type { ArrowNavigationState, FocusableElementOptions } from '@/types'
-import { EventEmitter } from '@/utils/createEventEmitter'
+import type { ArrowNavigationState, FocusableElement, FocusableElementOptions } from '@/types'
+import type { EventEmitter } from '@/utils/createEventEmitter'
 import isElementDisabled from './utils/isElementDisabled'
 import isFocusableElement from './utils/isFocusableElement'
 
@@ -13,6 +13,7 @@ export const ERROR_MESSAGES = {
 
 export default function registerElementHandler (
   state: ArrowNavigationState,
+  onChangeCurrentElement: (element: FocusableElement) => void,
   emit: EventEmitter['emit']
 ) {
   return (
@@ -61,11 +62,7 @@ export default function registerElementHandler (
     }
 
     if (!state.currentElement && !isElementDisabled(focusableElement.el)) {
-      // eslint-disable-next-line no-param-reassign
-      state.currentElement = focusableElement
-      element.focus()
-      emit(EVENTS.CURRENT_ELEMENT_CHANGE, focusableElement)
-      emit(EVENTS.CURRENT_GROUP_CHANGE, state.groupsConfig.get(group))
+      onChangeCurrentElement(focusableElement)
     }
   }
 }

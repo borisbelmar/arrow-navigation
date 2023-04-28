@@ -64,7 +64,7 @@ export function initArrowNavigation ({
     getFocusedElement: () => state.currentElement,
     setFocusElement: setFocusHandler(state, changeFocusElementHandler),
     registerGroup: registerGroupHandler(state, emitter.emit),
-    registerElement: registerElementHandler(state, emitter.emit),
+    registerElement: registerElementHandler(state, changeFocusElementHandler, emitter.emit),
     unregisterElement: unregisterElementHandler(state, changeFocusElementHandler, emitter.emit),
     destroy () {
       window.removeEventListener('keydown', onKeyPress)

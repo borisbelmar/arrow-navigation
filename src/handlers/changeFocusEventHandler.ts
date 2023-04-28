@@ -18,21 +18,37 @@ export default function changeFocusEventHandler ({
     const nextGroup = state.groupsConfig.get(nextElement.group as string)
 
     if (prevGroup) {
-      prevGroup.onBlur?.()
-      emit(EVENTS.GROUP_BLUR, prevGroup, direction)
+      prevGroup.onBlur?.({
+        current: prevGroup,
+        next: nextGroup,
+        direction
+      })
+      emit(EVENTS.GROUP_BLUR, prevGroup, direction, nextGroup)
     }
 
     if (nextGroup) {
-      nextGroup.onFocus?.()
-      emit(EVENTS.GROUP_FOCUS, nextGroup, direction)
-      emit(EVENTS.CURRENT_GROUP_CHANGE, nextGroup, direction)
+      nextGroup.onFocus?.({
+        current: nextGroup,
+        prev: prevGroup,
+        direction
+      })
+      emit(EVENTS.GROUP_FOCUS, nextGroup, direction, prevGroup)
+      emit(EVENTS.CURRENT_GROUP_CHANGE, nextGroup, direction, prevGroup)
     }
   }
   if (prevElement) {
-    prevElement.onBlur?.()
-    emit(EVENTS.ELEMENT_BLUR, prevElement, direction)
+    prevElement.onBlur?.({
+      current: prevElement,
+      next: nextElement,
+      direction
+    })
+    emit(EVENTS.ELEMENT_BLUR, prevElement, direction, nextElement)
   }
-  nextElement.onFocus?.()
-  emit(EVENTS.ELEMENT_FOCUS, nextElement, direction)
-  emit(EVENTS.CURRENT_ELEMENT_CHANGE, nextElement, direction)
+  nextElement.onFocus?.({
+    current: nextElement,
+    prev: prevElement,
+    direction
+  })
+  emit(EVENTS.ELEMENT_FOCUS, nextElement, direction, prevElement)
+  emit(EVENTS.CURRENT_ELEMENT_CHANGE, nextElement, direction, prevElement)
 }

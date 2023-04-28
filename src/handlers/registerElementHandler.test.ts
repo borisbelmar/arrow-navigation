@@ -6,14 +6,16 @@ import registerElementHandler, { ERROR_MESSAGES } from './registerElementHandler
 describe('registerElementHandler', () => {
   let state: ArrowNavigationState
   let emitter: EventEmitter
+  let onChangeElement: () => void
 
   beforeEach(() => {
     state = getViewNavigationStateMock()
     emitter = createEventEmitter()
+    onChangeElement = jest.fn()
   })
 
   it('should register the element on a new group', () => {
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
 
     const element = document.createElement('button')
     element.id = 'element-5-0'
@@ -24,7 +26,7 @@ describe('registerElementHandler', () => {
   })
 
   it('should register the element on an existing group', () => {
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
     const groupId = 'group-0'
     const group = state.groups.get(groupId) as FocusableGroup
     const groupTotalElements = group.elements.size
@@ -39,14 +41,14 @@ describe('registerElementHandler', () => {
   })
 
   it('should throw an error if the element id is not defined', () => {
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
 
     const element = document.createElement('button')
     expect(() => registerElement(element, 'group-1')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
   })
 
   it('should throw an error if the group id is not defined', () => {
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
 
     const element = document.createElement('button')
     element.id = 'element-1-0'
@@ -55,7 +57,7 @@ describe('registerElementHandler', () => {
 
   it('should log a warn message if element id is already registered and not register the element', () => {
     global.console.warn = jest.fn()
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
 
     const element = document.createElement('button')
     element.id = 'element-0-0'
@@ -68,17 +70,17 @@ describe('registerElementHandler', () => {
 
   it('should set the element as the current element if current is null', () => {
     state.currentElement = null
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
 
     const element = document.createElement('button')
     element.id = 'element-5-0'
     registerElement(element, 'group-5')
 
-    expect(state.currentElement).toBe(state.elements.get(element.id))
+    expect(onChangeElement).toHaveBeenCalledWith({ el: element, group: 'group-5' })
   })
 
   it('should throw an error if the element is not focusable', () => {
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
 
     const element = document.createElement('div')
     element.id = 'element-5-0'
@@ -86,7 +88,7 @@ describe('registerElementHandler', () => {
   })
 
   it('should keep the group element if the groups doesnt exists but config exists', () => {
-    const registerElement = registerElementHandler(state, emitter.emit)
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
 
     const group = document.createElement('div')
     group.id = 'group-10'
