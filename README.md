@@ -103,8 +103,8 @@ registerGroup(container, {
   saveLast: true, // Save the last focused element when the focus leave the group and use it when the focus enter again
   viewportSafe: true, // If true, the next element will be the first element that is visible in the viewport. The default value is true
   threshold: 2, // The threshold in pixels to consider an element eligible to be focused. The default value is 0
-  onFocus: (group) => { console.log(`focused ${group.el.id}`) }, // Callback when the group is focused
-  onBlur: (group) => { console.log(`blurred ${group.el.id}`) },
+  onFocus: ({ current, prev, direction }) => { console.log(`focused ${group.el.id}`) }, // Callback when the group is focused. The prev group is the group that was focused before the current group.
+  onBlur: ({ current, next, direction }) => { console.log(`blurred ${group.el.id}`) }, // Callback when the group is blurred. The next group is the group that will be focused when the focus leave the current group.
   keepFocus: true // If true, the focus will not leave the group when the user press the arrow keys. The default value is false. This option is usefull for modals or other elements that need to keep the focus inside.
 })
 ```
@@ -140,8 +140,8 @@ api.registerElement(element, 'group-1', {
     'up': null, // If press up, no elements will be focused
     'left': undefined // undefined will keep the default behavior
   },
-  onFocus: (element) => console.log(`focused ${element.el.id}`), // Callback when the element is focused
-  onBlur: (element) => console.log(`blurred ${element.el.id}`) // Callback when the element is blurred
+  onFocus: ({ current, prev, direction }) => console.log(`focused ${element.el.id}`), // Callback when the element is focused. The prev element is the element that was focused before the current element.
+  onBlur: ({ current, next, direction }) => console.log(`blurred ${element.el.id}`) // Callback when the element is blurred. The next element is the element that will be focused when the focus leave the current element.
 })
 ```
 
@@ -378,19 +378,19 @@ This event is triggered when the current group is changed. The event will receiv
 
 ### element:focus
 
-This event is triggered when an element is focused. The event will receive the element as first parameter and direction as second parameter.
+This event is triggered when an element is focused. The event will receive `(currentElement, direction, prevElement)`.
 
 ### element:blur
 
-This event is triggered when an element is blurred. The event will receive the element as first parameter and direction as second parameter.
+This event is triggered when an element is blurred. The event will receive `(currentElement, direction, nextElement)`.
 
 ### group:focus
 
-This event is triggered when a group is focused. The event will receive the group as first parameter and direction as second parameter.
+This event is triggered when a group is focused. The event will receive `(currentGroup, direction, prevGroup)`.
 
 ### group:blur
 
-This event is triggered when a group is blurred. The event will receive the group as first parameter and direction as second parameter.
+This event is triggered when a group is blurred. The event will receive `(currentGroup, direction, nextGroup)`.
 
 ### groups:change
 
