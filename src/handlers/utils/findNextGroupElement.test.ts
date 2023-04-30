@@ -48,6 +48,7 @@ describe('findNextGroupElement', () => {
       el: nextGroup.el as HTMLElement,
       firstElement: 'element-1-2'
     })
+    const nextElement = nextGroup.elements.get('element-1-2')
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
@@ -56,7 +57,67 @@ describe('findNextGroupElement', () => {
       state
     })
 
-    expect(element).toBe(nextGroup.elements.get('element-1-2'))
+    expect(element).toBe(nextElement)
+  })
+
+  it('should return the next group element if first is disabled but have other candidate', () => {
+    const nextGroup = state.groups.get('group-1') as FocusableGroup
+    state.groupsConfig.set('group-1', {
+      el: nextGroup.el as HTMLElement,
+      firstElement: 'element-1-0'
+    })
+    nextGroup.elements.get('element-1-0')?.el.setAttribute('disabled', 'true')
+    const nextElement = nextGroup.elements.get('element-1-1')
+    const fromElement = state.elements.get('element-0-0') as FocusableElement
+
+    const element = findNextGroupElement({
+      fromElement,
+      direction: 'right',
+      state
+    })
+
+    expect(element).toBe(nextElement)
+  })
+
+  it('should return the next group element if first is disabled but have other subsequent candidate', () => {
+    const nextGroup = state.groups.get('group-1') as FocusableGroup
+    state.groupsConfig.set('group-1', {
+      el: nextGroup.el as HTMLElement,
+      firstElement: 'element-1-0'
+    })
+    nextGroup.elements.get('element-1-0')?.el.setAttribute('disabled', 'true')
+    nextGroup.elements.get('element-1-1')?.el.setAttribute('disabled', 'true')
+    const nextElement = nextGroup.elements.get('element-1-2')
+    const fromElement = state.elements.get('element-0-0') as FocusableElement
+
+    const element = findNextGroupElement({
+      fromElement,
+      direction: 'right',
+      state
+    })
+
+    expect(element).toBe(nextElement)
+  })
+
+  it('should return null if the firstElement is disabled and have setted null candidate on direction (Last at his direction)', () => {
+    const nextGroup = state.groups.get('group-1') as FocusableGroup
+    state.groupsConfig.set('group-1', {
+      el: nextGroup.el as HTMLElement,
+      firstElement: 'element-1-0'
+    });
+    (nextGroup.elements.get('element-1-0') as FocusableElement).nextElementByDirection = {
+      right: null
+    }
+    nextGroup.elements.get('element-1-0')?.el.setAttribute('disabled', 'true')
+    const fromElement = state.elements.get('element-0-0') as FocusableElement
+
+    const element = findNextGroupElement({
+      fromElement,
+      direction: 'right',
+      state
+    })
+
+    expect(element).toBe(null)
   })
 
   it('should return null if the currentGroup doesnt exists', () => {

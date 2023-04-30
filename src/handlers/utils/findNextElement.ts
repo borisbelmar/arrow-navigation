@@ -1,6 +1,7 @@
-import type { ArrowNavigationState, Direction, FocusableElement, FocusableGroup } from '@/types'
+import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types'
 import findClosestElementInGroup from './findClosestElementInGroup'
 import findNextGroupElement from './findNextGroupElement'
+import findNextElementByDirection from './findNextElementByDirection'
 
 interface Props {
   direction: string | undefined
@@ -18,15 +19,18 @@ export default function findNextElement ({
   const selectedElement = fromElement || state.currentElement as FocusableElement
   const fromGroup = state.groups.get(selectedElement?.group) as FocusableGroup
   const fromGroupConfig = state.groupsConfig.get(selectedElement?.group)
-  let nextElement: FocusableElement | null = null
+  let nextElement: FocusableElement | null | undefined
 
   if (selectedElement?.nextElementByDirection) {
-    const nextElementId = selectedElement.nextElementByDirection[direction as Direction]
+    nextElement = findNextElementByDirection({
+      fromElement: selectedElement,
+      direction,
+      state
+    })
+    if (nextElement === null) return null
+  }
 
-    if (nextElementId === null) return null
-
-    nextElement = state.elements.get(nextElementId as string) as FocusableElement
-  } else {
+  if (!nextElement) {
     nextElement = findClosestElementInGroup({
       direction,
       candidateElements: Array.from(fromGroup?.elements.values() || []),
