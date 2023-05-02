@@ -45,17 +45,11 @@ describe('focusNextElement', () => {
   })
 
   it('should focus nothing with manual null', () => {
-    const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = {
-      ...currentGroup.elements.get('element-0-0') as FocusableElement,
-      nextElementByDirection: {
-        down: null
-      }
+    (state.currentElement as FocusableElement).nextElementByDirection = {
+      down: null
     }
 
-    const onFocusChange = jest.fn(element => {
-      state.currentElement = element
-    })
+    const onFocusChange = jest.fn()
 
     focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 

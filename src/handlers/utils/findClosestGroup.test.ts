@@ -19,9 +19,10 @@ describe('findClosestGroup', () => {
       direction: 'right',
       currentElement: state.currentElement as FocusableElement,
       candidateGroups: state.groups,
-      isViewportSafe: true
+      isViewportSafe: true,
+      state
     })
-    expect(closestGroup).toBe(group1)
+    expect(closestGroup?.group).toBe(group1)
   })
 
   it('should return null if the next candidate is out of viewport if isViewportSafe is true', () => {
@@ -32,7 +33,8 @@ describe('findClosestGroup', () => {
       direction: 'down',
       currentElement: state.currentElement as FocusableElement,
       candidateGroups: state.groups,
-      isViewportSafe: true
+      isViewportSafe: true,
+      state
     })
     expect(closestGroup).toBe(null)
   })
@@ -46,10 +48,11 @@ describe('findClosestGroup', () => {
     const closestGroup = findClosestGroup({
       direction: 'down',
       currentElement: state.currentElement as FocusableElement,
-      candidateGroups: state.groups
+      candidateGroups: state.groups,
+      state
     })
 
-    expect(closestGroup).toBe(group2)
+    expect(closestGroup?.group).toBe(group2)
   })
 
   it('should return null if the currentElement is null', () => {
@@ -58,8 +61,25 @@ describe('findClosestGroup', () => {
     const closestGroup = findClosestGroup({
       direction: 'down',
       currentElement: state.currentElement as unknown as FocusableElement,
-      candidateGroups: state.groups
+      candidateGroups: state.groups,
+      state
     })
     expect(closestGroup).toBe(null)
+  })
+
+  it('should return the subsequent best candidate if the next candidate doesnt have focusable elements', () => {
+    state.currentElement = state.elements.get('element-1-0') as FocusableElement
+
+    state.groups.get('group-2')?.elements.forEach(element => {
+      element.el.setAttribute('disabled', 'true')
+    })
+
+    const closestGroup = findClosestGroup({
+      direction: 'down',
+      currentElement: state.currentElement as unknown as FocusableElement,
+      candidateGroups: state.groups,
+      state
+    })
+    expect(closestGroup?.group?.el.id).toBe('group-3')
   })
 })
