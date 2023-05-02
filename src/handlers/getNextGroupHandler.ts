@@ -7,5 +7,5 @@ export default function getNextGroupHandler (state: ArrowNavigationState) {
     fromElement: state.elements.get(elementId || '') as FocusableElement,
     direction,
     state
-  })?.el.id ?? null
+  })?.group.el.id ?? null
 }

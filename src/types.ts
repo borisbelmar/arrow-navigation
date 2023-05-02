@@ -23,8 +23,11 @@ type BlurEventResult<T> = EventResult<T> & {
   next: T | undefined | null
 }
 
-export type FocusableElement = {
+export type Focusable = {
   el: HTMLElement
+}
+
+export type FocusableElement = Focusable & {
   group: string
   nextElementByDirection?: ElementByDirection
   onFocus?: (result: FocusEventResult<FocusableElement>) => void
@@ -33,13 +36,11 @@ export type FocusableElement = {
 
 export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group'>
 
-export type FocusableGroup = {
-  el: HTMLElement
+export type FocusableGroup = Focusable & {
   elements: Map<string, FocusableElement>
 }
 
-export type FocusableGroupConfig = {
-  el: HTMLElement
+export type FocusableGroupConfig = Focusable & {
   firstElement?: string
   nextGroupByDirection?: ElementByDirection
   saveLast?: boolean
