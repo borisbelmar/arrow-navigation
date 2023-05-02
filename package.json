@@ -53,6 +53,14 @@
   ],
   "author": "Boris Belmar <borisbelmarm@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/borisbelmar/arrow-navigation/",
+  "bugs": {
+      "url": "https://github.com/borisbelmar/arrow-navigation/issues"
+  },
+  "repository": {
+      "type": "git",
+      "url": "git+https://github.com/borisbelmar/arrow-navigation.git"
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "5.16.5",
     "@types/jest": "29.4.0",
