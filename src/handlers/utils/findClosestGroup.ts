@@ -1,7 +1,8 @@
-import type { FocusableElement, FocusableGroup } from '@/types'
+import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types'
 import getEuclideanDistance from './getEuclideanDistance'
 import getReferencePointsByCenter from './getReferencePointsByCenter'
 import isEligibleCandidate from './isEligibleCandidate/isEligibleCandidate'
+import findNextGroupElement from './findNextGroupElement'
 
 interface Result {
   minDistance: number
@@ -15,6 +16,12 @@ interface Props {
   threshold?: number
   isViewportSafe?: boolean
   allValidCandidates?: boolean
+  state: ArrowNavigationState
+}
+
+interface GroupAndElement {
+  group: FocusableGroup
+  element: FocusableElement
 }
 
 export default function findClosestGroup ({
@@ -23,8 +30,9 @@ export default function findClosestGroup ({
   candidateGroups,
   currentElement,
   direction,
-  allValidCandidates
-}: Props): FocusableGroup | null {
+  allValidCandidates,
+  state
+}: Props): GroupAndElement | null {
   const groupIdsArray = Array.from(candidateGroups.keys())
 
   const result = groupIdsArray.reduce<Result>(
@@ -64,6 +72,30 @@ export default function findClosestGroup ({
     },
     { minDistance: Infinity, closestGroup: null }
   )
+
+  if (result.closestGroup !== null) {
+    const element = findNextGroupElement({
+      direction,
+      nextGroup: result.closestGroup,
+      fromElement: currentElement,
+      state
+    })
+
+    if (!element) {
+      const filteredGroups = new Map(candidateGroups)
+      filteredGroups.delete(result.closestGroup.el.id)
+      return findClosestGroup({
+        direction,
+        currentElement,
+        candidateGroups: filteredGroups,
+        state
+      })
+    }
+    return {
+      group: result.closestGroup,
+      element
+    }
+  }
 
   return result.closestGroup
 }

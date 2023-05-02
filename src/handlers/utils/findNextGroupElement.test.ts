@@ -17,7 +17,7 @@ describe('findNextGroupElement', () => {
 
     const nextGroup = state.groups.get('group-1') as FocusableGroup
 
-    const element = findNextGroupElement({ fromElement, direction: 'right', state })
+    const element = findNextGroupElement({ fromElement, direction: 'right', state, nextGroup })
 
     expect(element).toBe(nextGroup.elements.get('element-1-0'))
   })
@@ -34,6 +34,7 @@ describe('findNextGroupElement', () => {
     const fromElement = currentGroup.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      nextGroup,
       fromElement,
       direction: 'right',
       state
@@ -52,6 +53,7 @@ describe('findNextGroupElement', () => {
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      nextGroup,
       fromElement,
       direction: 'right',
       state
@@ -71,6 +73,7 @@ describe('findNextGroupElement', () => {
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      nextGroup,
       fromElement,
       direction: 'right',
       state
@@ -91,6 +94,7 @@ describe('findNextGroupElement', () => {
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      nextGroup,
       fromElement,
       direction: 'right',
       state
@@ -112,6 +116,7 @@ describe('findNextGroupElement', () => {
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      nextGroup,
       fromElement,
       direction: 'right',
       state
@@ -127,6 +132,7 @@ describe('findNextGroupElement', () => {
     }
 
     const element = findNextGroupElement({
+      nextGroup: null as unknown as FocusableGroup,
       fromElement,
       direction: 'right',
       state
@@ -146,6 +152,7 @@ describe('findNextGroupElement', () => {
     const fromElement = currentGroup.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
+      nextGroup: null as unknown as FocusableGroup,
       fromElement,
       direction: 'right',
       state
@@ -162,6 +169,7 @@ describe('findNextGroupElement', () => {
     state.groupsConfig.delete('group-1')
 
     const element = findNextGroupElement({
+      nextGroup,
       fromElement,
       direction: 'right',
       state
