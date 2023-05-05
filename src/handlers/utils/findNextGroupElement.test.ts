@@ -1,5 +1,5 @@
 import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
-import { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types'
+import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../../types'
 import findNextGroupElement from './findNextGroupElement'
 
 describe('findNextGroupElement', () => {
@@ -176,5 +176,55 @@ describe('findNextGroupElement', () => {
     })
 
     expect(element).toBe(nextGroup.elements.get('element-1-0'))
+  })
+
+  it('should return the lastElement if saveLast is true and has lastElement', () => {
+    const nextGroupConfig = state.groupsConfig.get('group-1') as FocusableGroupConfig
+    nextGroupConfig.saveLast = true
+    nextGroupConfig.lastElement = 'element-1-2'
+
+    const prevElement = state.elements.get('element-0-0') as FocusableElement
+
+    const element = findNextGroupElement({
+      nextGroup: state.groups.get('group-1') as FocusableGroup,
+      fromElement: prevElement,
+      direction: 'right',
+      state
+    })
+
+    expect(element).toBe(state.elements.get('element-1-2'))
+  })
+
+  it('should mot return the lastElement if saveLast is false and has lastElement', () => {
+    const nextGroupConfig = state.groupsConfig.get('group-1') as FocusableGroupConfig
+    nextGroupConfig.saveLast = false
+    nextGroupConfig.lastElement = 'element-1-2'
+
+    const prevElement = state.elements.get('element-0-0') as FocusableElement
+
+    const element = findNextGroupElement({
+      nextGroup: state.groups.get('group-1') as FocusableGroup,
+      fromElement: prevElement,
+      direction: 'right',
+      state
+    })
+
+    expect(element).toBe(state.elements.get('element-1-0'))
+  })
+
+  it('should return the firstElement if setted and lastElement is not setted', () => {
+    const nextGroupConfig = state.groupsConfig.get('group-1') as FocusableGroupConfig
+    nextGroupConfig.firstElement = 'element-1-2'
+
+    const prevElement = state.elements.get('element-0-0') as FocusableElement
+
+    const element = findNextGroupElement({
+      nextGroup: state.groups.get('group-1') as FocusableGroup,
+      fromElement: prevElement,
+      direction: 'right',
+      state
+    })
+
+    expect(element).toBe(state.elements.get('element-1-2'))
   })
 })

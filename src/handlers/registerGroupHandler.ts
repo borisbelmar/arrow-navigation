@@ -4,6 +4,7 @@ import { EventEmitter } from '@/utils/createEventEmitter'
 
 const defaultGroupConfig: FocusableGroupOptions = {
   firstElement: undefined,
+  lastElement: undefined,
   nextGroupByDirection: undefined,
   saveLast: false,
   viewportSafe: true,
@@ -30,6 +31,7 @@ export default function registerGroupHandler (
     const existentGroup = state.groups.get(id)
 
     const prevElements: FocusableGroup['elements'] = existentGroup?.elements || new Map()
+    const prevConfig = state.groupsConfig.get(id)
 
     state.groups.set(id, {
       elements: prevElements,
@@ -40,6 +42,7 @@ export default function registerGroupHandler (
     state.groupsConfig.set(id, {
       ...defaultGroupConfig,
       ...options,
+      lastElement: prevConfig?.lastElement || undefined,
       el: element
     })
     emit(EVENTS.GROUPS_CONFIG_CHANGED, state.groupsConfig)
