@@ -96,8 +96,7 @@ export function initArrowNavigation ({
     _forceNavigate (key) {
       if (!state.debug) return
       onKeyPress({
-        key,
-        preventDefault: () => {}
+        key
       } as KeyboardEvent)
     },
     _getState () {
