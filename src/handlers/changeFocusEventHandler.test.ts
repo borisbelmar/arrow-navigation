@@ -146,4 +146,22 @@ describe('changeFocusEventHandler', () => {
     expect(events.onGroupBlur).not.toHaveBeenCalled()
     expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down', undefined)
   })
+
+  it('should save the last element of the group if saveLast is true', () => {
+    const currentGroupConfig = state.groupsConfig.get('group-0') as FocusableGroupConfig
+    const nextElement = state.groups.get('group-1')?.elements.get('element-1-0') as FocusableElement
+    const prevElement = state.groups.get('group-0')?.elements.get('element-0-0') as FocusableElement
+    currentGroupConfig.saveLast = true
+    currentGroupConfig.lastElement = undefined
+
+    changeFocusEventHandler({
+      nextElement,
+      prevElement,
+      direction: 'down',
+      state,
+      emit: emitter.emit
+    })
+
+    expect(state.groupsConfig.get('group-0')?.lastElement).toBe('element-0-0')
+  })
 })

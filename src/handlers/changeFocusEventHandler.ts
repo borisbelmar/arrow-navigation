@@ -1,5 +1,5 @@
 import EVENTS from '@/config/events'
-import type { ChangeFocusEventHandlerOptions } from '@/types'
+import type { ChangeFocusEventHandlerOptions, FocusableElement } from '@/types'
 
 export default function changeFocusEventHandler ({
   nextElement,
@@ -18,6 +18,12 @@ export default function changeFocusEventHandler ({
     const nextGroup = state.groupsConfig.get(nextElement.group as string)
 
     if (prevGroup) {
+      if (prevGroup.saveLast) {
+        state.groupsConfig.set(prevGroup.el.id, {
+          ...prevGroup,
+          lastElement: (prevElement as FocusableElement).el.id
+        })
+      }
       prevGroup.onBlur?.({
         current: prevGroup,
         next: nextGroup,
