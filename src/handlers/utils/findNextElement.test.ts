@@ -1,3 +1,4 @@
+import getCurrentElement from '@/utils/getCurrentElement'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import type { ArrowNavigationState, FocusableElement } from '@/types'
 import findNextElement from './findNextElement'
@@ -21,7 +22,7 @@ describe('findNextElement', () => {
 
     const nextElement = findNextElement({
       direction: 'down',
-      fromElement: state.currentElement as FocusableElement,
+      fromElement: getCurrentElement(state) as FocusableElement,
       state,
       inGroup: true
     })
@@ -32,7 +33,7 @@ describe('findNextElement', () => {
 
     const nextElement2 = findNextElement({
       direction: 'down',
-      fromElement: state.currentElement as FocusableElement,
+      fromElement: getCurrentElement(state) as FocusableElement,
       state,
       inGroup: true
     })
@@ -52,7 +53,7 @@ describe('findNextElement', () => {
 
     const nextElement = findNextElement({
       direction: 'down',
-      fromElement: state.currentElement as FocusableElement,
+      fromElement: getCurrentElement(state) as FocusableElement,
       state,
       inGroup: true
     })

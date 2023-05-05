@@ -54,7 +54,7 @@ export type FocusableGroupConfig = Focusable & {
 export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el'>
 
 export type ArrowNavigationState = {
-  currentElement: FocusableElement | null,
+  currentElement: string | null,
   groupsConfig: Map<string, FocusableGroupConfig>
   groups: Map<string, FocusableGroup>
   elements: Map<string, FocusableElement>

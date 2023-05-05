@@ -16,7 +16,8 @@ export default function findNextElement ({
   state,
   inGroup = false
 }: Props): FocusableElement | null {
-  const selectedElement = fromElement || state.currentElement as FocusableElement
+  const currentElement = state.elements.get(state.currentElement as string) as FocusableElement
+  const selectedElement = fromElement || currentElement
   const fromGroup = state.groups.get(selectedElement?.group) as FocusableGroup
   const fromGroupConfig = state.groupsConfig.get(selectedElement?.group)
   let nextElement: FocusableElement | null | undefined

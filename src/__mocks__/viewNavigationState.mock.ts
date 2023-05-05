@@ -68,7 +68,7 @@ export default function getViewNavigationStateMock (): ArrowNavigationState {
   groups.set(group5.el.id, group5)
   groupsConfig.set(group5.el.id, { el: group5.el })
   return {
-    currentElement: Array.from(elements.values())[0],
+    currentElement: 'element-0-0',
     elements,
     groups,
     groupsConfig

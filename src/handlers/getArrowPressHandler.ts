@@ -1,4 +1,5 @@
 import type { ArrowNavigationState, Direction, FocusableElement } from '@/types'
+import getCurrentElement from '@/utils/getCurrentElement'
 import focusNextElement from './utils/focusNextElement'
 
 const keyToDirection: { [x: string]: string } = {
@@ -22,7 +23,7 @@ export default function getArrowPressHandler (
 
     if (!direction) return
 
-    const currentElement = state.currentElement
+    const currentElement = getCurrentElement(state)
     if (!currentElement) {
       const firstRegisteredElement = state.elements.values().next().value
       if (firstRegisteredElement) {
