@@ -1,4 +1,5 @@
 import type { ArrowNavigationState, Direction, FocusableElement, FocusableGroup } from '@/types'
+import getCurrentElement from '@/utils/getCurrentElement'
 import findNextGroupElement from './findNextGroupElement'
 
 interface Props {
@@ -21,7 +22,7 @@ export default function findNextGroupByDirection ({
   state,
   groups
 }: Props): GroupAndElement | null | undefined {
-  const selectedElement = fromElement || state.currentElement as FocusableElement
+  const selectedElement = fromElement || getCurrentElement(state) as FocusableElement
   const candidateGroups = groups || state.groups
   const currentGroupConfig = state.groupsConfig.get(
     fromGroup?.el.id

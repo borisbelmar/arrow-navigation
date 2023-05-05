@@ -85,7 +85,7 @@ describe('arrowNavigation', () => {
 
     navigationApi._forceNavigate('ArrowDown')
 
-    expect(navigationApi.getFocusedElement()).toBe(state.groups.get('group-0')?.elements.get('element-0-1'))
+    expect(navigationApi.getFocusedElement()).toBe(state.elements.get('element-0-1'))
   })
 
   it('should return the state in debug mode', () => {

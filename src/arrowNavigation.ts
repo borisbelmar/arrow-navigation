@@ -11,6 +11,7 @@ import {
 } from './handlers'
 import changeFocusEventHandler from './handlers/changeFocusEventHandler'
 import createEventEmitter from './utils/createEventEmitter'
+import getCurrentElement from './utils/getCurrentElement'
 
 let arrowNavigation: ArrowNavigationInstance | null
 
@@ -34,8 +35,8 @@ export function initArrowNavigation ({
   const emitter = createEventEmitter()
 
   const changeFocusElementHandler = (nextElement: FocusableElement, direction?: Direction) => {
-    const prevElement = state.currentElement
-    state.currentElement = nextElement
+    const prevElement = getCurrentElement(state) as FocusableElement
+    state.currentElement = nextElement.el.id
     nextElement.el.focus()
     changeFocusEventHandler({
       nextElement,
@@ -61,7 +62,7 @@ export function initArrowNavigation ({
   window.addEventListener('keydown', onKeyPress)
 
   arrowNavigation = {
-    getFocusedElement: () => state.currentElement,
+    getFocusedElement: () => state.elements.get(state.currentElement as string) || null,
     setFocusElement: setFocusHandler(state, changeFocusElementHandler),
     registerGroup: registerGroupHandler(state, emitter.emit),
     registerElement: registerElementHandler(state, changeFocusElementHandler, emitter.emit),
@@ -83,7 +84,7 @@ export function initArrowNavigation ({
       return new Set(state.elements.keys())
     },
     getFocusedGroup () {
-      return state.currentElement?.group
+      return getCurrentElement(state)?.group
     },
     getNextElement: getNextElementHandler(state),
     getNextGroup: getNextGroupHandler(state),
