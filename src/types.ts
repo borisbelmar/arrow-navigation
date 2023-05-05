@@ -42,6 +42,7 @@ export type FocusableGroup = Focusable & {
 
 export type FocusableGroupConfig = Focusable & {
   firstElement?: string
+  lastElement?: string
   nextGroupByDirection?: ElementByDirection
   saveLast?: boolean
   viewportSafe?: boolean

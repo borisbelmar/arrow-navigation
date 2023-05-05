@@ -1,4 +1,4 @@
-import type { ArrowNavigationState, FocusableElement, FocusableGroupConfig, FocusableGroup } from '@/types'
+import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types'
 import findClosestElementInGroup from './findClosestElementInGroup'
 import isElementDisabled from './isElementDisabled'
 import findNextElementByDirection from './findNextElementByDirection'
@@ -18,18 +18,22 @@ export default function findNextGroupElement ({
 }: Props): FocusableElement | null {
   if (!nextGroup) return null
   let nextElement: FocusableElement | null = null
-  const config = state.groupsConfig.get(nextGroup.el.id) as FocusableGroupConfig
+  const config = state.groupsConfig.get(nextGroup.el.id)
 
-  if (config?.firstElement) {
-    nextElement = state.elements.get(config.firstElement) as FocusableElement
-    if (nextElement) {
-      if (isElementDisabled(nextElement.el)) {
-        nextElement = findNextElementByDirection({
-          fromElement: nextElement,
-          direction,
-          state
-        }) as FocusableElement
-        if (nextElement === null) return null
+  if (config) {
+    const firstElement = (config.saveLast && config.lastElement) || config.firstElement
+
+    if (firstElement) {
+      nextElement = state.elements.get(firstElement) as FocusableElement
+      if (nextElement) {
+        if (isElementDisabled(nextElement.el)) {
+          nextElement = findNextElementByDirection({
+            fromElement: nextElement,
+            direction,
+            state
+          }) as FocusableElement
+          if (nextElement === null) return null
+        }
       }
     }
   }
