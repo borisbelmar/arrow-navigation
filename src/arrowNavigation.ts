@@ -4,6 +4,7 @@ import {
   getArrowPressHandler,
   getNextElementHandler,
   getNextGroupHandler,
+  globalFocusHandler,
   registerElementHandler,
   registerGroupHandler,
   setFocusHandler,
@@ -59,7 +60,10 @@ export function initArrowNavigation ({
 
   const onKeyPress = getArrowPressHandler(state, changeFocusElementHandler)
 
+  const onGlobalFocus = (event: FocusEvent) => globalFocusHandler(state, event)
+
   window.addEventListener('keydown', onKeyPress)
+  window.addEventListener('focus', onGlobalFocus, true)
 
   arrowNavigation = {
     getFocusedElement: () => state.elements.get(state.currentElement as string) || null,
@@ -69,6 +73,7 @@ export function initArrowNavigation ({
     unregisterElement: unregisterElementHandler(state, changeFocusElementHandler, emitter.emit),
     destroy () {
       window.removeEventListener('keydown', onKeyPress)
+      window.removeEventListener('focus', onGlobalFocus, true)
       arrowNavigation = null
     },
     getCurrentGroups () {
