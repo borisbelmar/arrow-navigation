@@ -1,3 +1,4 @@
+import getCurrentElement from '@/utils/getCurrentElement'
 import { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types'
 import findClosestElementInGroup from './findClosestElementInGroup'
 import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
@@ -13,21 +14,21 @@ describe('findClosestElementInGroup', () => {
   it('should return the closest element in the group for given direction', () => {
     const group = state.groups.get('group-0') as FocusableGroup
     const arrayGroup = Array.from(group.elements.values())
-    state.currentElement = group.elements.get('element-0-0') as FocusableElement
+    state.currentElement = 'element-0-0'
 
     const closestElement = findClosestElementInGroup({
       direction: 'down',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true
     })
     expect(closestElement).toBe(group.elements.get('element-0-1'))
 
-    state.currentElement = group.elements.get('element-0-1') as FocusableElement
+    state.currentElement = 'element-0-1'
 
     const closestElement2 = findClosestElementInGroup({
       direction: 'up',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true
     })
@@ -35,7 +36,7 @@ describe('findClosestElementInGroup', () => {
 
     const closestElement3 = findClosestElementInGroup({
       direction: 'right',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true
     })
@@ -43,7 +44,7 @@ describe('findClosestElementInGroup', () => {
 
     const closestElement4 = findClosestElementInGroup({
       direction: 'left',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true
     })
@@ -53,11 +54,11 @@ describe('findClosestElementInGroup', () => {
   it('should return null if the next candidate is out of viewport if isViewportSafe is true', () => {
     const group = state.groups.get('group-1') as FocusableGroup
     const arrayGroup = Array.from(group.elements.values())
-    state.currentElement = group.elements.get('element-1-2') as FocusableElement
+    state.currentElement = 'element-1-2'
 
     const closestElement = findClosestElementInGroup({
       direction: 'right',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true
     })
@@ -68,11 +69,11 @@ describe('findClosestElementInGroup', () => {
   it('should return the closest element in the group for given direction if isViewportSafe is false', () => {
     const group = state.groups.get('group-1') as FocusableGroup
     const arrayGroup = Array.from(group.elements.values())
-    state.currentElement = group.elements.get('element-1-2') as FocusableElement
+    state.currentElement = 'element-1-2'
 
     const closestElement = findClosestElementInGroup({
       direction: 'right',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup
     })
     expect(group.elements.get('element-1-3')).not.toBeUndefined()
@@ -91,12 +92,11 @@ describe('findClosestElementInGroup', () => {
   })
 
   it('should return null if the currentElement is not in the group', () => {
-    const group = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = group.elements.get('element-0-0') as FocusableElement
+    state.currentElement = 'element-0-0'
 
     const closestElement = findClosestElementInGroup({
       direction: 'down',
-      currentFocusElement: state.currentElement as unknown as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: Array.from((state.groups.get('group-1') as FocusableGroup).elements.values())
     })
     expect(closestElement).toBe(null)
@@ -105,22 +105,22 @@ describe('findClosestElementInGroup', () => {
   it('should return the closest element, not matters the direction, with allValidCandidates', () => {
     const group = state.groups.get('group-0') as FocusableGroup
     const arrayGroup = Array.from(group.elements.values())
-    state.currentElement = group.elements.get('element-0-0') as FocusableElement
+    state.currentElement = 'element-0-0'
 
     const closestElement = findClosestElementInGroup({
       direction: 'down',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true,
       allValidCandidates: true
     })
     expect(closestElement).toBe(group.elements.get('element-0-1'))
 
-    state.currentElement = group.elements.get('element-0-1') as FocusableElement
+    state.currentElement = 'element-0-1'
 
     const closestElement2 = findClosestElementInGroup({
       direction: 'up',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true,
       allValidCandidates: true
@@ -129,7 +129,7 @@ describe('findClosestElementInGroup', () => {
 
     const closestElement3 = findClosestElementInGroup({
       direction: 'right',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true,
       allValidCandidates: true
@@ -138,7 +138,7 @@ describe('findClosestElementInGroup', () => {
 
     const closestElement4 = findClosestElementInGroup({
       direction: 'left',
-      currentFocusElement: state.currentElement as FocusableElement,
+      currentFocusElement: getCurrentElement(state) as FocusableElement,
       candidateElements: arrayGroup,
       isViewportSafe: true,
       allValidCandidates: true

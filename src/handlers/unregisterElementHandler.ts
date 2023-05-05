@@ -12,7 +12,7 @@ export default function unregisterElementHandler (
     const elementId = typeof element === 'string' ? element : element.id
     const groupId = state.elements.get(elementId)?.group as string
 
-    if (elementId === state.currentElement?.el.id) {
+    if (elementId === state.currentElement) {
       focusNextElement({
         direction: undefined,
         state,

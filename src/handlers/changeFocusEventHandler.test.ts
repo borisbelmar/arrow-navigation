@@ -1,5 +1,6 @@
 import EVENTS from '@/config/events'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
+import getCurrentElement from '@/utils/getCurrentElement'
 import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../types'
 import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
 import changeFocusEventHandler from './changeFocusEventHandler'
@@ -55,7 +56,7 @@ describe('changeFocusEventHandler', () => {
     })
 
     expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down', prevElement)
-    expect(events.onElementBlur).toHaveBeenCalledWith(state.currentElement as FocusableElement, 'down', nextElement)
+    expect(events.onElementBlur).toHaveBeenCalledWith(getCurrentElement(state) as FocusableElement, 'down', nextElement)
     expect(events.onGroupBlur).toHaveBeenCalledWith(state.groupsConfig.get('group-0'), 'down', state.groupsConfig.get('group-1'))
     expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down', state.groupsConfig.get('group-0'))
   })

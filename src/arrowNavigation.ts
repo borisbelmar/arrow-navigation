@@ -4,6 +4,7 @@ import {
   getArrowPressHandler,
   getNextElementHandler,
   getNextGroupHandler,
+  globalFocusHandler,
   registerElementHandler,
   registerGroupHandler,
   setFocusHandler,
@@ -11,6 +12,7 @@ import {
 } from './handlers'
 import changeFocusEventHandler from './handlers/changeFocusEventHandler'
 import createEventEmitter from './utils/createEventEmitter'
+import getCurrentElement from './utils/getCurrentElement'
 
 let arrowNavigation: ArrowNavigationInstance | null
 
@@ -34,8 +36,8 @@ export function initArrowNavigation ({
   const emitter = createEventEmitter()
 
   const changeFocusElementHandler = (nextElement: FocusableElement, direction?: Direction) => {
-    const prevElement = state.currentElement
-    state.currentElement = nextElement
+    const prevElement = getCurrentElement(state) as FocusableElement
+    state.currentElement = nextElement.el.id
     nextElement.el.focus()
     changeFocusEventHandler({
       nextElement,
@@ -58,16 +60,20 @@ export function initArrowNavigation ({
 
   const onKeyPress = getArrowPressHandler(state, changeFocusElementHandler)
 
+  const onGlobalFocus = (event: FocusEvent) => globalFocusHandler(state, event)
+
   window.addEventListener('keydown', onKeyPress)
+  window.addEventListener('focus', onGlobalFocus, true)
 
   arrowNavigation = {
-    getFocusedElement: () => state.currentElement,
+    getFocusedElement: () => state.elements.get(state.currentElement as string) || null,
     setFocusElement: setFocusHandler(state, changeFocusElementHandler),
     registerGroup: registerGroupHandler(state, emitter.emit),
     registerElement: registerElementHandler(state, changeFocusElementHandler, emitter.emit),
     unregisterElement: unregisterElementHandler(state, changeFocusElementHandler, emitter.emit),
     destroy () {
       window.removeEventListener('keydown', onKeyPress)
+      window.removeEventListener('focus', onGlobalFocus, true)
       arrowNavigation = null
     },
     getCurrentGroups () {
@@ -83,15 +89,14 @@ export function initArrowNavigation ({
       return new Set(state.elements.keys())
     },
     getFocusedGroup () {
-      return state.currentElement?.group
+      return getCurrentElement(state)?.group
     },
     getNextElement: getNextElementHandler(state),
     getNextGroup: getNextGroupHandler(state),
     _forceNavigate (key) {
       if (!state.debug) return
       onKeyPress({
-        key,
-        preventDefault: () => {}
+        key
       } as KeyboardEvent)
     },
     _getState () {

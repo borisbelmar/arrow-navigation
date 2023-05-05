@@ -1,4 +1,5 @@
 import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '@/types'
+import getCurrentElement from '@/utils/getCurrentElement'
 import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
 import focusNextElement from './focusNextElement'
 
@@ -13,39 +14,38 @@ describe('focusNextElement', () => {
 
   it('should focus the next element', () => {
     const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    state.currentElement = 'element-0-0'
 
     const onFocusChange = jest.fn(element => {
-      state.currentElement = element
+      state.currentElement = element.el.id
     })
 
     focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
-    expect(state.currentElement).toBe(currentGroup.elements.get('element-0-1'))
+    expect(state.currentElement).toBe('element-0-1')
     expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-1'), 'down')
   })
 
   it('should focus the next element with manual next element', () => {
     const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = {
-      ...currentGroup.elements.get('element-0-0') as FocusableElement,
-      nextElementByDirection: {
-        down: currentGroup.elements.get('element-0-2')?.el.id
-      }
+    const currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    currentElement.nextElementByDirection = {
+      down: 'element-0-2'
     }
+    state.currentElement = 'element-0-0'
 
     const onFocusChange = jest.fn(element => {
-      state.currentElement = element
+      state.currentElement = element.el.id
     })
 
     focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
-    expect(state.currentElement).toBe(currentGroup.elements.get('element-0-2'))
+    expect(state.currentElement).toBe('element-0-2')
     expect(onFocusChange).toHaveBeenCalledWith(currentGroup.elements.get('element-0-2'), 'down')
   })
 
   it('should focus nothing with manual null', () => {
-    (state.currentElement as FocusableElement).nextElementByDirection = {
+    (getCurrentElement(state) as FocusableElement).nextElementByDirection = {
       down: null
     }
 
@@ -57,8 +57,7 @@ describe('focusNextElement', () => {
   })
 
   it('should focus the next group if arent candidates on current group for given direction', () => {
-    const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    state.currentElement = 'element-0-0'
 
     const onFocusChange = jest.fn(element => {
       state.currentElement = element
@@ -71,25 +70,23 @@ describe('focusNextElement', () => {
   })
 
   it('should works normally if there no current group config', () => {
-    const currentGroup = state.groups.get('group-0') as FocusableGroup
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    state.currentElement = 'element-0-0'
     state.groupsConfig.delete('group-0')
 
     const onFocusChange = jest.fn(element => {
-      state.currentElement = element
+      state.currentElement = element.el.id
     })
 
     focusNextElement({ direction: 'down', state, onChangeCurrentElement: onFocusChange })
 
-    expect(state.currentElement).toBe(state.elements.get('element-0-1'))
+    expect(state.currentElement).toBe('element-0-1')
     expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-0-1'), 'down')
   })
 
   it('should keep the focus on group if keepFocus is true on currentGroup', () => {
-    const currentGroup = state.groups.get('group-0') as FocusableGroup
     const currentGroupConfig = state.groupsConfig.get('group-0') as FocusableGroupConfig
     currentGroupConfig.keepFocus = true
-    state.currentElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    state.currentElement = 'element-0-0'
 
     const onFocusChange = jest.fn(element => {
       state.currentElement = element
@@ -101,7 +98,7 @@ describe('focusNextElement', () => {
       onChangeCurrentElement: onFocusChange
     })
 
-    expect(state.currentElement).toBe(currentGroup.elements.get('element-0-0'))
+    expect(state.currentElement).toBe('element-0-0')
     expect(onFocusChange).not.toHaveBeenCalled()
   })
 })
