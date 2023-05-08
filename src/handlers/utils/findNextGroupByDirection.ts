@@ -25,7 +25,7 @@ export default function findNextGroupByDirection ({
   const selectedElement = fromElement || getCurrentElement(state) as FocusableElement
   const candidateGroups = groups || state.groups
   const currentGroupConfig = state.groupsConfig.get(
-    fromGroup?.el.id
+    fromGroup?.id
     || selectedElement?.group
     || ''
   )
@@ -48,6 +48,7 @@ export default function findNextGroupByDirection ({
     if (element) return ({ group: nextGroup, element })
 
     return findNextGroupByDirection({
+      fromElement: selectedElement,
       direction,
       fromGroup: nextGroup,
       state,

@@ -1,7 +1,7 @@
 import EVENTS from '@/config/events'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
 import getCurrentElement from '@/utils/getCurrentElement'
-import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../types'
+import { ArrowNavigationState, FocusableElement, FocusableGroupConfig } from '../types'
 import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
 import changeFocusEventHandler from './changeFocusEventHandler'
 
@@ -32,8 +32,8 @@ describe('changeFocusEventHandler', () => {
   })
 
   it('should call onElementFocus, onElementBlur, onGroupBlur and onGroupFocus correctly', () => {
-    const prevElement = state.groups.get('group-0')?.elements.get('element-0-0') as FocusableElement
-    const nextElement = state.groups.get('group-1')?.elements.get('element-1-0') as FocusableElement
+    const prevElement = state.elements.get('element-0-0') as FocusableElement
+    const nextElement = state.elements.get('element-1-0') as FocusableElement
 
     const events = {
       onElementFocus: jest.fn(),
@@ -62,17 +62,15 @@ describe('changeFocusEventHandler', () => {
   })
 
   it('should call onFocus and onBlur on group and element', () => {
-    const currentGroup = state.groups.get('group-0') as FocusableGroup
     const currentGroupConfig = state.groupsConfig.get('group-0') as FocusableGroupConfig
-    const prevElement = currentGroup.elements.get('element-0-0') as FocusableElement
+    const prevElement = state.elements.get('element-0-0') as FocusableElement
     currentGroupConfig.onFocus = jest.fn()
     currentGroupConfig.onBlur = jest.fn()
     prevElement.onFocus = jest.fn()
     prevElement.onBlur = jest.fn()
 
-    const nextGroup = state.groups.get('group-1') as FocusableGroup
     const nextGroupConfig = state.groupsConfig.get('group-1') as FocusableGroupConfig
-    const nextElement = nextGroup.elements.get('element-1-0') as FocusableElement
+    const nextElement = state.elements.get('element-1-0') as FocusableElement
     nextGroupConfig.onFocus = jest.fn()
     nextGroupConfig.onBlur = jest.fn()
     nextElement.onFocus = jest.fn()
@@ -115,7 +113,7 @@ describe('changeFocusEventHandler', () => {
 
   it('should not call onBlur if no prevGroup', () => {
     const prevElement = null
-    const nextElement = state.groups.get('group-1')?.elements.get('element-1-0') as FocusableElement
+    const nextElement = state.elements.get('element-1-0') as FocusableElement
 
     const events = {
       onElementFocus: jest.fn(),
@@ -149,8 +147,8 @@ describe('changeFocusEventHandler', () => {
 
   it('should save the last element of the group if saveLast is true', () => {
     const currentGroupConfig = state.groupsConfig.get('group-0') as FocusableGroupConfig
-    const nextElement = state.groups.get('group-1')?.elements.get('element-1-0') as FocusableElement
-    const prevElement = state.groups.get('group-0')?.elements.get('element-0-0') as FocusableElement
+    const nextElement = state.elements.get('element-1-0') as FocusableElement
+    const prevElement = state.elements.get('element-0-0') as FocusableElement
     currentGroupConfig.saveLast = true
     currentGroupConfig.lastElement = undefined
 

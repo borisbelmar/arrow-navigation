@@ -1,7 +1,9 @@
 import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types'
+import getCurrentElement from '@/utils/getCurrentElement'
 import findClosestElementInGroup from './findClosestElementInGroup'
 import findNextElementByDirection from './findNextElementByDirection'
 import findNextGroup from './findNextGroup'
+import findNextByDirection from './findNextByDirection'
 
 interface Props {
   direction: string | undefined
@@ -16,13 +18,26 @@ export default function findNextElement ({
   state,
   inGroup = false
 }: Props): FocusableElement | null {
-  const currentElement = state.elements.get(state.currentElement as string) as FocusableElement
-  const selectedElement = fromElement || currentElement
+  const selectedElement = fromElement || getCurrentElement(state) as FocusableElement
   const fromGroup = state.groups.get(selectedElement?.group) as FocusableGroup
   const fromGroupConfig = state.groupsConfig.get(selectedElement?.group)
   let nextElement: FocusableElement | null | undefined
 
-  if (selectedElement?.nextElementByDirection) {
+  if (selectedElement?.nextByDirection
+    || (fromGroupConfig?.byOrder || selectedElement?.order !== undefined)
+  ) {
+    nextElement = findNextByDirection({
+      direction,
+      fromElement: selectedElement,
+      state
+    })
+    if (nextElement === null) return null
+  } else if (selectedElement?.nextElementByDirection) {
+    /**
+     * If the current element has a nextElementByDirection property, we use it
+     * to find the next element.
+     * This will be removed in the next major version.
+     */
     nextElement = findNextElementByDirection({
       fromElement: selectedElement,
       direction,
@@ -34,7 +49,8 @@ export default function findNextElement ({
   if (!nextElement) {
     nextElement = findClosestElementInGroup({
       direction,
-      candidateElements: Array.from(fromGroup?.elements.values() || []),
+      candidateElements: fromGroup?.elements,
+      state,
       currentFocusElement: selectedElement,
       threshold: fromGroupConfig?.threshold,
       isViewportSafe: fromGroupConfig?.viewportSafe

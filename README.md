@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![install size](https://packagephobia.com/badge?p=@arrow-navigation/core)](https://packagephobia.com/result?p=@arrow-navigation/core)
 
-Light (~10kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
+Light (~13kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
 ## Installation
 
@@ -15,6 +15,10 @@ npm install --save @arrow-navigation/core
 
 yarn add @arrow-navigation/core
 ```
+
+## What is new?
+
+- **v1.2.8**: Add the `byOrder` option on groups. Now you can navigate by order setted on elements. Can be 'horizontal', 'vertical' or 'grid'. You can also set the number of columns to navigate when the byOrder is 'grid' using the `cols` option.
 
 ## Usage
 
@@ -100,11 +104,13 @@ api.registerGroup(container, {
     'up': null, // If press up, no groups will be focused
     'left': undefined // undefined will keep the default behavior
   },
+  byOrder: 'horizontal', // Navigate by order setted on elements. Can be 'horizontal', 'vertical' or 'grid'. Take care with this option, because this will change the id of the elements, for example, for group-0, the element in order 1 will be group-0-1. Keep this in mind if you are using the id of the elements for firstElement or nextByDirection options.
+  cols: 2, // The number of columns to navigate when the byOrder is 'grid'. The default value is 1 and you can set a object with the number of columns for each breakpoint. For example: { 0: 1, 768: 2, 1024: 3 }
   saveLast: true, // Save the last focused element when the focus leave the group and use it when the focus enter again
   viewportSafe: true, // If true, the next element will be the first element that is visible in the viewport. The default value is true
   threshold: 2, // The threshold in pixels to consider an element eligible to be focused. The default value is 0
-  onFocus: ({ current, prev, direction }) => { console.log(`focused ${current.el.id}`) }, // Callback when the group is focused. The prev group is the group that was focused before the current group.
-  onBlur: ({ current, next, direction }) => { console.log(`blurred ${current.el.id}`) }, // Callback when the group is blurred. The next group is the group that will be focused when the focus leave the current group.
+  onFocus: ({ current, prev, direction }) => { console.log(`focused ${current.id}`) }, // Callback when the group is focused. The prev group is the group that was focused before the current group.
+  onBlur: ({ current, next, direction }) => { console.log(`blurred ${current.id}`) }, // Callback when the group is blurred. The next group is the group that will be focused when the focus leave the current group.
   keepFocus: true // If true, the focus will not leave the group when the user press the arrow keys. The default value is false. This option is usefull for modals or other elements that need to keep the focus inside.
 })
 ```
@@ -135,13 +141,15 @@ const element = document.createElement('button')
 element.id = 'element-0-0'
 
 api.registerElement(element, 'group-1', {
-  nextElementByDirection: { // This will set the next element manually
+  nextByDirection: { // This will set the next element manually
     'down': 'element-0-1', // The next element when the user press the down arrow key
+    'right': { id: 'group-1', kind: 'group' }, // The next group when the user press the right arrow key
     'up': null, // If press up, no elements will be focused
     'left': undefined // undefined will keep the default behavior
   },
-  onFocus: ({ current, prev, direction }) => console.log(`focused ${current.el.id}`), // Callback when the element is focused. The prev element is the element that was focused before the current element.
-  onBlur: ({ current, next, direction }) => console.log(`blurred ${current.el.id}`) // Callback when the element is blurred. The next element is the element that will be focused when the focus leave the current element.
+  order: 0, // The order of the element. No default value. This is needed when the group is setted to navigate byOrder. If no setted, byOrder will be ignored.
+  onFocus: ({ current, prev, direction }) => console.log(`focused ${current.id}`), // Callback when the element is focused. The prev element is the element that was focused before the current element.
+  onBlur: ({ current, next, direction }) => console.log(`blurred ${current.id}`) // Callback when the element is blurred. The next element is the element that will be focused when the focus leave the current element.
 })
 ```
 

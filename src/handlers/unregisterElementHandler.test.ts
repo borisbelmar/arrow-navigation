@@ -21,7 +21,7 @@ describe('unregisterElementHandler', () => {
 
     expect(state.elements.has(element.id)).toBe(false)
     expect(state.groups.get('group-0')?.elements.has(element.id)).toBe(false)
-    expect(state.groups.get('group-0')?.elements.get('element-0-3')).toBeUndefined()
+    expect(state.groups.get('group-0')?.elements.has('element-0-3')).toBe(false)
   })
 
   it('should delete the group if it is empty', () => {
@@ -52,7 +52,7 @@ describe('unregisterElementHandler', () => {
 
     expect(state.elements.has(elementId)).toBe(false)
     expect(state.groups.get('group-0')?.elements.has(elementId)).toBe(false)
-    expect(state.groups.get('group-0')?.elements.get('element-0-3')).toBeUndefined()
+    expect(state.groups.get('group-0')?.elements.has('element-0-3')).toBe(false)
   })
 
   it('should focus the next element if the current element is unregistered', () => {
@@ -63,6 +63,6 @@ describe('unregisterElementHandler', () => {
     element.id = 'element-0-0'
     unregisterElement(element)
 
-    expect(onFocusChange).toHaveBeenCalledWith(state.groups.get('group-0')?.elements.get('element-0-1'), undefined)
+    expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-0-1'), undefined)
   })
 })

@@ -14,7 +14,7 @@ describe('findNextGroup', () => {
     const group1 = state.groups.get('group-1') as FocusableGroup
 
     group0Config.nextGroupByDirection = {
-      right: group1.el.id
+      right: group1.id
     }
 
     const nextGroup = findNextGroup({
@@ -43,7 +43,7 @@ describe('findNextGroup', () => {
     const group2 = state.groups.get('group-2') as FocusableGroup
 
     group1Config.nextGroupByDirection = {
-      down: group2.el.id
+      down: group2.id
     }
 
     const nextGroup = findNextGroup({

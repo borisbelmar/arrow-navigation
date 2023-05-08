@@ -25,7 +25,13 @@ export default function registerElementHandler (
       throw new Error(ERROR_MESSAGES.GROUP_REQUIRED)
     }
 
-    if (!element.id) {
+    const existentGroup = state.groups.get(group)
+    const existentGroupConfig = state.groupsConfig.get(group)
+
+    const isByOrder = existentGroupConfig?.byOrder
+      && options?.order !== undefined
+
+    if (!element.id && !isByOrder) {
       throw new Error(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
     }
 
@@ -38,27 +44,32 @@ export default function registerElementHandler (
       return
     }
 
+    const id = isByOrder
+      ? `${group}-${options.order}`
+      : element.id
+
+    element.setAttribute('id', id)
+
     const focusableElement = {
+      id,
       el: element,
       group,
       ...options
     }
 
-    state.elements.set(element.id, focusableElement)
+    state.elements.set(id, focusableElement)
     emit(EVENTS.ELEMENTS_CHANGED, state.elements)
 
-    const existentGroup = state.groups.get(group)
-    const existentGroupConfig = state.groupsConfig.get(group)
-
     if (!existentGroup) {
-      const elementsMap = new Map().set(element.id, focusableElement)
+      const elementsSet = new Set<string>().add(id)
       state.groups.set(group, {
-        elements: elementsMap,
+        id: group,
+        elements: elementsSet,
         el: existentGroupConfig?.el || null as unknown as HTMLElement
       })
       emit(EVENTS.GROUPS_CHANGED, state.groups)
     } else {
-      existentGroup.elements.set(element.id, focusableElement)
+      existentGroup.elements.add(id)
     }
 
     if (!state.currentElement && !isElementDisabled(focusableElement.el)) {

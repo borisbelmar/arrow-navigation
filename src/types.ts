@@ -6,6 +6,15 @@ export type FocusType = 'first' | 'closest' | 'manual'
 
 export type Point = { x: number, y: number }
 
+export type FocusableWithKind = {
+  id: string | null | undefined
+  kind: 'group' | 'element'
+}
+
+export type FocusableByDirection = {
+  [key in Direction]?: string | FocusableWithKind | null
+}
+
 export type ElementByDirection = {
   [key in Direction]?: string | null
 }
@@ -24,26 +33,39 @@ type BlurEventResult<T> = EventResult<T> & {
 }
 
 export type Focusable = {
+  id: string
   el: HTMLElement
 }
 
 export type FocusableElement = Focusable & {
   group: string
+  /**
+   * @deprecated
+   * Use nextByDirection instead. This property will be removed in the next major version.
+   */
   nextElementByDirection?: ElementByDirection
+  /**
+   * If group is setted byOrder, the order will be used to find the next element.
+   * nextByDirection will be overrided by this property.
+   */
+  order?: number
+  nextByDirection?: FocusableByDirection
   onFocus?: (result: FocusEventResult<FocusableElement>) => void
   onBlur?: (result: BlurEventResult<FocusableElement>) => void
 }
 
-export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group'>
+export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group' | 'id'>
 
 export type FocusableGroup = Focusable & {
-  elements: Map<string, FocusableElement>
+  elements: Set<string>
 }
 
 export type FocusableGroupConfig = Focusable & {
   firstElement?: string
   lastElement?: string
   nextGroupByDirection?: ElementByDirection
+  byOrder?: 'horizontal' | 'vertical' | 'grid'
+  cols?: number | Record<number, number>
   saveLast?: boolean
   viewportSafe?: boolean
   threshold?: number
@@ -52,7 +74,7 @@ export type FocusableGroupConfig = Focusable & {
   keepFocus?: boolean
 }
 
-export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el'>
+export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el' | 'id'>
 
 export type ArrowNavigationState = {
   currentElement: string | null,

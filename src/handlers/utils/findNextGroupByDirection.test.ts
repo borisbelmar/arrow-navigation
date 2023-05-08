@@ -15,7 +15,7 @@ describe('findNextGroupByDirection', () => {
     const group1 = state.groups.get('group-1') as FocusableGroup
 
     group0Config.nextGroupByDirection = {
-      right: group1.el.id
+      right: group1.id
     }
 
     const nextGroup = findNextGroupByDirection({
@@ -32,16 +32,16 @@ describe('findNextGroupByDirection', () => {
 
     const group1 = state.groups.get('group-1') as FocusableGroup
 
-    group1.elements.forEach(element => {
-      element.el.setAttribute('disabled', 'true')
+    group1.elements.forEach(id => {
+      state.elements.get(id)?.el.setAttribute('disabled', 'true')
     })
 
     group0Config.nextGroupByDirection = {
-      right: group1Config.el.id
+      right: group1Config.id
     }
 
     group1Config.nextGroupByDirection = {
-      right: group2.el.id
+      right: group2.id
     }
 
     const nextGroup = findNextGroupByDirection({

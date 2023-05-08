@@ -18,7 +18,7 @@ export default function findNextGroupElement ({
 }: Props): FocusableElement | null {
   if (!nextGroup) return null
   let nextElement: FocusableElement | null = null
-  const config = state.groupsConfig.get(nextGroup.el.id)
+  const config = state.groupsConfig.get(nextGroup.id)
 
   if (config) {
     const firstElement = (config.saveLast && config.lastElement) || config.firstElement
@@ -42,8 +42,9 @@ export default function findNextGroupElement ({
 
   nextElement = findClosestElementInGroup({
     direction,
-    candidateElements: Array.from(nextGroup.elements.values()),
+    candidateElements: nextGroup.elements,
     currentFocusElement: fromElement,
+    state,
     threshold: config?.threshold,
     isViewportSafe: config?.viewportSafe,
     allValidCandidates: true
