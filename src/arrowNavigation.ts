@@ -80,7 +80,7 @@ export function initArrowNavigation ({
       return new Set(state.groups.keys())
     },
     getGroupElements (group: string) {
-      return new Set(state.groups.get(group)?.elements.keys() || [])
+      return new Set(state.groups.get(group)?.elements.keys())
     },
     getGroupConfig (group: string) {
       return state.groupsConfig.get(group)
