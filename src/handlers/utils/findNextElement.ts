@@ -1,4 +1,5 @@
 import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types'
+import getCurrentElement from '@/utils/getCurrentElement'
 import findClosestElementInGroup from './findClosestElementInGroup'
 import findNextElementByDirection from './findNextElementByDirection'
 import findNextGroup from './findNextGroup'
@@ -17,13 +18,14 @@ export default function findNextElement ({
   state,
   inGroup = false
 }: Props): FocusableElement | null {
-  const currentElement = state.elements.get(state.currentElement as string) as FocusableElement
-  const selectedElement = fromElement || currentElement
+  const selectedElement = fromElement || getCurrentElement(state) as FocusableElement
   const fromGroup = state.groups.get(selectedElement?.group) as FocusableGroup
   const fromGroupConfig = state.groupsConfig.get(selectedElement?.group)
   let nextElement: FocusableElement | null | undefined
 
-  if (selectedElement?.nextByDirection) {
+  if (selectedElement?.nextByDirection
+    || (fromGroupConfig?.byOrder || selectedElement?.order !== undefined)
+  ) {
     nextElement = findNextByDirection({
       direction,
       fromElement: selectedElement,

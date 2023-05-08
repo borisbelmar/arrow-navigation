@@ -105,4 +105,34 @@ describe('registerElementHandler', () => {
 
     expect(state.groups.get('group-10')?.el).toBe(group)
   })
+
+  it('should register an element with order', () => {
+    state.groupsConfig.set('group-6', {
+      id: 'group-6',
+      el: state.groups.get('group-6')?.el as HTMLElement,
+      byOrder: 'horizontal'
+    })
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+
+    const element = document.createElement('button')
+    registerElement(element, 'group-6', { order: 0 })
+
+    expect(state.elements.has('group-6-0')).toBe(true)
+    expect(state.elements.get(element.id)?.el).toBe(element)
+    expect(state.elements.get(element.id)?.el.id).toBe('group-6-0')
+    expect(state.elements.get(element.id)?.id).toBe('group-6-0')
+    expect(state.groups.get('group-6')?.elements.has('group-6-0')).toBe(true)
+  })
+
+  it('should not register an element with order if the group is byOrder but the element doesnt have order', () => {
+    state.groupsConfig.set('group-6', {
+      id: 'group-6',
+      el: state.groups.get('group-6')?.el as HTMLElement,
+      byOrder: 'horizontal'
+    })
+    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+
+    const element = document.createElement('button')
+    expect(() => registerElement(element, 'group-6')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
+  })
 })

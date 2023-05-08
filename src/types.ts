@@ -7,7 +7,7 @@ export type FocusType = 'first' | 'closest' | 'manual'
 export type Point = { x: number, y: number }
 
 export type FocusableWithKind = {
-  id: string
+  id: string | null | undefined
   kind: 'group' | 'element'
 }
 
@@ -44,6 +44,11 @@ export type FocusableElement = Focusable & {
    * Use nextByDirection instead. This property will be removed in the next major version.
    */
   nextElementByDirection?: ElementByDirection
+  /**
+   * If group is setted byOrder, the order will be used to find the next element.
+   * nextByDirection will be overrided by this property.
+   */
+  order?: number
   nextByDirection?: FocusableByDirection
   onFocus?: (result: FocusEventResult<FocusableElement>) => void
   onBlur?: (result: BlurEventResult<FocusableElement>) => void
@@ -59,6 +64,8 @@ export type FocusableGroupConfig = Focusable & {
   firstElement?: string
   lastElement?: string
   nextGroupByDirection?: ElementByDirection
+  byOrder?: 'horizontal' | 'vertical' | 'grid'
+  cols?: number | Record<number, number>
   saveLast?: boolean
   viewportSafe?: boolean
   threshold?: number
