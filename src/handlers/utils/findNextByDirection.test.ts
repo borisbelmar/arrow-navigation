@@ -186,4 +186,61 @@ describe('findNextByDirection', () => {
 
     expect(next).toBe(undefined)
   })
+
+  it('should return the next element in order with byOrder is setted on group', () => {
+    state.groupsConfig.set('group-0', {
+      ...state.groupsConfig.get('group-0') as FocusableGroupConfig,
+      byOrder: 'vertical'
+    })
+    let count = 0
+    state.groups.get('group-0')?.elements.forEach(id => {
+      state.elements.set(`group-0-${count}`, {
+        ...state.elements.get(id) as FocusableElement,
+        order: count
+      })
+      count += 1
+    })
+    const next = findNextByDirection({
+      direction: 'down',
+      state,
+      fromElement: state.elements.get('group-0-0') as FocusableElement
+    })
+    expect(next).toBe(state.elements.get('group-0-1'))
+  })
+
+  it('should return null if the next element id is null', () => {
+    state.elements.set('element-0-0', {
+      ...state.elements.get('element-0-0') as FocusableElement,
+      nextByDirection: {
+        right: {
+          id: null,
+          kind: 'element'
+        }
+      }
+    })
+    const next = findNextByDirection({
+      direction: 'right',
+      state,
+      fromElement: state.elements.get('element-0-0') as FocusableElement
+    })
+    expect(next).toBe(null)
+  })
+
+  it('should return undefined if the next element id is undefined', () => {
+    state.elements.set('element-0-0', {
+      ...state.elements.get('element-0-0') as FocusableElement,
+      nextByDirection: {
+        right: {
+          id: undefined,
+          kind: 'element'
+        }
+      }
+    })
+    const next = findNextByDirection({
+      direction: 'right',
+      state,
+      fromElement: state.elements.get('element-0-0') as FocusableElement
+    })
+    expect(next).toBe(undefined)
+  })
 })

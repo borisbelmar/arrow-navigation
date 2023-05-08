@@ -1,6 +1,6 @@
 import getCurrentElement from '@/utils/getCurrentElement'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
-import type { ArrowNavigationState, FocusableElement } from '@/types'
+import type { ArrowNavigationState, FocusableElement, FocusableGroupConfig } from '@/types'
 import findNextElement from './findNextElement'
 
 describe('findNextElement', () => {
@@ -96,5 +96,23 @@ describe('findNextElement', () => {
     })
 
     expect(nextElement).toBe(null)
+  })
+
+  it('should return the next element in order with byOrder is setted on group', () => {
+    state.groupsConfig.set('group-0', {
+      ...state.groupsConfig.get('group-0') as FocusableGroupConfig,
+      byOrder: 'vertical'
+    })
+    let count = 0
+    state.groups.get('group-0')?.elements.forEach(id => {
+      (state.elements.get(id) as FocusableElement).order = count
+      count += 1
+    })
+    const next = findNextElement({
+      direction: 'down',
+      state,
+      fromElement: state.elements.get('element-0-0') as FocusableElement
+    })
+    expect(next).toBe(state.elements.get('element-0-1'))
   })
 })
