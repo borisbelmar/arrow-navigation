@@ -39,6 +39,7 @@ export default function registerElementHandler (
     }
 
     const focusableElement = {
+      id: element.id,
       el: element,
       group,
       ...options
@@ -51,14 +52,15 @@ export default function registerElementHandler (
     const existentGroupConfig = state.groupsConfig.get(group)
 
     if (!existentGroup) {
-      const elementsMap = new Map().set(element.id, focusableElement)
+      const elementsSet = new Set<string>().add(element.id)
       state.groups.set(group, {
-        elements: elementsMap,
+        id: group,
+        elements: elementsSet,
         el: existentGroupConfig?.el || null as unknown as HTMLElement
       })
       emit(EVENTS.GROUPS_CHANGED, state.groups)
     } else {
-      existentGroup.elements.set(element.id, focusableElement)
+      existentGroup.elements.add(element.id)
     }
 
     if (!state.currentElement && !isElementDisabled(focusableElement.el)) {

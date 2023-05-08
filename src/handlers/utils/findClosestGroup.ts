@@ -83,7 +83,7 @@ export default function findClosestGroup ({
 
     if (!element) {
       const filteredGroups = new Map(candidateGroups)
-      filteredGroups.delete(result.closestGroup.el.id)
+      filteredGroups.delete(result.closestGroup.id)
       return findClosestGroup({
         direction,
         currentElement,

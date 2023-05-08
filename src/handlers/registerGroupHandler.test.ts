@@ -39,13 +39,13 @@ describe('registerGroupHandler', () => {
     const element = document.createElement('button')
     element.id = `element-0-${groupTotalElements}`
 
-    expect(state.groupsConfig.get(group.el.id)?.viewportSafe).toBeUndefined()
+    expect(state.groupsConfig.get(group.id)?.viewportSafe).toBeUndefined()
 
     registerGroup(group.el, {
       viewportSafe: true
     })
 
-    expect(state.groupsConfig.get(group.el.id)?.viewportSafe).toBe(true)
+    expect(state.groupsConfig.get(group.id)?.viewportSafe).toBe(true)
     expect(state.groups.get(groupId)?.elements.size).toBe(groupTotalElements)
   })
 })

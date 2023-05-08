@@ -30,10 +30,11 @@ export default function registerGroupHandler (
 
     const existentGroup = state.groups.get(id)
 
-    const prevElements: FocusableGroup['elements'] = existentGroup?.elements || new Map()
+    const prevElements: FocusableGroup['elements'] = existentGroup?.elements || new Set()
     const prevConfig = state.groupsConfig.get(id)
 
     state.groups.set(id, {
+      id,
       elements: prevElements,
       el: element
     })
@@ -42,6 +43,7 @@ export default function registerGroupHandler (
     state.groupsConfig.set(id, {
       ...defaultGroupConfig,
       ...options,
+      id,
       lastElement: prevConfig?.lastElement || undefined,
       el: element
     })

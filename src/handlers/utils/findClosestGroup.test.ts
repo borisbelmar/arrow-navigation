@@ -68,8 +68,8 @@ describe('findClosestGroup', () => {
   it('should return the subsequent best candidate if the next candidate doesnt have focusable elements', () => {
     state.currentElement = 'element-1-0'
 
-    state.groups.get('group-2')?.elements.forEach(element => {
-      element.el.setAttribute('disabled', 'true')
+    state.groups.get('group-2')?.elements.forEach(id => {
+      state.elements.get(id)?.el.setAttribute('disabled', 'true')
     })
 
     const closestGroup = findClosestGroup({
@@ -78,6 +78,6 @@ describe('findClosestGroup', () => {
       candidateGroups: state.groups,
       state
     })
-    expect(closestGroup?.group?.el.id).toBe('group-3')
+    expect(closestGroup?.group?.id).toBe('group-3')
   })
 })

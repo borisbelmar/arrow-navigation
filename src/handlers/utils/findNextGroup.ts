@@ -25,7 +25,7 @@ export default function findNextGroup ({
 }: Props): GroupAndElement | null {
   const selectedElement = fromElement || getCurrentElement(state) as FocusableElement
   const candidateGroups = groups || state.groups
-  const currentGroupConfig = state.groupsConfig.get(fromGroup?.el.id || selectedElement?.group || '')
+  const currentGroupConfig = state.groupsConfig.get(fromGroup?.id || selectedElement?.group || '')
 
   let nextGroupAndElement: GroupAndElement | null | undefined
 

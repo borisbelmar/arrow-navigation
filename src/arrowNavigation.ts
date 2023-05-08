@@ -37,7 +37,7 @@ export function initArrowNavigation ({
 
   const changeFocusElementHandler = (nextElement: FocusableElement, direction?: Direction) => {
     const prevElement = getCurrentElement(state) as FocusableElement
-    state.currentElement = nextElement.el.id
+    state.currentElement = nextElement.id
     nextElement.el.focus()
     changeFocusEventHandler({
       nextElement,

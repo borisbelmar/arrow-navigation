@@ -60,4 +60,41 @@ describe('findNextElement', () => {
 
     expect(nextElement).toBe(state.elements.get('element-0-2'))
   })
+
+  it('should return the next group element if setted a group with nextByDirection', () => {
+    const element = state.elements.get('element-0-0') as FocusableElement
+
+    element.nextByDirection = {
+      down: {
+        id: 'group-1',
+        kind: 'group'
+      }
+    }
+
+    const nextElement = findNextElement({
+      direction: 'down',
+      fromElement: getCurrentElement(state) as FocusableElement,
+      state,
+      inGroup: true
+    })
+
+    expect(nextElement).toBe(state.elements.get('element-1-0'))
+  })
+
+  it('should return null if the next element is setted null', () => {
+    const element = state.elements.get('element-0-0') as FocusableElement
+
+    element.nextByDirection = {
+      down: null
+    }
+
+    const nextElement = findNextElement({
+      direction: 'down',
+      fromElement: getCurrentElement(state) as FocusableElement,
+      state,
+      inGroup: true
+    })
+
+    expect(nextElement).toBe(null)
+  })
 })

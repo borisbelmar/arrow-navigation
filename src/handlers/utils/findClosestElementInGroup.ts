@@ -1,4 +1,4 @@
-import type { FocusableElement } from '@/types'
+import type { ArrowNavigationState, FocusableElement } from '@/types'
 import getEuclideanDistance from './getEuclideanDistance'
 import getReferencePointsByDirection from './getReferencePointsByDirection'
 import isElementDisabled from './isElementDisabled'
@@ -11,23 +11,26 @@ interface Result {
 
 interface Props {
   currentFocusElement: FocusableElement
-  candidateElements: FocusableElement[]
+  candidateElements: Set<string>
   direction: string | undefined
   threshold?: number
   isViewportSafe?: boolean
   allValidCandidates?: boolean
+  state: ArrowNavigationState
 }
 
 export default function findClosestElementInGroup ({
   candidateElements,
   currentFocusElement,
+  state,
   direction,
   threshold = 0,
   isViewportSafe = false,
   allValidCandidates
 }: Props): FocusableElement | null {
-  const result = candidateElements.reduce<Result>(
-    (acc, candidate) => {
+  const result = Array.from(candidateElements?.values() || []).reduce<Result>(
+    (acc, id) => {
+      const candidate = state.elements.get(id) as FocusableElement
       if (
         candidate.el === currentFocusElement?.el
         || !currentFocusElement?.el
