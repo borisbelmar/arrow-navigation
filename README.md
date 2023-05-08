@@ -6,6 +6,8 @@
 
 Light (~13kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
+For live demo, [visit this url](https://arrow-navigation-demo.vercel.app/). For ReactJS implementation, check [@arrow-navigation/react](https://www.npmjs.com/package/@arrow-navigation/react).
+
 ## Installation
 
 ```bash
@@ -15,10 +17,6 @@ npm install --save @arrow-navigation/core
 
 yarn add @arrow-navigation/core
 ```
-
-## What is new?
-
-- **v1.2.8**: Add the `byOrder` option on groups. Now you can navigate by order setted on elements. Can be 'horizontal', 'vertical' or 'grid'. You can also set the number of columns to navigate when the byOrder is 'grid' using the `cols` option.
 
 ## Usage
 
