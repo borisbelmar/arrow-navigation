@@ -103,8 +103,8 @@ api.registerGroup(container, {
   saveLast: true, // Save the last focused element when the focus leave the group and use it when the focus enter again
   viewportSafe: true, // If true, the next element will be the first element that is visible in the viewport. The default value is true
   threshold: 2, // The threshold in pixels to consider an element eligible to be focused. The default value is 0
-  onFocus: ({ current, prev, direction }) => { console.log(`focused ${current.el.id}`) }, // Callback when the group is focused. The prev group is the group that was focused before the current group.
-  onBlur: ({ current, next, direction }) => { console.log(`blurred ${current.el.id}`) }, // Callback when the group is blurred. The next group is the group that will be focused when the focus leave the current group.
+  onFocus: ({ current, prev, direction }) => { console.log(`focused ${current.id}`) }, // Callback when the group is focused. The prev group is the group that was focused before the current group.
+  onBlur: ({ current, next, direction }) => { console.log(`blurred ${current.id}`) }, // Callback when the group is blurred. The next group is the group that will be focused when the focus leave the current group.
   keepFocus: true // If true, the focus will not leave the group when the user press the arrow keys. The default value is false. This option is usefull for modals or other elements that need to keep the focus inside.
 })
 ```
@@ -135,13 +135,14 @@ const element = document.createElement('button')
 element.id = 'element-0-0'
 
 api.registerElement(element, 'group-1', {
-  nextElementByDirection: { // This will set the next element manually
+  nextByDirection: { // This will set the next element manually
     'down': 'element-0-1', // The next element when the user press the down arrow key
+    'right': { id: 'group-1', kind: 'group' }, // The next group when the user press the right arrow key
     'up': null, // If press up, no elements will be focused
     'left': undefined // undefined will keep the default behavior
   },
-  onFocus: ({ current, prev, direction }) => console.log(`focused ${current.el.id}`), // Callback when the element is focused. The prev element is the element that was focused before the current element.
-  onBlur: ({ current, next, direction }) => console.log(`blurred ${current.el.id}`) // Callback when the element is blurred. The next element is the element that will be focused when the focus leave the current element.
+  onFocus: ({ current, prev, direction }) => console.log(`focused ${current.id}`), // Callback when the element is focused. The prev element is the element that was focused before the current element.
+  onBlur: ({ current, next, direction }) => console.log(`blurred ${current.id}`) // Callback when the element is blurred. The next element is the element that will be focused when the focus leave the current element.
 })
 ```
 

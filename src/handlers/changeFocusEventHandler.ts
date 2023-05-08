@@ -19,9 +19,9 @@ export default function changeFocusEventHandler ({
 
     if (prevGroup) {
       if (prevGroup.saveLast) {
-        state.groupsConfig.set(prevGroup.el.id, {
+        state.groupsConfig.set(prevGroup.id, {
           ...prevGroup,
-          lastElement: (prevElement as FocusableElement).el.id
+          lastElement: (prevElement as FocusableElement).id
         })
       }
       prevGroup.onBlur?.({

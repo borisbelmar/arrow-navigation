@@ -59,11 +59,11 @@ describe('arrowNavigation', () => {
 
     navigationApi._forceNavigate('ArrowDown')
 
-    expect(state.groups.get('group-0')?.elements.get('element-0-1')?.el.focus).toHaveBeenCalled()
+    expect(state.elements.get('element-0-1')?.el.focus).toHaveBeenCalled()
 
     navigationApi._forceNavigate('ArrowDown')
 
-    expect(state.groups.get('group-0')?.elements.get('element-0-2')?.el.focus).toHaveBeenCalled()
+    expect(state.elements.get('element-0-2')?.el.focus).toHaveBeenCalled()
   })
 
   it('should not forceNavigate if debug is disabled', () => {
@@ -74,7 +74,7 @@ describe('arrowNavigation', () => {
 
     navigationApi._forceNavigate('ArrowDown')
 
-    expect(state.groups.get('group-0')?.elements.get('element-0-1')?.el.focus).not.toHaveBeenCalled()
+    expect(state.elements.get('element-0-1')?.el.focus).not.toHaveBeenCalled()
   })
 
   it('should return the focused element', () => {
@@ -217,6 +217,6 @@ describe('arrowNavigation', () => {
     navigationApi._forceNavigate('ArrowDown')
 
     expect(listener).toHaveBeenCalledWith('last')
-    expect(navigationApi.getFocusedElement()?.el.id).toBe('element-0-3')
+    expect(navigationApi.getFocusedElement()?.id).toBe('element-0-3')
   })
 })

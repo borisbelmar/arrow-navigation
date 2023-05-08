@@ -12,5 +12,7 @@ export type {
   ArrowNavigationState,
   Direction,
   FocusableElementOptions,
-  FocusableGroupOptions
+  FocusableGroupOptions,
+  FocusableWithKind,
+  FocusableByDirection
 } from './types'

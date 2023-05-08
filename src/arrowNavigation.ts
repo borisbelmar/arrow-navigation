@@ -37,7 +37,7 @@ export function initArrowNavigation ({
 
   const changeFocusElementHandler = (nextElement: FocusableElement, direction?: Direction) => {
     const prevElement = getCurrentElement(state) as FocusableElement
-    state.currentElement = nextElement.el.id
+    state.currentElement = nextElement.id
     nextElement.el.focus()
     changeFocusEventHandler({
       nextElement,
@@ -80,7 +80,7 @@ export function initArrowNavigation ({
       return new Set(state.groups.keys())
     },
     getGroupElements (group: string) {
-      return new Set(state.groups.get(group)?.elements.keys() || [])
+      return new Set(state.groups.get(group)?.elements.keys())
     },
     getGroupConfig (group: string) {
       return state.groupsConfig.get(group)

@@ -8,5 +8,5 @@ export default function getNextElementHandler (state: ArrowNavigationState) {
     direction,
     state,
     inGroup
-  })?.el.id ?? null
+  })?.id ?? null
 }

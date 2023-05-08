@@ -7,6 +7,10 @@ interface Props {
   fromElement: FocusableElement
 }
 
+/**
+ * @deprecated
+ * Use findNextByDirection instead
+ */
 export default function findNextElementByDirection ({
   fromElement,
   direction,

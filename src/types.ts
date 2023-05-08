@@ -6,6 +6,15 @@ export type FocusType = 'first' | 'closest' | 'manual'
 
 export type Point = { x: number, y: number }
 
+export type FocusableWithKind = {
+  id: string
+  kind: 'group' | 'element'
+}
+
+export type FocusableByDirection = {
+  [key in Direction]?: string | FocusableWithKind | null
+}
+
 export type ElementByDirection = {
   [key in Direction]?: string | null
 }
@@ -24,20 +33,26 @@ type BlurEventResult<T> = EventResult<T> & {
 }
 
 export type Focusable = {
+  id: string
   el: HTMLElement
 }
 
 export type FocusableElement = Focusable & {
   group: string
+  /**
+   * @deprecated
+   * Use nextByDirection instead. This property will be removed in the next major version.
+   */
   nextElementByDirection?: ElementByDirection
+  nextByDirection?: FocusableByDirection
   onFocus?: (result: FocusEventResult<FocusableElement>) => void
   onBlur?: (result: BlurEventResult<FocusableElement>) => void
 }
 
-export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group'>
+export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group' | 'id'>
 
 export type FocusableGroup = Focusable & {
-  elements: Map<string, FocusableElement>
+  elements: Set<string>
 }
 
 export type FocusableGroupConfig = Focusable & {
@@ -52,7 +67,7 @@ export type FocusableGroupConfig = Focusable & {
   keepFocus?: boolean
 }
 
-export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el'>
+export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el' | 'id'>
 
 export type ArrowNavigationState = {
   currentElement: string | null,

@@ -37,7 +37,8 @@ describe('registerElementHandler', () => {
     registerElement(element, groupId)
 
     expect(state.elements.has(element.id)).toBe(true)
-    expect(state.groups.get(groupId)?.elements.get(element.id)?.el).toBe(element)
+    expect(state.elements.get(element.id)?.el).toBe(element)
+    expect(state.groups.get('group-0')?.elements.has(element.id)).toBe(true)
   })
 
   it('should throw an error if the element id is not defined', () => {
@@ -76,7 +77,7 @@ describe('registerElementHandler', () => {
     element.id = 'element-5-0'
     registerElement(element, 'group-5')
 
-    expect(onChangeElement).toHaveBeenCalledWith({ el: element, group: 'group-5' })
+    expect(onChangeElement).toHaveBeenCalledWith({ el: element, group: 'group-5', id: 'element-5-0' })
   })
 
   it('should throw an error if the element is not focusable', () => {
@@ -94,6 +95,7 @@ describe('registerElementHandler', () => {
     group.id = 'group-10'
 
     state.groupsConfig.set(group.id, {
+      id: group.id,
       el: group
     })
 
