@@ -1,4 +1,5 @@
 import { ElementByDirection, FocusableByDirection, FocusableWithKind } from '@/types'
+import getElementIdByOrder from '@/utils/getElementIdByOrder'
 
 interface Props {
   group: string
@@ -18,10 +19,10 @@ export default function getNextByOrderHorizontal ({
   return {
     left: (order <= 0
       ? { id: nextGroupByDirection.left, kind: 'group' }
-      : { id: `${group}-${order - 1}`, kind: 'element' }) as FocusableWithKind,
+      : { id: getElementIdByOrder(group, order - 1), kind: 'element' }) as FocusableWithKind,
     right: (order >= size - 1
       ? { id: nextGroupByDirection.right, kind: 'group' }
-      : { id: `${group}-${order + 1}`, kind: 'element' }) as FocusableWithKind,
+      : { id: getElementIdByOrder(group, order + 1), kind: 'element' }) as FocusableWithKind,
     up: { id: nextGroupByDirection.up, kind: 'group' },
     down: { id: nextGroupByDirection.down, kind: 'group' }
   }
