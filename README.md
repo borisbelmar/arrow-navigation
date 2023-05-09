@@ -25,7 +25,9 @@ At the top of your application, you need to initialize the module. This will add
 ```typescript
 import { initArrowNavigation } from '@arrow-navigation/core'
 
-initArrowNavigation()
+initArrowNavigation({
+  preventScroll: true // Prevent the default behavior of the arrow keys to scroll the page. The default value is true
+})
 ```
 
 Then, you can use the `getArrowNavigation` to access the API.

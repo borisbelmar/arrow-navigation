@@ -15,7 +15,7 @@ describe('globalFocusHandler', () => {
     state.currentElement = 'element-0-0'
     const focusMock = jest.fn();
     (getCurrentElement(state) as FocusableElement).el.focus = focusMock
-    globalFocusHandler(state, event)
+    globalFocusHandler(state, event, true)
     expect(state.currentElement).toBe('element-0-0')
     expect(focusMock).toHaveBeenCalled()
   })
@@ -25,7 +25,7 @@ describe('globalFocusHandler', () => {
     state.currentElement = 'element-0-0'
     const focusMock = jest.fn();
     (getCurrentElement(state) as FocusableElement).el.focus = focusMock
-    globalFocusHandler(state, event)
+    globalFocusHandler(state, event, true)
     expect(state.currentElement).toBe('element-0-0')
     expect(focusMock).not.toHaveBeenCalled()
   })
@@ -33,7 +33,7 @@ describe('globalFocusHandler', () => {
   it('should not focus the current element if not exists on state', () => {
     const event = { target: { id: 'non-existent' } } as unknown as FocusEvent
     state.currentElement = 'non-existent-current'
-    globalFocusHandler(state, event)
+    globalFocusHandler(state, event, true)
     expect(state.currentElement).toBe('non-existent-current')
     expect(getCurrentElement(state)).toBe(null)
   })
