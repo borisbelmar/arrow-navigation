@@ -24,7 +24,8 @@ export const ERROR_MESSAGES = {
 
 export function initArrowNavigation ({
   errorOnReinit = false,
-  debug = false
+  debug = false,
+  preventScroll = true
 }: ArrowNavigationOptions = {}) {
   const state: ArrowNavigationState = {
     currentElement: null,
@@ -38,7 +39,7 @@ export function initArrowNavigation ({
   const changeFocusElementHandler = (nextElement: FocusableElement, direction?: Direction) => {
     const prevElement = getCurrentElement(state) as FocusableElement
     state.currentElement = nextElement.id
-    nextElement.el.focus()
+    nextElement.el.focus({ preventScroll })
     changeFocusEventHandler({
       nextElement,
       prevElement,
@@ -60,7 +61,7 @@ export function initArrowNavigation ({
 
   const onKeyPress = getArrowPressHandler(state, changeFocusElementHandler)
 
-  const onGlobalFocus = (event: FocusEvent) => globalFocusHandler(state, event)
+  const onGlobalFocus = (event: FocusEvent) => globalFocusHandler(state, event, preventScroll)
 
   window.addEventListener('keydown', onKeyPress)
   window.addEventListener('focus', onGlobalFocus, true)

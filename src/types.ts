@@ -87,6 +87,7 @@ export type ArrowNavigationState = {
 export type ArrowNavigationOptions = {
   debug?: boolean
   errorOnReinit?: boolean
+  preventScroll?: boolean
 }
 
 export type GetNextOptions = {
