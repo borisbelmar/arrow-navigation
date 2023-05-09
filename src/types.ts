@@ -4,6 +4,12 @@ export type Direction = 'up' | 'down' | 'left' | 'right'
 
 export type FocusType = 'first' | 'closest' | 'manual'
 
+export type ORDER = {
+  HORIZONTAL: 'horizontal'
+  VERTICAL: 'vertical'
+  GRID: 'grid'
+}
+
 export type Point = { x: number, y: number }
 
 export type FocusableWithKind = {
@@ -64,7 +70,7 @@ export type FocusableGroupConfig = Focusable & {
   firstElement?: string
   lastElement?: string
   nextGroupByDirection?: ElementByDirection
-  byOrder?: 'horizontal' | 'vertical' | 'grid'
+  byOrder?: ORDER[keyof ORDER]
   cols?: number | Record<number, number>
   saveLast?: boolean
   viewportSafe?: boolean
