@@ -104,7 +104,7 @@ api.registerGroup(container, {
     'up': null, // If press up, no groups will be focused
     'left': undefined // undefined will keep the default behavior
   },
-  byOrder: ArrowNavigationOrder.HORIZONTAL, // Navigate by order setted on elements. Can be 'horizontal', 'vertical' or 'grid', this enum comes with ArrowNavigationOrder constant object. Take care with this option, because this will change the id of the elements, for example, for group-0, the element in order 1 will be group-0-1. It includes a utility function getElementByOrder(groupId, order): string. Keep this in mind if you are using the id of the elements for firstElement or nextByDirection options.
+  byOrder: ArrowNavigationOrder.HORIZONTAL, // Navigate by order setted on elements. Can be 'horizontal', 'vertical' or 'grid', this enum comes with ArrowNavigationOrder constant object. Take care with this option, because this will change the id of the elements, for example, for group-0, the element in order 1 will be group-0-1. It includes a utility function getElementIdByOrder(groupId, order): string. Keep this in mind if you are using the id of the elements for firstElement or nextByDirection options.
   cols: 2, // The number of columns to navigate when the byOrder is 'grid'. The default value is 1 and you can set a object with the number of columns for each breakpoint. For example: { 0: 1, 768: 2, 1024: 3 }
   saveLast: true, // Save the last focused element when the focus leave the group and use it when the focus enter again
   viewportSafe: true, // If true, the next element will be the first element that is visible in the viewport. The default value is true
