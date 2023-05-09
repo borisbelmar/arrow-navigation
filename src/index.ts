@@ -3,7 +3,10 @@ export {
   getArrowNavigation
 } from './arrowNavigation'
 
+export { default as getElementIdByOrder } from './utils/getElementIdByOrder'
+
 export { default as ArrowNavigationEvents } from './config/events'
+export { default as ArrowNavigationOrder } from './config/order'
 
 export type {
   FocusableElement,

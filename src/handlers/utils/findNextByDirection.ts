@@ -28,6 +28,7 @@ export default function findNextByDirection ({
       group: selectedElement.group,
       order: selectedElement.order || 0,
       groupSize: fromGroupElementsSize,
+      groupCols: fromGroupConfig.cols,
       nextGroupByDirection: fromGroupConfig.nextGroupByDirection
     })
   }

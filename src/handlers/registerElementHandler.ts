@@ -1,6 +1,7 @@
 import EVENTS from '@/config/events'
 import type { ArrowNavigationState, FocusableElement, FocusableElementOptions } from '@/types'
 import type { EventEmitter } from '@/utils/createEventEmitter'
+import getElementIdByOrder from '@/utils/getElementIdByOrder'
 import isElementDisabled from './utils/isElementDisabled'
 import isFocusableElement from './utils/isFocusableElement'
 
@@ -45,7 +46,7 @@ export default function registerElementHandler (
     }
 
     const id = isByOrder
-      ? `${group}-${options.order}`
+      ? getElementIdByOrder(group, options.order || 0)
       : element.id
 
     element.setAttribute('id', id)

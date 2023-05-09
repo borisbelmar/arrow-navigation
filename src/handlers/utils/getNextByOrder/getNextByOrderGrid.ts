@@ -1,4 +1,5 @@
 import { ElementByDirection, FocusableByDirection, FocusableWithKind } from '@/types'
+import getElementIdByOrder from '@/utils/getElementIdByOrder'
 import getColsByWidth from './utils/getColsByWidth'
 
 interface Props {
@@ -31,15 +32,15 @@ export default function getNextByOrderGrid ({
   return {
     left: (col <= 0
       ? { id: nextGroupByDirection.left, kind: 'group' }
-      : { id: `${group}-${order - 1}`, kind: 'element' }) as FocusableWithKind,
+      : { id: getElementIdByOrder(group, order - 1), kind: 'element' }) as FocusableWithKind,
     right: (col >= cols - 1
       ? { id: nextGroupByDirection.right, kind: 'group' }
-      : { id: `${group}-${order + 1}`, kind: 'element' }) as FocusableWithKind,
+      : { id: getElementIdByOrder(group, order + 1), kind: 'element' }) as FocusableWithKind,
     up: (row <= 0
       ? { id: nextGroupByDirection.up, kind: 'group' }
-      : { id: `${group}-${order - cols}`, kind: 'element' }) as FocusableWithKind,
+      : { id: getElementIdByOrder(group, order - cols), kind: 'element' }) as FocusableWithKind,
     down: (row >= totalRows - 1
       ? { id: nextGroupByDirection.down, kind: 'group' }
-      : { id: `${group}-${order + cols}`, kind: 'element' }) as FocusableWithKind
+      : { id: getElementIdByOrder(group, order + cols), kind: 'element' }) as FocusableWithKind
   }
 }
