@@ -13,7 +13,10 @@ describe('registerGroupHandler', () => {
   })
 
   it('should register the group', () => {
-    const registerGroup = registerGroupHandler(state, emitter.emit)
+    const registerGroup = registerGroupHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const group = document.createElement('div')
     group.id = 'group-5'
@@ -24,14 +27,20 @@ describe('registerGroupHandler', () => {
   })
 
   it('should throw an error if the group id is not defined', () => {
-    const registerGroup = registerGroupHandler(state, emitter.emit)
+    const registerGroup = registerGroupHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const group = document.createElement('div')
     expect(() => registerGroup(group)).toThrowError(ERROR_MESSAGES.GROUP_ID_REQUIRED)
   })
 
   it('if the group is already registered, just changes the group config and keep the elements', () => {
-    const registerGroup = registerGroupHandler(state, emitter.emit)
+    const registerGroup = registerGroupHandler({
+      state,
+      emit: emitter.emit
+    })
     const groupId = 'group-0'
     const group = state.groups.get(groupId) as FocusableGroup
     const groupTotalElements = group.elements.size

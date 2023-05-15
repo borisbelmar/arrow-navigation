@@ -2,13 +2,17 @@ window.arrowNavigation.init({ debug: true })
 
 const arrowNavigationApi = window.arrowNavigation.get()
 
+arrowNavigationApi.setInitialFocusElement('group-1-button-0')
+
 const app = document.getElementById('app')
 
 const group0Container = document.createElement('container')
 app.appendChild(group0Container)
 group0Container.setAttribute('id', 'group-0')
 group0Container.classList.add('flex', 'flex-col', 'justify-center', 'items-center', 'h-full', 'p-4', 'bg-gray-600', 'gap-4')
-arrowNavigationApi.registerGroup(group0Container)
+arrowNavigationApi.registerGroup(group0Container, {
+  arrowDebounce: false
+})
 
 Array.from(Array(6).keys()).forEach(index => {
   const button = document.createElement('button')

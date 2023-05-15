@@ -17,5 +17,7 @@ export type {
   FocusableElementOptions,
   FocusableGroupOptions,
   FocusableWithKind,
-  FocusableByDirection
+  FocusableByDirection,
+  FocusNodeOptions,
+  Adapter
 } from './types'

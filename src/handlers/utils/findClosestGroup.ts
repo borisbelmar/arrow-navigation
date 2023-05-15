@@ -40,15 +40,13 @@ export default function findClosestGroup ({
       const currentGroup = candidateGroups.get(currentElement?.group) as FocusableGroup
       const candidate = candidateGroups.get(candidateKey) as FocusableGroup
       if (
-        candidate.el === currentGroup?.el
-        || !currentElement?.el
+        candidate.id === currentGroup?.id
         || !currentGroup
-        || !candidate.el
       ) return acc
 
-      const currentElementRect = currentElement.el.getBoundingClientRect()
-      const currentGroupRect = currentGroup.el.getBoundingClientRect()
-      const candidateGroupRect = candidate.el.getBoundingClientRect()
+      const currentElementRect = state.adapter.getNodeRect(currentElement)
+      const currentGroupRect = state.adapter.getNodeRect(currentGroup)
+      const candidateGroupRect = state.adapter.getNodeRect(candidate)
 
       if (!allValidCandidates && !isEligibleCandidate({
         direction,

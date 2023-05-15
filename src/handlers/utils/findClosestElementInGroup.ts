@@ -1,7 +1,6 @@
 import type { ArrowNavigationState, FocusableElement } from '@/types'
 import getEuclideanDistance from './getEuclideanDistance'
 import getReferencePointsByDirection from './getReferencePointsByDirection'
-import isElementDisabled from './isElementDisabled'
 import isEligibleCandidate from './isEligibleCandidate/isEligibleCandidate'
 
 interface Result {
@@ -32,15 +31,15 @@ export default function findClosestElementInGroup ({
     (acc, id) => {
       const candidate = state.elements.get(id) as FocusableElement
       if (
-        candidate.el === currentFocusElement?.el
-        || !currentFocusElement?.el
-        || !candidate.el
+        candidate.id === currentFocusElement?.id
+        || !currentFocusElement
+        || !candidate
       ) return acc
 
-      const currentRect = currentFocusElement.el.getBoundingClientRect()
-      const candidateRect = candidate.el.getBoundingClientRect()
+      const currentRect = state.adapter.getNodeRect(currentFocusElement)
+      const candidateRect = state.adapter.getNodeRect(candidate)
 
-      if (isElementDisabled(candidate.el)) return acc
+      if (state.adapter.isNodeDisabled(candidate)) return acc
 
       if (!allValidCandidates && !isEligibleCandidate({
         direction,

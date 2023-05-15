@@ -29,7 +29,11 @@ export default function changeFocusEventHandler ({
         next: nextGroup,
         direction
       })
-      emit(EVENTS.GROUP_BLUR, prevGroup, direction, nextGroup)
+      emit(EVENTS.GROUP_BLUR, {
+        current: prevGroup,
+        next: nextGroup,
+        direction
+      })
     }
 
     if (nextGroup) {
@@ -38,8 +42,16 @@ export default function changeFocusEventHandler ({
         prev: prevGroup,
         direction
       })
-      emit(EVENTS.GROUP_FOCUS, nextGroup, direction, prevGroup)
-      emit(EVENTS.CURRENT_GROUP_CHANGE, nextGroup, direction, prevGroup)
+      emit(EVENTS.GROUP_FOCUS, {
+        current: nextGroup,
+        prev: prevGroup,
+        direction
+      })
+      emit(EVENTS.CURRENT_GROUP_CHANGE, {
+        current: nextGroup,
+        prev: prevGroup,
+        direction
+      })
     }
   }
   if (prevElement) {
@@ -48,13 +60,25 @@ export default function changeFocusEventHandler ({
       next: nextElement,
       direction
     })
-    emit(EVENTS.ELEMENT_BLUR, prevElement, direction, nextElement)
+    emit(EVENTS.ELEMENT_BLUR, {
+      current: prevElement,
+      next: nextElement,
+      direction
+    })
   }
   nextElement.onFocus?.({
     current: nextElement,
     prev: prevElement,
     direction
   })
-  emit(EVENTS.ELEMENT_FOCUS, nextElement, direction, prevElement)
-  emit(EVENTS.CURRENT_ELEMENT_CHANGE, nextElement, direction, prevElement)
+  emit(EVENTS.ELEMENT_FOCUS, {
+    current: nextElement,
+    prev: prevElement,
+    direction
+  })
+  emit(EVENTS.CURRENT_ELEMENT_CHANGE, {
+    current: nextElement,
+    prev: prevElement,
+    direction
+  })
 }

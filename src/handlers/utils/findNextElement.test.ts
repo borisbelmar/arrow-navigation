@@ -16,7 +16,7 @@ describe('findNextElement', () => {
 
     state.elements.get('element-0-1')?.el.setAttribute('disabled', 'true')
 
-    element.nextElementByDirection = {
+    element.nextByDirection = {
       down: 'element-0-1'
     }
 
@@ -47,7 +47,7 @@ describe('findNextElement', () => {
     state.groups.get('group-0')?.elements.delete('element-0-1')
     state.elements.delete('element-0-1')
 
-    element.nextElementByDirection = {
+    element.nextByDirection = {
       down: 'element-0-1'
     }
 
@@ -114,5 +114,14 @@ describe('findNextElement', () => {
       fromElement: state.elements.get('element-0-0') as FocusableElement
     })
     expect(next).toBe(state.elements.get('element-0-1'))
+  })
+
+  it('should return the next element from the next group', () => {
+    const nextElement = findNextElement({
+      direction: 'right',
+      state,
+      fromElement: state.elements.get('element-0-0') as FocusableElement
+    })
+    expect(nextElement).toBe(state.elements.get('element-1-0'))
   })
 })

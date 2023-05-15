@@ -13,56 +13,50 @@ describe('unregisterElementHandler', () => {
   })
 
   it('should unregister the element', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
-
-    const element = document.createElement('div')
-    element.id = 'element-0-3'
-    unregisterElement(element)
-
-    expect(state.elements.has(element.id)).toBe(false)
-    expect(state.groups.get('group-0')?.elements.has(element.id)).toBe(false)
-    expect(state.groups.get('group-0')?.elements.has('element-0-3')).toBe(false)
-  })
-
-  it('should delete the group if it is empty', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
-
-    const element = document.createElement('div')
-    element.id = 'element-4-0'
-    unregisterElement(element)
-
-    expect(state.groups.has('group-4')).toBe(false)
-  })
-
-  it('should not unregister the element if it is not registered', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
-
-    const element = document.createElement('div')
-    element.id = 'not-registered-element'
-    unregisterElement(element)
-
-    expect(state.elements.has(element.id)).toBe(false)
-  })
-
-  it('should unregister the element given the element id only', () => {
-    const unregisterElement = unregisterElementHandler(state, jest.fn(), emitter.emit)
+    const unregisterElement = unregisterElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const elementId = 'element-0-3'
+
+    expect(state.elements.has(elementId)).toBe(true)
+
     unregisterElement(elementId)
 
     expect(state.elements.has(elementId)).toBe(false)
     expect(state.groups.get('group-0')?.elements.has(elementId)).toBe(false)
-    expect(state.groups.get('group-0')?.elements.has('element-0-3')).toBe(false)
   })
 
-  it('should focus the next element if the current element is unregistered', () => {
-    const onFocusChange = jest.fn()
-    const unregisterElement = unregisterElementHandler(state, onFocusChange, emitter.emit)
+  it('should delete the group if it is empty', () => {
+    const unregisterElement = unregisterElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
-    const element = document.createElement('div')
-    element.id = 'element-0-0'
-    unregisterElement(element)
+    const elementId = 'element-4-0'
+    const groupId = 'group-4'
 
-    expect(onFocusChange).toHaveBeenCalledWith(state.elements.get('element-0-1'), undefined)
+    expect(state.groups.has(groupId)).toBe(true)
+    expect(state.groups.get(groupId)?.elements.has(elementId)).toBe(true)
+    expect(state.elements.has(elementId)).toBe(true)
+    expect(state.groups.get(groupId)?.elements.size).toBe(1)
+
+    unregisterElement(elementId)
+
+    expect(state.groups.has(groupId)).toBe(false)
+    expect(state.elements.has(elementId)).toBe(false)
+  })
+
+  it('should not unregister the element if it is not registered', () => {
+    const unregisterElement = unregisterElementHandler({
+      state,
+      emit: emitter.emit
+    })
+
+    const elementId = 'not-registered-element'
+    unregisterElement(elementId)
+
+    expect(state.elements.has(elementId)).toBe(false)
   })
 })

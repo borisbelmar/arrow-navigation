@@ -1,5 +1,7 @@
+import type { Rect } from '@/types'
+
 export default function isElementPartiallyInViewport (
-  elementRect: DOMRect,
+  elementRect: Rect,
   viewport: { innerWidth: number, innerHeight: number }
 ): boolean {
   const isHorizontalOverlap = (

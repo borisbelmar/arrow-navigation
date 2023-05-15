@@ -55,10 +55,26 @@ describe('changeFocusEventHandler', () => {
       emit: emitter.emit
     })
 
-    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down', prevElement)
-    expect(events.onElementBlur).toHaveBeenCalledWith(getCurrentElement(state) as FocusableElement, 'down', nextElement)
-    expect(events.onGroupBlur).toHaveBeenCalledWith(state.groupsConfig.get('group-0'), 'down', state.groupsConfig.get('group-1'))
-    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down', state.groupsConfig.get('group-0'))
+    expect(events.onElementFocus).toHaveBeenCalledWith({
+      current: nextElement,
+      direction: 'down',
+      prev: prevElement
+    })
+    expect(events.onElementBlur).toHaveBeenCalledWith({
+      current: getCurrentElement(state) as FocusableElement,
+      direction: 'down',
+      next: nextElement
+    })
+    expect(events.onGroupBlur).toHaveBeenCalledWith({
+      current: state.groupsConfig.get('group-0'),
+      direction: 'down',
+      next: state.groupsConfig.get('group-1')
+    })
+    expect(events.onGroupFocus).toHaveBeenCalledWith({
+      current: state.groupsConfig.get('group-1'),
+      direction: 'down',
+      prev: state.groupsConfig.get('group-0')
+    })
   })
 
   it('should call onFocus and onBlur on group and element', () => {
@@ -139,10 +155,18 @@ describe('changeFocusEventHandler', () => {
       emit: emitter.emit
     })
 
-    expect(events.onElementFocus).toHaveBeenCalledWith(nextElement, 'down', null)
+    expect(events.onElementFocus).toHaveBeenCalledWith({
+      current: nextElement,
+      direction: 'down',
+      prev: null
+    })
     expect(events.onElementBlur).not.toHaveBeenCalled()
     expect(events.onGroupBlur).not.toHaveBeenCalled()
-    expect(events.onGroupFocus).toHaveBeenCalledWith(state.groupsConfig.get('group-1'), 'down', undefined)
+    expect(events.onGroupFocus).toHaveBeenCalledWith({
+      current: state.groupsConfig.get('group-1'),
+      direction: 'down',
+      prev: undefined
+    })
   })
 
   it('should save the last element of the group if saveLast is true', () => {

@@ -1,6 +1,8 @@
+import type { Rect } from '@/types'
+
 export const isYAxisIntersecting = (
-  currentRect: DOMRect,
-  candidateRect: DOMRect,
+  currentRect: Rect,
+  candidateRect: Rect,
   threshold = 0
 ): boolean => (
   currentRect.left - threshold <= candidateRect.right
@@ -8,8 +10,8 @@ export const isYAxisIntersecting = (
 )
 
 export const isXAxisIntersecting = (
-  currentRect: DOMRect,
-  candidateRect: DOMRect,
+  currentRect: Rect,
+  candidateRect: Rect,
   threshold = 0
 ): boolean => (
   currentRect.top - threshold <= candidateRect.bottom

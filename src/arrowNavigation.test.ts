@@ -1,8 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import { initArrowNavigation, getArrowNavigation, ERROR_MESSAGES } from './arrowNavigation'
 import EVENTS from './config/events'
-import type { Direction, FocusableElement } from './types'
+import type { Direction, FocusableElement, FocusEventResult } from './types'
 import getViewNavigationStateMock from './__mocks__/viewNavigationState.mock'
+import { TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED } from './handlers/registerElementHandler'
 
 describe('arrowNavigation', () => {
   beforeEach(() => {
@@ -195,21 +196,25 @@ describe('arrowNavigation', () => {
   })
 
   it('check correct time on current reassigned and event consumption', () => {
-    initArrowNavigation({ debug: true })
+    initArrowNavigation({ debug: true, disableWebListeners: false })
 
     const navigationApi = getArrowNavigation()
 
     navigationApi._setState(getViewNavigationStateMock())
 
-    navigationApi.setFocusElement('element-0-2', 'group-0')
+    navigationApi.setFocusElement('element-0-2')
 
     const listener = jest.fn()
 
-    navigationApi.on(EVENTS.CURRENT_ELEMENT_CHANGE, (
-      _el: FocusableElement,
-      direction: Direction
-    ) => {
-      if (!navigationApi.getNextElement({ direction: direction as Direction, inGroup: true })) {
+    navigationApi.on(EVENTS.CURRENT_ELEMENT_CHANGE, ({
+      current: _,
+      direction
+    }: FocusEventResult<FocusableElement>) => {
+      const nextElement = navigationApi.getNextElement({
+        direction: direction as Direction,
+        inGroup: true
+      })
+      if (!nextElement) {
         listener('last')
       }
     })
@@ -218,5 +223,102 @@ describe('arrowNavigation', () => {
 
     expect(listener).toHaveBeenCalledWith('last')
     expect(navigationApi.getFocusedElement()?.id).toBe('element-0-3')
+  })
+
+  it('should focus the next element if direction press handler is executed', () => {
+    initArrowNavigation({ debug: true })
+
+    const navigationApi = getArrowNavigation()
+
+    navigationApi._setState(getViewNavigationStateMock())
+
+    navigationApi.setFocusElement('element-0-2')
+
+    navigationApi.handleDirectionPress('down', false)
+
+    expect(navigationApi.getFocusedElement()?.id).toBe('element-0-3')
+  })
+
+  it('should not set the eventListeners if disableWebListeners is true', () => {
+    window.addEventListener = jest.fn()
+    initArrowNavigation({ disableWebListeners: true })
+
+    expect(window.addEventListener).not.toHaveBeenCalled()
+  })
+
+  it('should set the eventListeners if disableWebListeners is false', () => {
+    window.addEventListener = jest.fn()
+    initArrowNavigation({ disableWebListeners: false })
+
+    expect(window.addEventListener).toHaveBeenCalled()
+  })
+
+  it('should focus the initialFocusElement if it is set', () => {
+    jest.useFakeTimers()
+    initArrowNavigation({ initialFocusElement: 'element-0-2' })
+
+    const navigationApi = getArrowNavigation()
+
+    const groupContainer = document.createElement('div')
+    groupContainer.id = 'group-0'
+    document.body.appendChild(groupContainer)
+    navigationApi.registerGroup(groupContainer)
+
+    const element = document.createElement('button')
+    element.id = 'element-0-1'
+    groupContainer.appendChild(element)
+    navigationApi.registerElement(element, 'group-0')
+
+    const element2 = document.createElement('button')
+    element2.id = 'element-0-2'
+    groupContainer.appendChild(element2)
+    navigationApi.registerElement(element2, 'group-0')
+
+    expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
+
+    jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+
+    expect(navigationApi.getFocusedElement()?.id).toBe('element-0-2')
+
+    navigationApi.unregisterElement('element-0-2')
+    navigationApi.unregisterElement('element-0-1')
+
+    navigationApi.setInitialFocusElement('element-0-1')
+
+    navigationApi.registerElement(element, 'group-0')
+    navigationApi.registerElement(element2, 'group-0')
+
+    expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
+
+    jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+
+    expect(navigationApi.getFocusedElement()?.id).toBe('element-0-1')
+
+    navigationApi.unregisterElement('element-0-2')
+    navigationApi.unregisterElement('element-0-1')
+
+    navigationApi.setInitialFocusElement('non-existing-element')
+
+    navigationApi.registerElement(element, 'group-0')
+    navigationApi.registerElement(element2, 'group-0')
+
+    expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
+
+    jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+
+    expect(navigationApi.getFocusedElement()?.id).toBe('element-0-1')
+
+    navigationApi.unregisterElement('element-0-2')
+    navigationApi.unregisterElement('element-0-1')
+
+    navigationApi.setInitialFocusElement(null as unknown as string)
+
+    navigationApi.registerElement(element, 'group-0')
+
+    expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
+
+    jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+
+    expect(navigationApi.getFocusedElement()?.id).toBe('element-0-1')
   })
 })

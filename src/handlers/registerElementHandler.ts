@@ -1,9 +1,8 @@
+/* eslint-disable no-param-reassign */
 import EVENTS from '@/config/events'
-import type { ArrowNavigationState, FocusableElement, FocusableElementOptions } from '@/types'
+import type { ArrowNavigationState, FocusableElementOptions } from '@/types'
 import type { EventEmitter } from '@/utils/createEventEmitter'
 import getElementIdByOrder from '@/utils/getElementIdByOrder'
-import isElementDisabled from './utils/isElementDisabled'
-import isFocusableElement from './utils/isFocusableElement'
 
 export const ERROR_MESSAGES = {
   GROUP_REQUIRED: 'Group is required',
@@ -12,11 +11,18 @@ export const ERROR_MESSAGES = {
   ELEMENT_NOT_FOCUSABLE: (id: string) => `Element with id ${id} is not focusable. Check if you are not registering an element that is not focusable.`
 }
 
-export default function registerElementHandler (
-  state: ArrowNavigationState,
-  onChangeCurrentElement: (element: FocusableElement) => void,
+export const TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED = 500
+let timeout: ReturnType<typeof setTimeout>
+
+interface RegisterElementHandlerProps {
+  state: ArrowNavigationState
   emit: EventEmitter['emit']
-) {
+}
+
+export default function registerElementHandler ({
+  state,
+  emit
+}: RegisterElementHandlerProps) {
   return (
     element: HTMLElement,
     group: string,
@@ -34,10 +40,6 @@ export default function registerElementHandler (
 
     if (!element.id && !isByOrder) {
       throw new Error(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
-    }
-
-    if (!isFocusableElement(element)) {
-      throw new Error(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
     }
 
     if (state.elements.get(element.id)) {
@@ -58,6 +60,12 @@ export default function registerElementHandler (
       ...options
     }
 
+    if (!state.adapter.isNodeFocusable(focusableElement)) {
+      throw new Error(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
+    }
+
+    clearTimeout(timeout)
+
     state.elements.set(id, focusableElement)
     emit(EVENTS.ELEMENTS_CHANGED, state.elements)
 
@@ -73,8 +81,8 @@ export default function registerElementHandler (
       existentGroup.elements.add(id)
     }
 
-    if (!state.currentElement && !isElementDisabled(focusableElement.el)) {
-      onChangeCurrentElement(focusableElement)
-    }
+    timeout = setTimeout(() => {
+      emit(EVENTS.ELEMENTS_REGISTER_END)
+    }, TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
   }
 }

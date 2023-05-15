@@ -1,21 +1,23 @@
 import type { ArrowNavigationState, FocusableGroup } from '@/types'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
-import registerElementHandler, { ERROR_MESSAGES } from './registerElementHandler'
+import EVENTS from '@/config/events'
+import registerElementHandler, { ERROR_MESSAGES, TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED } from './registerElementHandler'
 
 describe('registerElementHandler', () => {
   let state: ArrowNavigationState
   let emitter: EventEmitter
-  let onChangeElement: () => void
 
   beforeEach(() => {
     state = getViewNavigationStateMock()
     emitter = createEventEmitter()
-    onChangeElement = jest.fn()
   })
 
   it('should register the element on a new group', () => {
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const element = document.createElement('button')
     element.id = 'element-5-0'
@@ -26,7 +28,10 @@ describe('registerElementHandler', () => {
   })
 
   it('should register the element on an existing group', () => {
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
     const groupId = 'group-0'
     const group = state.groups.get(groupId) as FocusableGroup
     const groupTotalElements = group.elements.size
@@ -42,14 +47,20 @@ describe('registerElementHandler', () => {
   })
 
   it('should throw an error if the element id is not defined', () => {
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const element = document.createElement('button')
     expect(() => registerElement(element, 'group-1')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
   })
 
   it('should throw an error if the group id is not defined', () => {
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const element = document.createElement('button')
     element.id = 'element-1-0'
@@ -58,7 +69,10 @@ describe('registerElementHandler', () => {
 
   it('should log a warn message if element id is already registered and not register the element', () => {
     global.console.warn = jest.fn()
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const element = document.createElement('button')
     element.id = 'element-0-0'
@@ -69,19 +83,11 @@ describe('registerElementHandler', () => {
     )
   })
 
-  it('should set the element as the current element if current is null', () => {
-    state.currentElement = null
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
-
-    const element = document.createElement('button')
-    element.id = 'element-5-0'
-    registerElement(element, 'group-5')
-
-    expect(onChangeElement).toHaveBeenCalledWith({ el: element, group: 'group-5', id: 'element-5-0' })
-  })
-
   it('should throw an error if the element is not focusable', () => {
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const element = document.createElement('div')
     element.id = 'element-5-0'
@@ -89,7 +95,10 @@ describe('registerElementHandler', () => {
   })
 
   it('should keep the group element if the groups doesnt exists but config exists', () => {
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const group = document.createElement('div')
     group.id = 'group-10'
@@ -112,7 +121,10 @@ describe('registerElementHandler', () => {
       el: state.groups.get('group-6')?.el as HTMLElement,
       byOrder: 'horizontal'
     })
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const element = document.createElement('button')
     registerElement(element, 'group-6', { order: 0 })
@@ -130,9 +142,55 @@ describe('registerElementHandler', () => {
       el: state.groups.get('group-6')?.el as HTMLElement,
       byOrder: 'horizontal'
     })
-    const registerElement = registerElementHandler(state, onChangeElement, emitter.emit)
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
 
     const element = document.createElement('button')
     expect(() => registerElement(element, 'group-6')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
+  })
+
+  it('should emit the elements register end event', () => {
+    jest.useFakeTimers()
+
+    const emitMock = jest.fn()
+
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitMock
+    })
+
+    const element = document.createElement('button')
+    element.id = 'element-5-0'
+
+    registerElement(element, 'group-5')
+
+    // Group 5 is registered and element-5-0 is registered
+    expect(emitMock).toHaveBeenCalledTimes(2)
+    expect(emitMock).not.toHaveBeenCalledWith(EVENTS.ELEMENTS_REGISTER_END)
+
+    jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+
+    expect(emitMock).toHaveBeenCalledWith(EVENTS.ELEMENTS_REGISTER_END)
+    expect(emitMock).toHaveBeenCalledTimes(3)
+
+    jest.resetAllMocks()
+
+    const element2 = document.createElement('button')
+    element2.id = 'element-5-1'
+    registerElement(element2, 'group-5')
+
+    const element3 = document.createElement('button')
+    element3.id = 'element-5-2'
+    registerElement(element3, 'group-5')
+
+    expect(emitMock).not.toHaveBeenCalledWith(EVENTS.ELEMENTS_REGISTER_END)
+    // Group 5 is already registered, but element-5-1 and element-5-2 are not
+    expect(emitMock).toHaveBeenCalledTimes(2)
+
+    jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+    expect(emitMock).toHaveBeenCalledWith(EVENTS.ELEMENTS_REGISTER_END)
+    expect(emitMock).toHaveBeenCalledTimes(3)
   })
 })

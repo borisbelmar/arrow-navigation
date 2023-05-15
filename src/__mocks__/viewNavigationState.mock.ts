@@ -1,7 +1,9 @@
-import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../types'
+import { Adapter, ArrowNavigationState, Focusable, FocusableElement, FocusableGroup, FocusableGroupConfig, Rect } from '../types'
 import getHtmlElementMock from './getHtmlElement.mock'
 
-export default function getViewNavigationStateMock (): ArrowNavigationState {
+export default function getViewNavigationStateMock (
+  adapter?: Adapter
+): ArrowNavigationState {
   const elements = new Map<string, FocusableElement>()
 
   const getSquareElement = (id: string, group: string, x: number, y: number) => {
@@ -82,6 +84,17 @@ export default function getViewNavigationStateMock (): ArrowNavigationState {
     currentElement: 'element-0-0',
     elements,
     groups,
-    groupsConfig
+    groupsConfig,
+    adapter: {
+      type: 'web',
+      getNodeRect: (focusable: Focusable) => focusable?.el?.getBoundingClientRect() as Rect,
+      focusNode: (focusable: FocusableElement) => focusable?.el.focus(),
+      isNodeDisabled: (focusable: FocusableElement) => focusable?.el.getAttribute('disabled') !== null,
+      isNodeFocusable: (focusable: FocusableElement) => {
+        const focusableSelector = 'input, select, textarea, button, a, [tabindex], [contenteditable]'
+        return focusable.el.matches(focusableSelector)
+      },
+      ...adapter
+    }
   }
 }

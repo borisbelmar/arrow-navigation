@@ -1,3 +1,4 @@
+import type { TextInput, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import type { EventEmitter } from './utils/createEventEmitter'
 
 export type Direction = 'up' | 'down' | 'left' | 'right'
@@ -30,26 +31,27 @@ type EventResult<T> = {
   direction: Direction | undefined | null
 }
 
-type FocusEventResult<T> = EventResult<T> & {
+export type FocusEventResult<T> = EventResult<T> & {
   prev: T | undefined | null
 }
 
-type BlurEventResult<T> = EventResult<T> & {
+export type BlurEventResult<T> = EventResult<T> & {
   next: T | undefined | null
 }
 
 export type Focusable = {
   id: string
+  /**
+   * @deprecated
+   * Now it uses the id to find the element and ref for React Native adapter.
+   * It keeps the el property for backward compatibility.
+   */
   el: HTMLElement
 }
 
 export type FocusableElement = Focusable & {
+  instance?: TextInput | TouchableHighlight | TouchableOpacity
   group: string
-  /**
-   * @deprecated
-   * Use nextByDirection instead. This property will be removed in the next major version.
-   */
-  nextElementByDirection?: ElementByDirection
   /**
    * If group is setted byOrder, the order will be used to find the next element.
    * nextByDirection will be overrided by this property.
@@ -67,6 +69,7 @@ export type FocusableGroup = Focusable & {
 }
 
 export type FocusableGroupConfig = Focusable & {
+  instance?: View
   firstElement?: string
   lastElement?: string
   nextGroupByDirection?: ElementByDirection
@@ -78,9 +81,33 @@ export type FocusableGroupConfig = Focusable & {
   onFocus?: (result: FocusEventResult<FocusableGroupConfig>) => void
   onBlur?: (result: BlurEventResult<FocusableGroupConfig>) => void
   keepFocus?: boolean
+  arrowDebounce?: boolean
 }
 
 export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el' | 'id'>
+
+export type Rect = {
+  x: number
+  y: number
+  width: number
+  height: number
+  left: number
+  top: number
+  right: number
+  bottom: number
+}
+
+export type FocusNodeOptions = {
+  preventScroll?: boolean
+}
+
+export type Adapter = {
+  type: 'web' | 'react-native'
+  getNodeRect: (focusable: FocusableElement | FocusableGroupConfig) => Rect
+  isNodeDisabled: (focusable: FocusableElement) => boolean
+  focusNode: (focusable: FocusableElement, opts?: FocusNodeOptions) => void
+  isNodeFocusable: (focusable: FocusableElement) => boolean
+}
 
 export type ArrowNavigationState = {
   currentElement: string | null,
@@ -88,12 +115,17 @@ export type ArrowNavigationState = {
   groups: Map<string, FocusableGroup>
   elements: Map<string, FocusableElement>
   debug?: boolean
+  readonly adapter: Adapter
+  initialFocusElement?: string
 }
 
 export type ArrowNavigationOptions = {
   debug?: boolean
   errorOnReinit?: boolean
   preventScroll?: boolean
+  adapter?: Adapter
+  disableWebListeners?: boolean
+  initialFocusElement?: string
 }
 
 export type GetNextOptions = {
@@ -117,10 +149,11 @@ export type ChangeFocusEventHandlerOptions = {
 
 export type ArrowNavigationInstance = {
   getFocusedElement: () => FocusableElement | null
-  setFocusElement: (id: string, group: string) => void
-  registerGroup: (element: HTMLElement, options?: FocusableGroupOptions) => void
-  registerElement: (element: HTMLElement, group: string, options?: FocusableElementOptions) => void
-  unregisterElement: (element: string | HTMLElement) => void
+  setFocusElement: (id: string) => void
+  setInitialFocusElement: (id: string) => void
+  registerGroup: (el: HTMLElement, options?: FocusableGroupOptions) => void
+  registerElement: (el: HTMLElement, groupId: string, options?: FocusableElementOptions) => void
+  unregisterElement: (id: string) => void
   destroy: () => void
   getCurrentGroups: () => Set<string>
   getGroupElements: (group: string) => Set<string>
@@ -129,6 +162,7 @@ export type ArrowNavigationInstance = {
   getFocusedGroup: () => string | undefined
   getNextElement: (opts: GetNextElementOptions) => string | null
   getNextGroup: (opts: GetNextGroupOptions) => string | null
+  handleDirectionPress: (direction: Direction, repeat: boolean) => void
   on: EventEmitter['on']
   off: EventEmitter['off']
   /**

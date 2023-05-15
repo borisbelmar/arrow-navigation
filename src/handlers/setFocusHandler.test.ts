@@ -10,7 +10,10 @@ describe('setFocusHandler', () => {
 
   it('should set the focus to the element', () => {
     const onChange = jest.fn()
-    const setFocus = setFocusHandler(state, onChange)
+    const setFocus = setFocusHandler({
+      state,
+      onChangeCurrentElement: onChange
+    })
 
     setFocus('element-1-0')
 
@@ -19,7 +22,10 @@ describe('setFocusHandler', () => {
 
   it('should not set the focus to the element if it is not registered', () => {
     const onChange = jest.fn()
-    const setFocus = setFocusHandler(state, onChange)
+    const setFocus = setFocusHandler({
+      state,
+      onChangeCurrentElement: onChange
+    })
 
     setFocus('not-registered-element')
 

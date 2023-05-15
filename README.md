@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![install size](https://packagephobia.com/badge?p=@arrow-navigation/core)](https://packagephobia.com/result?p=@arrow-navigation/core)
 
-Light (~13kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
+Light (~14kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
 For live demo, [visit this url](https://arrow-navigation-demo.vercel.app/). For ReactJS implementation, check [@arrow-navigation/react](https://www.npmjs.com/package/@arrow-navigation/react).
 
@@ -26,7 +26,10 @@ At the top of your application, you need to initialize the module. This will add
 import { initArrowNavigation } from '@arrow-navigation/core'
 
 initArrowNavigation({
-  preventScroll: true // Prevent the default behavior of the arrow keys to scroll the page. The default value is true
+  preventScroll: true // Prevent the default behavior of the arrow keys to scroll the page. The default value is true,
+  disableWebListeners: false, // Disable the web listeners. The default value is false
+  adapter: webAdapter, // The adapter to use. The default value is webAdapter included in the package. You can create your own adapter to use the module in other platforms like React Native.
+  initialFocusElement: 'element-0-0' // The element to be focused when the elements has been registered. The default value is null
 })
 ```
 
@@ -71,6 +74,18 @@ navigationApi.registerElement(buttonElement2)
 ## initArrowNavigation
 
 Initialize the module. This will add the event listeners to the document and store the navigation state in a singleton instance.
+
+## getElementIdByOrder
+
+Retrieve the element ID in the same order as the library when use group byOrder. This functionality proves valuable when you need to manually control the focus.
+
+```typescript
+const api = getArrowNavigation()
+
+// Set the focus to the first element of the group-0
+const id = getElementIdByOrder('group-0', 0) // 'group-0-0'
+api.setFocusedElement(id)
+```
 
 ## getArrowNavigation
 
@@ -214,6 +229,22 @@ api.registerElement(element2, 'group-0')
 api.setFocusedElement('element-0-1')
 
 document.activeElement.id === element2.id // true
+```
+
+### setInitialFocusElement
+
+Set the initial focus element. This will be the element focused when the elements has been registered.
+
+```typescript
+const api = getArrowNavigation()
+
+//... Register all the elements
+
+api.setInitialFocusElement('element-0-1')
+
+// Wait for 500ms to be sure that the focus has been setted
+
+document.activeElement.id === 'element-0-1' // true
 ```
 
 ### destroy
@@ -372,6 +403,30 @@ const nextGroup = api.getNextGroup({ direction: 'down' }) // 'group-1'
 const nextGroup = api.getNextGroup({ groupId: 'group-0', direction: 'down' }) // 'group-1'
 ```
 
+### handleDirectionPress
+
+Handle the arrow key press. This is useful if you want to handle the arrow key press manually or React Native. The first parameter is the direction and the second parameter is a boolean to specify is a repeated key press, for example, when the user keep the key pressed. The default value is false.
+
+```typescript
+const api = getArrowNavigation()
+
+const container = document.createElement('div')
+const element = document.createElement('button')
+const element2 = document.createElement('button')
+
+// Is important to keep a unique id for each group and his elements
+
+container.id = 'group-0'
+element.id = 'element-0-0'
+element2.id = 'element-0-1'
+
+api.registerGroup(container)
+api.registerElement(element, 'group-0')
+api.registerElement(element2, 'group-0')
+
+api.handleDirectionPress('right', false)
+```
+
 ## Events
 
 The API implements an Event Emitter to listen to events. The events are accessible through the `on` and `off` methods. All the events can be accesed through the `ArrowNavigationEvents` enum.
@@ -386,19 +441,19 @@ This event is triggered when the current group is changed. The event will receiv
 
 ### element:focus
 
-This event is triggered when an element is focused. The event will receive `(currentElement, direction, prevElement)`.
+This event is triggered when an element is focused. The event will receive `({ current, direction, prev })`.
 
 ### element:blur
 
-This event is triggered when an element is blurred. The event will receive `(currentElement, direction, nextElement)`.
+This event is triggered when an element is blurred. The event will receive `({ current, direction, next })`.
 
 ### group:focus
 
-This event is triggered when a group is focused. The event will receive `(currentGroup, direction, prevGroup)`.
+This event is triggered when a group is focused. The event will receive `({ current, direction, prev })`.
 
 ### group:blur
 
-This event is triggered when a group is blurred. The event will receive `(currentGroup, direction, nextGroup)`.
+This event is triggered when a group is blurred. The event will receive `({ current, direction, next })`.
 
 ### groups:change
 
@@ -411,6 +466,10 @@ This event is triggered when the elements are changed. The event will receive th
 ### groups-config:change
 
 This event is triggered when the groups configuration is changed. The event will receive the groups configuration as a parameter.
+
+### elements:register-end
+
+This event is triggered when the elements are registered. The event will not receive any parameter.
 
 # Using with CDN
 

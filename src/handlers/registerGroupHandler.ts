@@ -8,17 +8,23 @@ const defaultGroupConfig: FocusableGroupOptions = {
   nextGroupByDirection: undefined,
   saveLast: false,
   viewportSafe: true,
-  threshold: 0
+  threshold: 0,
+  arrowDebounce: true
 }
 
 export const ERROR_MESSAGES = {
   GROUP_ID_REQUIRED: 'Group ID is required'
 }
 
-export default function registerGroupHandler (
-  state: ArrowNavigationState,
+interface RegisterGroupHandlerProps {
+  state: ArrowNavigationState
   emit: EventEmitter['emit']
-) {
+}
+
+export default function registerGroupHandler ({
+  state,
+  emit
+}: RegisterGroupHandlerProps) {
   return (
     element: HTMLElement,
     options?: FocusableGroupOptions

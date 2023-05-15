@@ -112,7 +112,7 @@ describe('findNextGroupElement', () => {
       el: nextGroup.el as HTMLElement,
       firstElement: 'element-1-0'
     });
-    (state.elements.get('element-1-0') as FocusableElement).nextElementByDirection = {
+    (state.elements.get('element-1-0') as FocusableElement).nextByDirection = {
       right: null
     }
     state.elements.get('element-1-0')?.el.setAttribute('disabled', 'true')
