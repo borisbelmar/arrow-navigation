@@ -43,10 +43,9 @@ export type Focusable = {
   id: string
   /**
    * @deprecated
-   * Now it uses the id to find the element and ref for React Native adapter.
-   * It keeps the el property for backward compatibility.
+   * For test purposes only.
    */
-  el: HTMLElement
+  _ref?: HTMLElement
 }
 
 export type FocusableElement = Focusable & {
@@ -62,7 +61,7 @@ export type FocusableElement = Focusable & {
   onBlur?: (result: BlurEventResult<FocusableElement>) => void
 }
 
-export type FocusableElementOptions = Omit<FocusableElement, 'el' | 'group' | 'id'>
+export type FocusableElementOptions = Omit<FocusableElement, '_ref' | 'group' | 'id'>
 
 export type FocusableGroup = Focusable & {
   elements: Set<string>
@@ -84,7 +83,7 @@ export type FocusableGroupConfig = Focusable & {
   arrowDebounce?: boolean
 }
 
-export type FocusableGroupOptions = Omit<FocusableGroupConfig, 'el' | 'id'>
+export type FocusableGroupOptions = Omit<FocusableGroupConfig, '_ref' | 'id'>
 
 export type Rect = {
   x: number
@@ -107,6 +106,7 @@ export type Adapter = {
   isNodeDisabled: (focusable: FocusableElement) => boolean
   focusNode: (focusable: FocusableElement, opts?: FocusNodeOptions) => void
   isNodeFocusable: (focusable: FocusableElement) => boolean
+  getNodeRef: (focusable: Focusable) => unknown
 }
 
 export type ArrowNavigationState = {
@@ -151,8 +151,8 @@ export type ArrowNavigationInstance = {
   getFocusedElement: () => FocusableElement | null
   setFocusElement: (id: string) => void
   setInitialFocusElement: (id: string) => void
-  registerGroup: (el: HTMLElement, options?: FocusableGroupOptions) => void
-  registerElement: (el: HTMLElement, groupId: string, options?: FocusableElementOptions) => void
+  registerGroup: (id: string, options?: FocusableGroupOptions) => void
+  registerElement: (id: string, groupId: string, options?: FocusableElementOptions) => void
   unregisterElement: (id: string) => void
   destroy: () => void
   getCurrentGroups: () => Set<string>

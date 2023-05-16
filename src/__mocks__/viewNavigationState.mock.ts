@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Adapter, ArrowNavigationState, Focusable, FocusableElement, FocusableGroup, FocusableGroupConfig, Rect } from '../types'
 import getHtmlElementMock from './getHtmlElement.mock'
 
@@ -9,7 +10,7 @@ export default function getViewNavigationStateMock (
   const getSquareElement = (id: string, group: string, x: number, y: number) => {
     const focusableElement = {
       id,
-      el: getHtmlElementMock({ id, x, y, width: 10, height: 10 }),
+      _ref: getHtmlElementMock({ id, x, y, width: 10, height: 10 }),
       group
     }
     elements.set(focusableElement.id, focusableElement)
@@ -21,7 +22,7 @@ export default function getViewNavigationStateMock (
 
   const group1: FocusableGroup = {
     id: 'group-0',
-    el: getHtmlElementMock({ id: 'group-0', x: 0, y: 0, width: 16, height: 52 }),
+    _ref: getHtmlElementMock({ id: 'group-0', x: 0, y: 0, width: 16, height: 52 }),
     elements: new Set()
   };
   [0, 1, 2, 3].forEach(i => {
@@ -30,11 +31,11 @@ export default function getViewNavigationStateMock (
     group1.elements.add(id)
   })
   groups.set(group1.id, group1)
-  groupsConfig.set(group1.id, { el: group1.el, id: group1.id })
+  groupsConfig.set(group1.id, { _ref: group1._ref, id: group1.id })
 
   const group2: FocusableGroup = {
     id: 'group-1',
-    el: getHtmlElementMock({ id: 'group-1', x: 16, y: 0, width: 52, height: 16 }),
+    _ref: getHtmlElementMock({ id: 'group-1', x: 16, y: 0, width: 52, height: 16 }),
     elements: new Set()
   };
   [0, 1, 2, 3].forEach(i => {
@@ -43,11 +44,11 @@ export default function getViewNavigationStateMock (
     group2.elements.add(id)
   })
   groups.set(group2.id, group2)
-  groupsConfig.set(group2.id, { el: group2.el, id: group2.id })
+  groupsConfig.set(group2.id, { _ref: group2._ref, id: group2.id })
 
   const group3: FocusableGroup = {
     id: 'group-2',
-    el: getHtmlElementMock({ id: 'group-2', x: 16, y: 18, width: 52, height: 16 }),
+    _ref: getHtmlElementMock({ id: 'group-2', x: 16, y: 18, width: 52, height: 16 }),
     elements: new Set()
   };
   [0, 1, 2, 3].forEach(i => {
@@ -56,11 +57,11 @@ export default function getViewNavigationStateMock (
     group3.elements.add(id)
   })
   groups.set(group3.id, group3)
-  groupsConfig.set(group3.id, { el: group3.el, id: group3.id })
+  groupsConfig.set(group3.id, { _ref: group3._ref, id: group3.id })
 
   const group4: FocusableGroup = {
     id: 'group-3',
-    el: getHtmlElementMock({ id: 'group-3', x: 16, y: 36, width: 52, height: 16 }),
+    _ref: getHtmlElementMock({ id: 'group-3', x: 16, y: 36, width: 52, height: 16 }),
     elements: new Set()
   };
   [0, 1, 2, 3].forEach(i => {
@@ -69,17 +70,17 @@ export default function getViewNavigationStateMock (
     group4.elements.add(id)
   })
   groups.set(group4.id, group4)
-  groupsConfig.set(group4.id, { el: group4.el, id: group4.id })
+  groupsConfig.set(group4.id, { _ref: group4._ref, id: group4.id })
 
   const group5: FocusableGroup = {
     id: 'group-4',
-    el: getHtmlElementMock({ id: 'group-4', x: 0, y: 52, width: 16, height: 16 }),
+    _ref: getHtmlElementMock({ id: 'group-4', x: 0, y: 52, width: 16, height: 16 }),
     elements: new Set()
   }
   getSquareElement('element-4-0', 'group-4', 3, 55)
   group5.elements.add('element-4-0')
   groups.set(group5.id, group5)
-  groupsConfig.set(group5.id, { el: group5.el, id: group5.id })
+  groupsConfig.set(group5.id, { _ref: group5._ref, id: group5.id })
   return {
     currentElement: 'element-0-0',
     elements,
@@ -87,13 +88,14 @@ export default function getViewNavigationStateMock (
     groupsConfig,
     adapter: {
       type: 'web',
-      getNodeRect: (focusable: Focusable) => focusable?.el?.getBoundingClientRect() as Rect,
-      focusNode: (focusable: FocusableElement) => focusable?.el.focus(),
-      isNodeDisabled: (focusable: FocusableElement) => focusable?.el.getAttribute('disabled') !== null,
+      getNodeRect: (focusable: Focusable) => focusable?._ref?.getBoundingClientRect() as Rect,
+      focusNode: (focusable: FocusableElement) => focusable?._ref?.focus(),
+      isNodeDisabled: (focusable: FocusableElement) => focusable?._ref?.getAttribute('disabled') !== null,
       isNodeFocusable: (focusable: FocusableElement) => {
         const focusableSelector = 'input, select, textarea, button, a, [tabindex], [contenteditable]'
-        return focusable.el.matches(focusableSelector)
+        return focusable._ref?.matches(focusableSelector) || false
       },
+      getNodeRef: (focusable: Focusable) => focusable?._ref,
       ...adapter
     }
   }

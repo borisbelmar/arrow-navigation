@@ -60,11 +60,11 @@ describe('arrowNavigation', () => {
 
     navigationApi._forceNavigate('ArrowDown')
 
-    expect(state.elements.get('element-0-1')?.el.focus).toHaveBeenCalled()
+    expect(state.elements.get('element-0-1')?._ref?.focus).toHaveBeenCalled()
 
     navigationApi._forceNavigate('ArrowDown')
 
-    expect(state.elements.get('element-0-2')?.el.focus).toHaveBeenCalled()
+    expect(state.elements.get('element-0-2')?._ref?.focus).toHaveBeenCalled()
   })
 
   it('should not forceNavigate if debug is disabled', () => {
@@ -75,7 +75,7 @@ describe('arrowNavigation', () => {
 
     navigationApi._forceNavigate('ArrowDown')
 
-    expect(state.elements.get('element-0-1')?.el.focus).not.toHaveBeenCalled()
+    expect(state.elements.get('element-0-1')?._ref?.focus).not.toHaveBeenCalled()
   })
 
   it('should return the focused element', () => {
@@ -262,17 +262,17 @@ describe('arrowNavigation', () => {
     const groupContainer = document.createElement('div')
     groupContainer.id = 'group-0'
     document.body.appendChild(groupContainer)
-    navigationApi.registerGroup(groupContainer)
+    navigationApi.registerGroup(groupContainer.id)
 
     const element = document.createElement('button')
     element.id = 'element-0-1'
     groupContainer.appendChild(element)
-    navigationApi.registerElement(element, 'group-0')
+    navigationApi.registerElement(element.id, 'group-0')
 
     const element2 = document.createElement('button')
     element2.id = 'element-0-2'
     groupContainer.appendChild(element2)
-    navigationApi.registerElement(element2, 'group-0')
+    navigationApi.registerElement(element2.id, 'group-0')
 
     expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
 
@@ -285,8 +285,8 @@ describe('arrowNavigation', () => {
 
     navigationApi.setInitialFocusElement('element-0-1')
 
-    navigationApi.registerElement(element, 'group-0')
-    navigationApi.registerElement(element2, 'group-0')
+    navigationApi.registerElement(element.id, 'group-0')
+    navigationApi.registerElement(element2.id, 'group-0')
 
     expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
 
@@ -299,8 +299,8 @@ describe('arrowNavigation', () => {
 
     navigationApi.setInitialFocusElement('non-existing-element')
 
-    navigationApi.registerElement(element, 'group-0')
-    navigationApi.registerElement(element2, 'group-0')
+    navigationApi.registerElement(element.id, 'group-0')
+    navigationApi.registerElement(element2.id, 'group-0')
 
     expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
 
@@ -313,7 +313,7 @@ describe('arrowNavigation', () => {
 
     navigationApi.setInitialFocusElement(null as unknown as string)
 
-    navigationApi.registerElement(element, 'group-0')
+    navigationApi.registerElement(element.id, 'group-0')
 
     expect(navigationApi.getFocusedElement()?.id).toBe(undefined)
 

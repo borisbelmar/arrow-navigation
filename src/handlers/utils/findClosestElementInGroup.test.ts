@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import getCurrentElement from '@/utils/getCurrentElement'
 import { ArrowNavigationState, FocusableElement, FocusableGroup } from '../../types'
 import findClosestElementInGroup from './findClosestElementInGroup'
@@ -159,7 +160,7 @@ describe('findClosestElementInGroup', () => {
   it('should return the closest element, but not the disabled element', () => {
     const group1 = state.groups.get('group-1') as FocusableGroup
 
-    state.elements.get('element-1-1')?.el.setAttribute('disabled', '')
+    state.elements.get('element-1-1')?._ref?.setAttribute('disabled', '')
 
     const closesElement = findClosestElementInGroup({
       direction: 'right',

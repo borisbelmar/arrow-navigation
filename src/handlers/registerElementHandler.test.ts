@@ -1,15 +1,22 @@
-import type { ArrowNavigationState, FocusableGroup } from '@/types'
+/* eslint-disable no-underscore-dangle */
+import type { Adapter, ArrowNavigationState, FocusableGroup } from '@/types'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
 import EVENTS from '@/config/events'
+import webAdapter from '@/utils/webAdapter'
 import registerElementHandler, { ERROR_MESSAGES, TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED } from './registerElementHandler'
 
 describe('registerElementHandler', () => {
   let state: ArrowNavigationState
   let emitter: EventEmitter
+  let adapterMock: Adapter
 
   beforeEach(() => {
-    state = getViewNavigationStateMock()
+    adapterMock = {
+      getNodeRef: webAdapter.getNodeRef,
+      isNodeFocusable: webAdapter.isNodeFocusable
+    } as unknown as Adapter
+    state = getViewNavigationStateMock(adapterMock)
     emitter = createEventEmitter()
   })
 
@@ -21,10 +28,11 @@ describe('registerElementHandler', () => {
 
     const element = document.createElement('button')
     element.id = 'element-5-0'
-    registerElement(element, 'group-5')
+    document.body.appendChild(element)
+    registerElement(element.id, 'group-5')
 
     expect(state.elements.has(element.id)).toBe(true)
-    expect(state.elements.get(element.id)?.el).toBe(element)
+    expect(state.elements.get(element.id)?._ref).toBe(element)
   })
 
   it('should register the element on an existing group', () => {
@@ -39,10 +47,12 @@ describe('registerElementHandler', () => {
     const element = document.createElement('button')
     element.id = `element-0-${groupTotalElements}`
 
-    registerElement(element, groupId)
+    document.body.appendChild(element)
+
+    registerElement(element.id, groupId)
 
     expect(state.elements.has(element.id)).toBe(true)
-    expect(state.elements.get(element.id)?.el).toBe(element)
+    expect(state.elements.get(element.id)?._ref).toBe(element)
     expect(state.groups.get('group-0')?.elements.has(element.id)).toBe(true)
   })
 
@@ -51,9 +61,7 @@ describe('registerElementHandler', () => {
       state,
       emit: emitter.emit
     })
-
-    const element = document.createElement('button')
-    expect(() => registerElement(element, 'group-1')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
+    expect(() => registerElement(null as unknown as string, 'group-1')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
   })
 
   it('should throw an error if the group id is not defined', () => {
@@ -64,7 +72,8 @@ describe('registerElementHandler', () => {
 
     const element = document.createElement('button')
     element.id = 'element-1-0'
-    expect(() => registerElement(element, '')).toThrowError(ERROR_MESSAGES.GROUP_REQUIRED)
+    document.body.appendChild(element)
+    expect(() => registerElement(element.id, '')).toThrowError(ERROR_MESSAGES.GROUP_REQUIRED)
   })
 
   it('should log a warn message if element id is already registered and not register the element', () => {
@@ -76,7 +85,8 @@ describe('registerElementHandler', () => {
 
     const element = document.createElement('button')
     element.id = 'element-0-0'
-    registerElement(element, 'group-0')
+    document.body.appendChild(element)
+    registerElement(element.id, 'group-0')
 
     expect(console.warn).toHaveBeenCalledWith(
       ERROR_MESSAGES.ELEMENT_ID_ALREADY_REGISTERED(element.id)
@@ -91,7 +101,8 @@ describe('registerElementHandler', () => {
 
     const element = document.createElement('div')
     element.id = 'element-5-0'
-    expect(() => registerElement(element, 'group-5')).toThrowError(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
+    document.body.appendChild(element)
+    expect(() => registerElement(element.id, 'group-5')).toThrowError(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
   })
 
   it('should keep the group element if the groups doesnt exists but config exists', () => {
@@ -105,20 +116,23 @@ describe('registerElementHandler', () => {
 
     state.groupsConfig.set(group.id, {
       id: group.id,
-      el: group
+      _ref: group
     })
+
+    document.body.appendChild(group)
 
     const element = document.createElement('button')
     element.id = 'element-10-0'
-    registerElement(element, 'group-10')
+    group.appendChild(element)
+    registerElement(element.id, 'group-10')
 
-    expect(state.groups.get('group-10')?.el).toBe(group)
+    expect(state.groups.get('group-10')?._ref).toBe(group)
   })
 
   it('should register an element with order', () => {
     state.groupsConfig.set('group-6', {
       id: 'group-6',
-      el: state.groups.get('group-6')?.el as HTMLElement,
+      _ref: state.groups.get('group-6')?._ref as HTMLElement,
       byOrder: 'horizontal'
     })
     const registerElement = registerElementHandler({
@@ -127,11 +141,13 @@ describe('registerElementHandler', () => {
     })
 
     const element = document.createElement('button')
-    registerElement(element, 'group-6', { order: 0 })
+    element.id = 'element-6-0'
+    document.body.appendChild(element)
+    registerElement(element.id, 'group-6', { order: 0 })
 
     expect(state.elements.has('group-6-0')).toBe(true)
-    expect(state.elements.get(element.id)?.el).toBe(element)
-    expect(state.elements.get(element.id)?.el.id).toBe('group-6-0')
+    expect(state.elements.get(element.id)?._ref).toBe(element)
+    expect(state.elements.get(element.id)?._ref?.id).toBe('group-6-0')
     expect(state.elements.get(element.id)?.id).toBe('group-6-0')
     expect(state.groups.get('group-6')?.elements.has('group-6-0')).toBe(true)
   })
@@ -139,7 +155,7 @@ describe('registerElementHandler', () => {
   it('should not register an element with order if the group is byOrder but the element doesnt have order', () => {
     state.groupsConfig.set('group-6', {
       id: 'group-6',
-      el: state.groups.get('group-6')?.el as HTMLElement,
+      _ref: state.groups.get('group-6')?._ref as HTMLElement,
       byOrder: 'horizontal'
     })
     const registerElement = registerElementHandler({
@@ -148,7 +164,7 @@ describe('registerElementHandler', () => {
     })
 
     const element = document.createElement('button')
-    expect(() => registerElement(element, 'group-6')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
+    expect(() => registerElement(element.id, 'group-6')).toThrowError(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
   })
 
   it('should emit the elements register end event', () => {
@@ -163,8 +179,8 @@ describe('registerElementHandler', () => {
 
     const element = document.createElement('button')
     element.id = 'element-5-0'
-
-    registerElement(element, 'group-5')
+    document.body.appendChild(element)
+    registerElement(element.id, 'group-5')
 
     // Group 5 is registered and element-5-0 is registered
     expect(emitMock).toHaveBeenCalledTimes(2)
@@ -179,11 +195,13 @@ describe('registerElementHandler', () => {
 
     const element2 = document.createElement('button')
     element2.id = 'element-5-1'
-    registerElement(element2, 'group-5')
+    document.body.appendChild(element2)
+    registerElement(element2.id, 'group-5')
 
     const element3 = document.createElement('button')
     element3.id = 'element-5-2'
-    registerElement(element3, 'group-5')
+    document.body.appendChild(element3)
+    registerElement(element3.id, 'group-5')
 
     expect(emitMock).not.toHaveBeenCalledWith(EVENTS.ELEMENTS_REGISTER_END)
     // Group 5 is already registered, but element-5-1 and element-5-2 are not
@@ -192,5 +210,14 @@ describe('registerElementHandler', () => {
     jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
     expect(emitMock).toHaveBeenCalledWith(EVENTS.ELEMENTS_REGISTER_END)
     expect(emitMock).toHaveBeenCalledTimes(3)
+  })
+
+  it('should throw an error if the element not exists at DOM', () => {
+    const registerElement = registerElementHandler({
+      state,
+      emit: emitter.emit
+    })
+
+    expect(() => registerElement('not-exists', 'group-5')).toThrowError(ERROR_MESSAGES.ELEMENT_DOES_NOT_EXIST('not-exists'))
   })
 })

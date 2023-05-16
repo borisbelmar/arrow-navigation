@@ -13,7 +13,8 @@ const defaultGroupConfig: FocusableGroupOptions = {
 }
 
 export const ERROR_MESSAGES = {
-  GROUP_ID_REQUIRED: 'Group ID is required'
+  GROUP_ID_REQUIRED: 'Group ID is required',
+  GROUP_DOES_NOT_EXIST: (id: string) => `Group with id ${id} does not exist. Check if you are not registering a group that does not exist.`
 }
 
 interface RegisterGroupHandlerProps {
@@ -26,12 +27,16 @@ export default function registerGroupHandler ({
   emit
 }: RegisterGroupHandlerProps) {
   return (
-    element: HTMLElement,
+    id: string,
     options?: FocusableGroupOptions
   ) => {
-    const id = element.id
     if (!id) {
       throw new Error(ERROR_MESSAGES.GROUP_ID_REQUIRED)
+    }
+
+    const element = state.adapter.getNodeRef({ id }) as HTMLElement
+    if (!element) {
+      throw new Error(ERROR_MESSAGES.GROUP_DOES_NOT_EXIST(id))
     }
 
     const existentGroup = state.groups.get(id)
@@ -42,7 +47,7 @@ export default function registerGroupHandler ({
     state.groups.set(id, {
       id,
       elements: prevElements,
-      el: element
+      _ref: element
     })
     emit(EVENTS.GROUPS_CHANGED, state.groups)
 
@@ -51,7 +56,7 @@ export default function registerGroupHandler ({
       ...options,
       id,
       lastElement: prevConfig?.lastElement || undefined,
-      el: element
+      _ref: element
     })
     emit(EVENTS.GROUPS_CONFIG_CHANGED, state.groupsConfig)
   }

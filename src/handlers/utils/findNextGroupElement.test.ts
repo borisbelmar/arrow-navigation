@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import getViewNavigationStateMock from '../../__mocks__/viewNavigationState.mock'
 import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../../types'
 import findNextGroupElement from './findNextGroupElement'
@@ -25,7 +26,7 @@ describe('findNextGroupElement', () => {
     const nextGroup = state.groups.get('group-2') as FocusableGroup
     state.groupsConfig.set('group-0', {
       id: 'group-0',
-      el: state.groups.get('group-0')?.el as HTMLElement,
+      _ref: state.groups.get('group-0')?._ref as HTMLElement,
       nextGroupByDirection: {
         right: nextGroup.id
       }
@@ -46,7 +47,7 @@ describe('findNextGroupElement', () => {
     const nextGroup = state.groups.get('group-1') as FocusableGroup
     state.groupsConfig.set('group-1', {
       id: 'group-1',
-      el: nextGroup.el as HTMLElement,
+      _ref: nextGroup._ref as HTMLElement,
       firstElement: 'element-1-2'
     })
     const nextElement = state.elements.get('element-1-2')
@@ -66,10 +67,10 @@ describe('findNextGroupElement', () => {
     const nextGroup = state.groups.get('group-1') as FocusableGroup
     state.groupsConfig.set('group-1', {
       id: 'group-1',
-      el: nextGroup.el as HTMLElement,
+      _ref: nextGroup._ref as HTMLElement,
       firstElement: 'element-1-0'
     })
-    state.elements.get('element-1-0')?.el.setAttribute('disabled', 'true')
+    state.elements.get('element-1-0')?._ref?.setAttribute('disabled', 'true')
     const nextElement = state.elements.get('element-1-1')
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
@@ -87,11 +88,11 @@ describe('findNextGroupElement', () => {
     const nextGroup = state.groups.get('group-1') as FocusableGroup
     state.groupsConfig.set('group-1', {
       id: 'group-1',
-      el: nextGroup.el as HTMLElement,
+      _ref: nextGroup._ref as HTMLElement,
       firstElement: 'element-1-0'
     })
-    state.elements.get('element-1-0')?.el.setAttribute('disabled', 'true')
-    state.elements.get('element-1-1')?.el.setAttribute('disabled', 'true')
+    state.elements.get('element-1-0')?._ref?.setAttribute('disabled', 'true')
+    state.elements.get('element-1-1')?._ref?.setAttribute('disabled', 'true')
     const nextElement = state.elements.get('element-1-2')
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
@@ -109,13 +110,13 @@ describe('findNextGroupElement', () => {
     const nextGroup = state.groups.get('group-1') as FocusableGroup
     state.groupsConfig.set('group-1', {
       id: 'group-1',
-      el: nextGroup.el as HTMLElement,
+      _ref: nextGroup._ref as HTMLElement,
       firstElement: 'element-1-0'
     });
     (state.elements.get('element-1-0') as FocusableElement).nextByDirection = {
       right: null
     }
-    state.elements.get('element-1-0')?.el.setAttribute('disabled', 'true')
+    state.elements.get('element-1-0')?._ref?.setAttribute('disabled', 'true')
     const fromElement = state.elements.get('element-0-0') as FocusableElement
 
     const element = findNextGroupElement({
@@ -148,7 +149,7 @@ describe('findNextGroupElement', () => {
   it('should return null if the manual setted next group is null', () => {
     state.groupsConfig.set('group-0', {
       id: 'group-0',
-      el: state.groups.get('group-0')?.el as HTMLElement,
+      _ref: state.groups.get('group-0')?._ref as HTMLElement,
       nextGroupByDirection: {
         right: null
       }
