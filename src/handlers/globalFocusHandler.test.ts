@@ -43,10 +43,10 @@ describe('globalFocusHandler', () => {
     // For coverage only
     const event = { target: { id: 'non-existent' } } as unknown as FocusEvent
     state.currentElement = 'element-0-0'
-    delete state.elements.get('element-0-0')?._ref
+    document.getElementById('element-0-0')?.remove()
     globalFocusHandler(state, event, true)
     expect(state.currentElement).toBe('element-0-0')
     expect(getCurrentElement(state)?.id).toBe('element-0-0')
-    expect(getCurrentElement(state)?._ref).toBe(undefined)
+    expect((state.adapter.getFocusedNode() as HTMLElement)?.id).not.toBe('element-0-0')
   })
 })
