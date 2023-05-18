@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![install size](https://packagephobia.com/badge?p=@arrow-navigation/core)](https://packagephobia.com/result?p=@arrow-navigation/core)
 
-Light (~14kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
+Light (~16kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
 For live demo, [visit this url](https://arrow-navigation-demo.vercel.app/). For ReactJS implementation, check [@arrow-navigation/react](https://www.npmjs.com/package/@arrow-navigation/react).
 
@@ -489,3 +489,27 @@ You can use the module with a CDN. The module is available in the following URL:
 </script>
 ```
 
+# Using with React Native
+
+You can use the module with React Native (Experimental). You need to create an adapter to use the module in React Native. The adapter is a simple object with the following methods:
+
+```typescript
+type Adapter = {
+  type: 'web' | 'react-native'
+  getNodeRect: (focusable: FocusableElement | FocusableGroupConfig) => Rect
+  isNodeDisabled: (focusable: FocusableElement) => boolean
+  focusNode: (focusable: FocusableElement, opts?: FocusNodeOptions) => void
+  isNodeFocusable: (focusable: FocusableElement) => boolean
+  getNodeRef: (focusable: Focusable) => unknown // TextInput / View / TouchableOpacity / TouchableHighlight
+}
+```
+
+You can use the `handleDirectionPress` method on API with TVHandler from React Native to handle the arrow key press manually. We will release a React Native package soon.
+
+# Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Keep the coverage at +95% and run `yarn test` before commit.
+
+# License
+
+[MIT](https://choosealicense.com/licenses/mit/)

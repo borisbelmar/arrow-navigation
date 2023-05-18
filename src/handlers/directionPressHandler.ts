@@ -20,6 +20,7 @@ export default function directionPressHandler ({
   onChangeCurrentElement
 }: DirectionPressHandlerProps) {
   const currentElement = getCurrentElement(state)
+
   if (!currentElement) {
     const initialElement = state.elements.get(state.initialFocusElement || '')
     if (initialElement) {
@@ -34,6 +35,14 @@ export default function directionPressHandler ({
     }
     return
   }
+
+  const focusRef = state.adapter.getFocusedNode()
+  const currentRef = currentElement && state.adapter.getNodeRef(currentElement)
+
+  if (currentElement && focusRef !== currentRef) {
+    state.adapter.focusNode(currentElement, { preventScroll: true })
+  }
+
   const currentGroupConfig = state.groupsConfig.get(currentElement.group)
 
   if (currentGroupConfig?.arrowDebounce && repeat) {

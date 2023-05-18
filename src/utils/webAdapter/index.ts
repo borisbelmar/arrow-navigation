@@ -4,6 +4,7 @@ import isNodeDisabled from './isNodeDisabled'
 import focusNode from './focusNode'
 import isNodeFocusable from './isNodeFocusable'
 import getNodeRef from './getNodeRef'
+import getFocusedNode from './getFocusedNode'
 
 const webAdapter: Adapter = {
   type: 'web',
@@ -11,7 +12,8 @@ const webAdapter: Adapter = {
   isNodeDisabled,
   focusNode,
   isNodeFocusable,
-  getNodeRef
+  getNodeRef,
+  getFocusedNode
 }
 
 export default webAdapter

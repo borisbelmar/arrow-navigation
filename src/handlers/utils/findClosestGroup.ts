@@ -26,7 +26,7 @@ interface GroupAndElement {
 
 export default function findClosestGroup ({
   isViewportSafe = false,
-  threshold = 2,
+  threshold = 0,
   candidateGroups,
   currentElement,
   direction,

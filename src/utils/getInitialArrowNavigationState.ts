@@ -5,12 +5,14 @@ interface ArrowNavigationStateProps {
   debug?: boolean
   adapter?: Adapter
   initialFocusElement?: string
+  registerCooldown?: number
 }
 
 export default function getInitialArrowNavigationState ({
   debug,
   adapter = webAdapter,
-  initialFocusElement
+  initialFocusElement,
+  registerCooldown
 }: ArrowNavigationStateProps): ArrowNavigationState {
   return {
     currentElement: null,
@@ -19,6 +21,7 @@ export default function getInitialArrowNavigationState ({
     elements: new Map(),
     debug,
     adapter,
-    initialFocusElement
+    initialFocusElement,
+    registerCooldown
   }
 }

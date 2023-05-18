@@ -106,7 +106,8 @@ export type Adapter = {
   isNodeDisabled: (focusable: FocusableElement) => boolean
   focusNode: (focusable: FocusableElement, opts?: FocusNodeOptions) => void
   isNodeFocusable: (focusable: FocusableElement) => boolean
-  getNodeRef: (focusable: Focusable) => unknown
+  getNodeRef: (focusable: Focusable) => unknown,
+  getFocusedNode: () => unknown
 }
 
 export type ArrowNavigationState = {
@@ -117,6 +118,7 @@ export type ArrowNavigationState = {
   debug?: boolean
   readonly adapter: Adapter
   initialFocusElement?: string
+  readonly registerCooldown?: number
 }
 
 export type ArrowNavigationOptions = {
@@ -126,6 +128,7 @@ export type ArrowNavigationOptions = {
   adapter?: Adapter
   disableWebListeners?: boolean
   initialFocusElement?: string
+  registerCooldown?: number
 }
 
 export type GetNextOptions = {

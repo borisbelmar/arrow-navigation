@@ -1,22 +1,16 @@
 /* eslint-disable no-underscore-dangle */
-import type { Adapter, ArrowNavigationState, FocusableGroup } from '@/types'
+import type { ArrowNavigationState, FocusableGroup } from '@/types'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
 import EVENTS from '@/config/events'
-import webAdapter from '@/utils/webAdapter'
 import registerElementHandler, { ERROR_MESSAGES, TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED } from './registerElementHandler'
 
 describe('registerElementHandler', () => {
   let state: ArrowNavigationState
   let emitter: EventEmitter
-  let adapterMock: Adapter
 
   beforeEach(() => {
-    adapterMock = {
-      getNodeRef: webAdapter.getNodeRef,
-      isNodeFocusable: webAdapter.isNodeFocusable
-    } as unknown as Adapter
-    state = getViewNavigationStateMock(adapterMock)
+    state = getViewNavigationStateMock()
     emitter = createEventEmitter()
   })
 

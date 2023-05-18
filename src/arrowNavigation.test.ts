@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-underscore-dangle */
 import { initArrowNavigation, getArrowNavigation, ERROR_MESSAGES } from './arrowNavigation'
 import EVENTS from './config/events'
@@ -199,8 +200,9 @@ describe('arrowNavigation', () => {
     initArrowNavigation({ debug: true, disableWebListeners: false })
 
     const navigationApi = getArrowNavigation()
+    const state = getViewNavigationStateMock()
 
-    navigationApi._setState(getViewNavigationStateMock())
+    navigationApi._setState(state)
 
     navigationApi.setFocusElement('element-0-2')
 
@@ -229,8 +231,9 @@ describe('arrowNavigation', () => {
     initArrowNavigation({ debug: true })
 
     const navigationApi = getArrowNavigation()
+    const state = getViewNavigationStateMock()
 
-    navigationApi._setState(getViewNavigationStateMock())
+    navigationApi._setState(state)
 
     navigationApi.setFocusElement('element-0-2')
 
@@ -320,5 +323,40 @@ describe('arrowNavigation', () => {
     jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
 
     expect(navigationApi.getFocusedElement()?.id).toBe('element-0-1')
+  })
+
+  it('should focus the initialFocusElement if the focused node is not the current', () => {
+    jest.useFakeTimers()
+    initArrowNavigation({ initialFocusElement: 'element-0-1', debug: true })
+
+    const navigationApi = getArrowNavigation()
+
+    const groupContainer = document.createElement('div')
+    groupContainer.id = 'group-0'
+    document.body.appendChild(groupContainer)
+    navigationApi.registerGroup(groupContainer.id)
+
+    const element = document.createElement('button')
+    element.id = 'element-0-0'
+    groupContainer.appendChild(element)
+    navigationApi.registerElement(element.id, 'group-0')
+
+    navigationApi.setFocusElement('element-0-0')
+
+    const element1 = document.createElement('button')
+    element1.id = 'element-0-1'
+    groupContainer.appendChild(element1)
+    navigationApi.registerElement(element1.id, 'group-0')
+
+    const nonRegisteredItem = document.createElement('button')
+    document.body.appendChild(nonRegisteredItem)
+    nonRegisteredItem.focus()
+
+    expect(navigationApi.getFocusedElement()?.id).toBe('element-0-0')
+    expect(document.activeElement).toBe(nonRegisteredItem)
+
+    jest.advanceTimersByTime(TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+
+    expect(document.activeElement).toBe(element)
   })
 })

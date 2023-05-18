@@ -11,6 +11,10 @@ describe('findNextGroupByDirection', () => {
     window.innerHeight = 52
   })
 
+  afterEach(() => {
+    document.body.innerHTML = ''
+  })
+
   it('should return the next group in the direction', () => {
     const group0Config = state.groupsConfig.get('group-0') as FocusableGroupConfig
     const group1 = state.groups.get('group-1') as FocusableGroup

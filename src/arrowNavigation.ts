@@ -31,12 +31,14 @@ export function initArrowNavigation ({
   preventScroll = true,
   disableWebListeners = false,
   adapter,
-  initialFocusElement
+  initialFocusElement,
+  registerCooldown = 500
 }: ArrowNavigationOptions = {}) {
   const state: ArrowNavigationState = getInitialArrowNavigationState({
     debug,
     adapter,
-    initialFocusElement
+    initialFocusElement,
+    registerCooldown
   })
   const emitter = createEventEmitter()
 
@@ -55,16 +57,25 @@ export function initArrowNavigation ({
 
   emitter.on(EVENTS.ELEMENTS_REGISTER_END, () => {
     const currentElement = getCurrentElement(state)
-    if (!currentElement && state.elements.size) {
+
+    if ((!currentElement) && state.elements.size) {
       const initialElement = state.elements.get(state.initialFocusElement || '')
       if (initialElement) {
         changeFocusElementHandler(initialElement)
-      } else {
-        const firstElement = state.elements.values().next().value
-        if (firstElement) {
-          changeFocusElementHandler(firstElement)
-        }
+        return
       }
+      const firstElement = state.elements.values().next().value
+      if (firstElement) {
+        changeFocusElementHandler(firstElement)
+        return
+      }
+    }
+
+    const focusedRef = state.adapter.getFocusedNode()
+    const currentRef = currentElement && state.adapter.getNodeRef(currentElement)
+
+    if (currentElement && focusedRef !== currentRef) {
+      state.adapter.focusNode(currentElement, { preventScroll })
     }
   })
 

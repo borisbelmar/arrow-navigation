@@ -1,20 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import createEventEmitter, { EventEmitter } from '@/utils/createEventEmitter'
-import webAdapter from '@/utils/webAdapter'
-import { Adapter, ArrowNavigationState, FocusableGroup } from '../types'
+import { ArrowNavigationState, FocusableGroup } from '../types'
 import getViewNavigationStateMock from '../__mocks__/viewNavigationState.mock'
 import registerGroupHandler, { ERROR_MESSAGES } from './registerGroupHandler'
 
 describe('registerGroupHandler', () => {
   let state: ArrowNavigationState
   let emitter: EventEmitter
-  let adapterMock: Adapter
 
   beforeEach(() => {
-    adapterMock = {
-      getNodeRef: webAdapter.getNodeRef
-    } as unknown as Adapter
-    state = getViewNavigationStateMock(adapterMock)
+    state = getViewNavigationStateMock()
     emitter = createEventEmitter()
   })
 
@@ -44,9 +39,7 @@ describe('registerGroupHandler', () => {
   })
 
   it('if the group is already registered, just changes the group config and keep the elements', () => {
-    state = getViewNavigationStateMock({
-      getNodeRef: () => state.groups.get('group-0')?._ref
-    } as unknown as Adapter)
+    state = getViewNavigationStateMock()
     const registerGroup = registerGroupHandler({
       state,
       emit: emitter.emit

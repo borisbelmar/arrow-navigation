@@ -19,5 +19,9 @@ export type {
   FocusableWithKind,
   FocusableByDirection,
   FocusNodeOptions,
-  Adapter
+  Adapter,
+  Focusable,
+  Rect,
+  FocusEventResult,
+  BlurEventResult
 } from './types'

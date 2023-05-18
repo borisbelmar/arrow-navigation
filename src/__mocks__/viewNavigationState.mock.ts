@@ -1,16 +1,22 @@
 /* eslint-disable no-underscore-dangle */
-import { Adapter, ArrowNavigationState, Focusable, FocusableElement, FocusableGroup, FocusableGroupConfig, Rect } from '../types'
+import webAdapter from '@/utils/webAdapter'
+import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '../types'
 import getHtmlElementMock from './getHtmlElement.mock'
 
-export default function getViewNavigationStateMock (
-  adapter?: Adapter
-): ArrowNavigationState {
+interface MockProps {
+  registerCooldown?: number
+}
+
+export default function getViewNavigationStateMock ({
+  registerCooldown
+}: MockProps = {}): ArrowNavigationState {
+  document.body.innerHTML = ''
   const elements = new Map<string, FocusableElement>()
 
   const getSquareElement = (id: string, group: string, x: number, y: number) => {
     const focusableElement = {
       id,
-      _ref: getHtmlElementMock({ id, x, y, width: 10, height: 10 }),
+      _ref: getHtmlElementMock({ id, x, y, width: 10, height: 10, mountOn: group, tagName: 'button' }),
       group
     }
     elements.set(focusableElement.id, focusableElement)
@@ -81,22 +87,18 @@ export default function getViewNavigationStateMock (
   group5.elements.add('element-4-0')
   groups.set(group5.id, group5)
   groupsConfig.set(group5.id, { _ref: group5._ref, id: group5.id })
-  return {
-    currentElement: 'element-0-0',
+
+  const CURRENT_ELEMENT = 'element-0-0'
+
+  elements.get(CURRENT_ELEMENT)?._ref?.focus()
+
+  const state: ArrowNavigationState = {
+    currentElement: CURRENT_ELEMENT,
     elements,
     groups,
     groupsConfig,
-    adapter: {
-      type: 'web',
-      getNodeRect: (focusable: Focusable) => focusable?._ref?.getBoundingClientRect() as Rect,
-      focusNode: (focusable: FocusableElement) => focusable?._ref?.focus(),
-      isNodeDisabled: (focusable: FocusableElement) => focusable?._ref?.getAttribute('disabled') !== null,
-      isNodeFocusable: (focusable: FocusableElement) => {
-        const focusableSelector = 'input, select, textarea, button, a, [tabindex], [contenteditable]'
-        return focusable._ref?.matches(focusableSelector) || false
-      },
-      getNodeRef: (focusable: Focusable) => focusable?._ref,
-      ...adapter
-    }
+    registerCooldown,
+    adapter: webAdapter
   }
+  return state
 }

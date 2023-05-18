@@ -91,6 +91,6 @@ export default function registerElementHandler ({
 
     timeout = setTimeout(() => {
       emit(EVENTS.ELEMENTS_REGISTER_END)
-    }, TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
+    }, state.registerCooldown || TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
   }
 }
