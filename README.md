@@ -101,7 +101,7 @@ const container = document.createElement('div')
 // Is important to keep a unique id for each group and his elements
 container.id = 'group-0'
 
-registerGroup(container): void
+registerGroup(container.id): void
 ```
 
 You can also pass a options object as the second parameter to customize the navigation behavior.
@@ -112,7 +112,7 @@ const container = document.createElement('div')
 // Is important to keep a unique id for each group and his elements
 container.id = 'group-0'
 
-api.registerGroup(container, {
+api.registerGroup(container.id, {
   firstElement: 'element-0-0', // The first element to be focused when the focus enter the group
   nextGroupByDirection: {
     'down': 'group-1', // The next group when the user press the down arrow key
@@ -142,7 +142,7 @@ const element = document.createElement('button')
 // Is important to keep a unique id for each element
 element.id = 'element-0-0'
 
-api.registerElement(element, 'group-1')
+api.registerElement(element.id, 'group-1')
 ```
 
 You can also pass a options object as the third parameter to customize the navigation behavior.
@@ -155,7 +155,7 @@ const element = document.createElement('button')
 // Is important to keep a unique id for each element
 element.id = 'element-0-0'
 
-api.registerElement(element, 'group-1', {
+api.registerElement(element.id, 'group-1', {
   nextByDirection: { // This will set the next element manually
     'down': 'element-0-1', // The next element when the user press the down arrow key
     'right': { id: 'group-1', kind: 'group' }, // The next group when the user press the right arrow key
@@ -181,10 +181,10 @@ const container = document.createElement('div')
 container.id = 'group-0'
 element.id = 'element-0-0'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, 'group-0')
 
-api.unregisterElement(element)
+api.unregisterElement(element.id)
 ```
 
 ### getFocusedElement
@@ -200,8 +200,8 @@ const container = document.createElement('div')
 container.id = 'group-0'
 element.id = 'element-0-0'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, 'group-0')
 
 const focusedElement = api.getFocusedElement()
 ```
@@ -222,9 +222,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
 
 api.setFocusedElement('element-0-1')
 
@@ -271,8 +271,8 @@ const container2 = document.createElement('div')
 container.id = 'group-0'
 container2.id = 'group-1'
 
-api.registerGroup(container)
-api.registerGroup(container2)
+api.registerGroup(container.id)
+api.registerGroup(container2.id)
 
 const currentGroups = api.getCurrentGroups() // Set { 'group-0', 'group-1' }
 ```
@@ -293,9 +293,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
 
 const groupElements = api.getGroupElements('group-0') // Set { 'element-0-0', 'element-0-1' }
 ```
@@ -312,7 +312,7 @@ const container = document.createElement('div')
 // Is important to keep a unique id for each group and his elements
 container.id = 'group-0'
 
-api.registerGroup(container)
+api.registerGroup(container.id)
 
 const groupConfig = api.getGroupConfig('group-0') // { viewportSafe: true, threshold: 0, keepFocus: false }
 ```
@@ -334,9 +334,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, 'group-0')
+api.registerElement(element2.id, 'group-0')
 
 const registeredElements = api.getRegisteredElements() // Set { 'element-0-0', 'element-0-1' }
 ```
@@ -358,9 +358,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element, container.id)
+api.registerElement(element2, container.id)
 
 const registeredElements = api.getNextElement({ direction: 'right', inGroup: true }) // 'element-0-1'
 // or
@@ -391,12 +391,12 @@ container2.id = 'group-1'
 element3.id = 'element-1-0'
 element4.id = 'element-1-1'
 
-api.registerGroup(container)
-api.registerGroup(container2)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
-api.registerElement(element3, 'group-1')
-api.registerElement(element4, 'group-1')
+api.registerGroup(container.id)
+api.registerGroup(container2.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
+api.registerElement(element3.id, container2.id)
+api.registerElement(element4.id, container2.id)
 
 const nextGroup = api.getNextGroup({ direction: 'down' }) // 'group-1'
 // or
@@ -420,9 +420,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
 
 api.handleDirectionPress('right', false)
 ```
