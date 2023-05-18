@@ -130,6 +130,26 @@ api.registerGroup(container.id, {
 })
 ```
 
+### resetGroupState
+
+Reset the group state. This will reset states like lastElement from the group config. This is usefull when you are remounting the group, for example, a memory's route change.
+
+```typescript
+
+const container = document.createElement('div')
+container.id = 'group-0'
+api.registerGroup(container.id, { saveLast: true })
+
+// ...Register all the elements considering element-0-0 as the first element
+// ...Navigate to element-0-1 
+
+api.getGroupConfig('group-0').lastElement === 'element-0-1' // true
+
+api.resetGroupState('group-0')
+
+api.getGroupConfig('group-0').lastElement === undefined // true
+```
+
 ### registerElement
 
 Register an element to be able to navigate to it. The element must be inside a group.

@@ -8,6 +8,7 @@ import {
   globalFocusHandler,
   registerElementHandler,
   registerGroupHandler,
+  resetGroupStateHandler,
   setFocusHandler,
   unregisterElementHandler
 } from './handlers'
@@ -118,6 +119,10 @@ export function initArrowNavigation ({
       emit: emitter.emit
     }),
     unregisterElement: unregisterElementHandler({
+      state,
+      emit: emitter.emit
+    }),
+    resetGroupState: resetGroupStateHandler({
       state,
       emit: emitter.emit
     }),

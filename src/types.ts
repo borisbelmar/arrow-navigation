@@ -157,6 +157,7 @@ export type ArrowNavigationInstance = {
   registerGroup: (id: string, options?: FocusableGroupOptions) => void
   registerElement: (id: string, groupId: string, options?: FocusableElementOptions) => void
   unregisterElement: (id: string) => void
+  resetGroupState: (id: string) => void
   destroy: () => void
   getCurrentGroups: () => Set<string>
   getGroupElements: (group: string) => Set<string>
