@@ -1,6 +1,6 @@
 {
   "name": "@arrow-navigation/core",
-  "version": "1.2.11",
+  "version": "2.0.0",
   "description": "Zero-dependency library to navigate through UI elements using the keyboard arrow keys built with Typescript",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
@@ -55,17 +55,18 @@
   "license": "MIT",
   "homepage": "https://github.com/borisbelmar/arrow-navigation/",
   "bugs": {
-      "url": "https://github.com/borisbelmar/arrow-navigation/issues"
+    "url": "https://github.com/borisbelmar/arrow-navigation/issues"
   },
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/borisbelmar/arrow-navigation.git"
+    "type": "git",
+    "url": "git+https://github.com/borisbelmar/arrow-navigation.git"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.16.5",
     "@types/jest": "29.4.0",
     "@types/jsdom": "21.1.1",
     "@types/node": "18.15.11",
+    "@types/react-native": "0.72",
     "@typescript-eslint/eslint-plugin": "5.45.0",
     "@typescript-eslint/parser": "5.45.0",
     "eslint": "8.28.0",

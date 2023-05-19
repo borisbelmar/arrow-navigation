@@ -1,7 +1,6 @@
 import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types'
 import findClosestElementInGroup from './findClosestElementInGroup'
-import isElementDisabled from './isElementDisabled'
-import findNextElementByDirection from './findNextElementByDirection'
+import findNextByDirection from './findNextByDirection'
 
 interface Props {
   fromElement: FocusableElement
@@ -26,8 +25,8 @@ export default function findNextGroupElement ({
     if (firstElement) {
       nextElement = state.elements.get(firstElement) as FocusableElement
       if (nextElement) {
-        if (isElementDisabled(nextElement.el)) {
-          nextElement = findNextElementByDirection({
+        if (state.adapter.isNodeDisabled(nextElement)) {
+          nextElement = findNextByDirection({
             fromElement: nextElement,
             direction,
             state

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import { ArrowNavigationState, FocusableElement, FocusableGroup, FocusableGroupConfig } from '@/types'
 import findNextByDirection from './findNextByDirection'
@@ -62,7 +63,7 @@ describe('findNextByDirection', () => {
   it('should return the subsequent element if the next element is disabled', () => {
     const nextElement = state.elements.get('element-0-1') as FocusableElement
     const subsequentElement = state.elements.get('element-0-2') as FocusableElement
-    nextElement.el.setAttribute('disabled', 'true')
+    nextElement._ref?.setAttribute('disabled', 'true')
     state.elements.set('element-0-0', {
       ...state.elements.get('element-0-0') as FocusableElement,
       nextByDirection: {
@@ -89,7 +90,7 @@ describe('findNextByDirection', () => {
     const nextGroup = state.groups.get('group-1') as FocusableGroup
 
     nextGroup.elements.forEach(id => {
-      state.elements.get(id)?.el.setAttribute('disabled', 'true')
+      state.elements.get(id)?._ref?.setAttribute('disabled', 'true')
     })
 
     state.elements.set('element-0-0', {
@@ -168,7 +169,7 @@ describe('findNextByDirection', () => {
     })
 
     nextGroup.elements.forEach(id => {
-      state.elements.get(id)?.el.setAttribute('disabled', 'true')
+      state.elements.get(id)?._ref?.setAttribute('disabled', 'true')
     })
 
     state.groupsConfig.set('group-1', {

@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![install size](https://packagephobia.com/badge?p=@arrow-navigation/core)](https://packagephobia.com/result?p=@arrow-navigation/core)
 
-Light (~13kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
+Light (~16kb) and zero-dependency module to navigate through elements using the arrow keys written in Typescript.
 
 For live demo, [visit this url](https://arrow-navigation-demo.vercel.app/). For ReactJS implementation, check [@arrow-navigation/react](https://www.npmjs.com/package/@arrow-navigation/react).
 
@@ -26,7 +26,10 @@ At the top of your application, you need to initialize the module. This will add
 import { initArrowNavigation } from '@arrow-navigation/core'
 
 initArrowNavigation({
-  preventScroll: true // Prevent the default behavior of the arrow keys to scroll the page. The default value is true
+  preventScroll: true // Prevent the default behavior of the arrow keys to scroll the page. The default value is true,
+  disableWebListeners: false, // Disable the web listeners. The default value is false
+  adapter: webAdapter, // The adapter to use. The default value is webAdapter included in the package. You can create your own adapter to use the module in other platforms like React Native.
+  initialFocusElement: 'element-0-0' // The element to be focused when the elements has been registered. The default value is null
 })
 ```
 
@@ -72,6 +75,18 @@ navigationApi.registerElement(buttonElement2)
 
 Initialize the module. This will add the event listeners to the document and store the navigation state in a singleton instance.
 
+## getElementIdByOrder
+
+Retrieve the element ID in the same order as the library when use group byOrder. This functionality proves valuable when you need to manually control the focus.
+
+```typescript
+const api = getArrowNavigation()
+
+// Set the focus to the first element of the group-0
+const id = getElementIdByOrder('group-0', 0) // 'group-0-0'
+api.setFocusedElement(id)
+```
+
 ## getArrowNavigation
 
 Get the navigation API. This will return an object with the following methods:
@@ -86,7 +101,7 @@ const container = document.createElement('div')
 // Is important to keep a unique id for each group and his elements
 container.id = 'group-0'
 
-registerGroup(container): void
+registerGroup(container.id): void
 ```
 
 You can also pass a options object as the second parameter to customize the navigation behavior.
@@ -97,7 +112,7 @@ const container = document.createElement('div')
 // Is important to keep a unique id for each group and his elements
 container.id = 'group-0'
 
-api.registerGroup(container, {
+api.registerGroup(container.id, {
   firstElement: 'element-0-0', // The first element to be focused when the focus enter the group
   nextGroupByDirection: {
     'down': 'group-1', // The next group when the user press the down arrow key
@@ -115,6 +130,26 @@ api.registerGroup(container, {
 })
 ```
 
+### resetGroupState
+
+Reset the group state. This will reset states like lastElement from the group config. This is usefull when you are remounting the group, for example, a memory's route change.
+
+```typescript
+
+const container = document.createElement('div')
+container.id = 'group-0'
+api.registerGroup(container.id, { saveLast: true })
+
+// ...Register all the elements considering element-0-0 as the first element
+// ...Navigate to element-0-1 
+
+api.getGroupConfig('group-0').lastElement === 'element-0-1' // true
+
+api.resetGroupState('group-0')
+
+api.getGroupConfig('group-0').lastElement === undefined // true
+```
+
 ### registerElement
 
 Register an element to be able to navigate to it. The element must be inside a group.
@@ -127,7 +162,7 @@ const element = document.createElement('button')
 // Is important to keep a unique id for each element
 element.id = 'element-0-0'
 
-api.registerElement(element, 'group-1')
+api.registerElement(element.id, 'group-1')
 ```
 
 You can also pass a options object as the third parameter to customize the navigation behavior.
@@ -140,7 +175,7 @@ const element = document.createElement('button')
 // Is important to keep a unique id for each element
 element.id = 'element-0-0'
 
-api.registerElement(element, 'group-1', {
+api.registerElement(element.id, 'group-1', {
   nextByDirection: { // This will set the next element manually
     'down': 'element-0-1', // The next element when the user press the down arrow key
     'right': { id: 'group-1', kind: 'group' }, // The next group when the user press the right arrow key
@@ -166,10 +201,10 @@ const container = document.createElement('div')
 container.id = 'group-0'
 element.id = 'element-0-0'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, 'group-0')
 
-api.unregisterElement(element)
+api.unregisterElement(element.id)
 ```
 
 ### getFocusedElement
@@ -185,8 +220,8 @@ const container = document.createElement('div')
 container.id = 'group-0'
 element.id = 'element-0-0'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, 'group-0')
 
 const focusedElement = api.getFocusedElement()
 ```
@@ -207,13 +242,29 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
 
 api.setFocusedElement('element-0-1')
 
 document.activeElement.id === element2.id // true
+```
+
+### setInitialFocusElement
+
+Set the initial focus element. This will be the element focused when the elements has been registered.
+
+```typescript
+const api = getArrowNavigation()
+
+//... Register all the elements
+
+api.setInitialFocusElement('element-0-1')
+
+// Wait for 500ms to be sure that the focus has been setted
+
+document.activeElement.id === 'element-0-1' // true
 ```
 
 ### destroy
@@ -240,8 +291,8 @@ const container2 = document.createElement('div')
 container.id = 'group-0'
 container2.id = 'group-1'
 
-api.registerGroup(container)
-api.registerGroup(container2)
+api.registerGroup(container.id)
+api.registerGroup(container2.id)
 
 const currentGroups = api.getCurrentGroups() // Set { 'group-0', 'group-1' }
 ```
@@ -262,9 +313,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
 
 const groupElements = api.getGroupElements('group-0') // Set { 'element-0-0', 'element-0-1' }
 ```
@@ -281,7 +332,7 @@ const container = document.createElement('div')
 // Is important to keep a unique id for each group and his elements
 container.id = 'group-0'
 
-api.registerGroup(container)
+api.registerGroup(container.id)
 
 const groupConfig = api.getGroupConfig('group-0') // { viewportSafe: true, threshold: 0, keepFocus: false }
 ```
@@ -303,9 +354,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element.id, 'group-0')
+api.registerElement(element2.id, 'group-0')
 
 const registeredElements = api.getRegisteredElements() // Set { 'element-0-0', 'element-0-1' }
 ```
@@ -327,9 +378,9 @@ container.id = 'group-0'
 element.id = 'element-0-0'
 element2.id = 'element-0-1'
 
-api.registerGroup(container)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
+api.registerGroup(container.id)
+api.registerElement(element, container.id)
+api.registerElement(element2, container.id)
 
 const registeredElements = api.getNextElement({ direction: 'right', inGroup: true }) // 'element-0-1'
 // or
@@ -360,16 +411,40 @@ container2.id = 'group-1'
 element3.id = 'element-1-0'
 element4.id = 'element-1-1'
 
-api.registerGroup(container)
-api.registerGroup(container2)
-api.registerElement(element, 'group-0')
-api.registerElement(element2, 'group-0')
-api.registerElement(element3, 'group-1')
-api.registerElement(element4, 'group-1')
+api.registerGroup(container.id)
+api.registerGroup(container2.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
+api.registerElement(element3.id, container2.id)
+api.registerElement(element4.id, container2.id)
 
 const nextGroup = api.getNextGroup({ direction: 'down' }) // 'group-1'
 // or
 const nextGroup = api.getNextGroup({ groupId: 'group-0', direction: 'down' }) // 'group-1'
+```
+
+### handleDirectionPress
+
+Handle the arrow key press. This is useful if you want to handle the arrow key press manually or React Native. The first parameter is the direction and the second parameter is a boolean to specify is a repeated key press, for example, when the user keep the key pressed. The default value is false.
+
+```typescript
+const api = getArrowNavigation()
+
+const container = document.createElement('div')
+const element = document.createElement('button')
+const element2 = document.createElement('button')
+
+// Is important to keep a unique id for each group and his elements
+
+container.id = 'group-0'
+element.id = 'element-0-0'
+element2.id = 'element-0-1'
+
+api.registerGroup(container.id)
+api.registerElement(element.id, container.id)
+api.registerElement(element2.id, container.id)
+
+api.handleDirectionPress('right', false)
 ```
 
 ## Events
@@ -386,19 +461,19 @@ This event is triggered when the current group is changed. The event will receiv
 
 ### element:focus
 
-This event is triggered when an element is focused. The event will receive `(currentElement, direction, prevElement)`.
+This event is triggered when an element is focused. The event will receive `({ current, direction, prev })`.
 
 ### element:blur
 
-This event is triggered when an element is blurred. The event will receive `(currentElement, direction, nextElement)`.
+This event is triggered when an element is blurred. The event will receive `({ current, direction, next })`.
 
 ### group:focus
 
-This event is triggered when a group is focused. The event will receive `(currentGroup, direction, prevGroup)`.
+This event is triggered when a group is focused. The event will receive `({ current, direction, prev })`.
 
 ### group:blur
 
-This event is triggered when a group is blurred. The event will receive `(currentGroup, direction, nextGroup)`.
+This event is triggered when a group is blurred. The event will receive `({ current, direction, next })`.
 
 ### groups:change
 
@@ -411,6 +486,10 @@ This event is triggered when the elements are changed. The event will receive th
 ### groups-config:change
 
 This event is triggered when the groups configuration is changed. The event will receive the groups configuration as a parameter.
+
+### elements:register-end
+
+This event is triggered when the elements are registered. The event will not receive any parameter.
 
 # Using with CDN
 
@@ -430,3 +509,27 @@ You can use the module with a CDN. The module is available in the following URL:
 </script>
 ```
 
+# Using with React Native
+
+You can use the module with React Native (Experimental). You need to create an adapter to use the module in React Native. The adapter is a simple object with the following methods:
+
+```typescript
+type Adapter = {
+  type: 'web' | 'react-native'
+  getNodeRect: (focusable: FocusableElement | FocusableGroupConfig) => Rect
+  isNodeDisabled: (focusable: FocusableElement) => boolean
+  focusNode: (focusable: FocusableElement, opts?: FocusNodeOptions) => void
+  isNodeFocusable: (focusable: FocusableElement) => boolean
+  getNodeRef: (focusable: Focusable) => unknown // TextInput / View / TouchableOpacity / TouchableHighlight
+}
+```
+
+You can use the `handleDirectionPress` method on API with TVHandler from React Native to handle the arrow key press manually. We will release a React Native package soon.
+
+# Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Keep the coverage at +95% and run `yarn test` before commit.
+
+# License
+
+[MIT](https://choosealicense.com/licenses/mit/)

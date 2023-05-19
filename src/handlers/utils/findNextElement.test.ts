@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import getCurrentElement from '@/utils/getCurrentElement'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import type { ArrowNavigationState, FocusableElement, FocusableGroupConfig } from '@/types'
@@ -14,9 +15,9 @@ describe('findNextElement', () => {
   it('should return the subsequent element if the next element is disabled', () => {
     const element = state.elements.get('element-0-0') as FocusableElement
 
-    state.elements.get('element-0-1')?.el.setAttribute('disabled', 'true')
+    state.elements.get('element-0-1')?._ref?.setAttribute('disabled', 'true')
 
-    element.nextElementByDirection = {
+    element.nextByDirection = {
       down: 'element-0-1'
     }
 
@@ -29,7 +30,7 @@ describe('findNextElement', () => {
 
     expect(nextElement).toBe(state.elements.get('element-0-2'))
 
-    state.elements.get('element-0-2')?.el.setAttribute('disabled', 'true')
+    state.elements.get('element-0-2')?._ref?.setAttribute('disabled', 'true')
 
     const nextElement2 = findNextElement({
       direction: 'down',
@@ -47,7 +48,7 @@ describe('findNextElement', () => {
     state.groups.get('group-0')?.elements.delete('element-0-1')
     state.elements.delete('element-0-1')
 
-    element.nextElementByDirection = {
+    element.nextByDirection = {
       down: 'element-0-1'
     }
 
@@ -114,5 +115,14 @@ describe('findNextElement', () => {
       fromElement: state.elements.get('element-0-0') as FocusableElement
     })
     expect(next).toBe(state.elements.get('element-0-1'))
+  })
+
+  it('should return the next element from the next group', () => {
+    const nextElement = findNextElement({
+      direction: 'right',
+      state,
+      fromElement: state.elements.get('element-0-0') as FocusableElement
+    })
+    expect(nextElement).toBe(state.elements.get('element-1-0'))
   })
 })

@@ -1,9 +1,10 @@
+import type { Rect } from '@/types'
 import getAxisCenter from './getAxisCenter'
 
 export default function getReferencePointsByDirection (
   direction: string | undefined,
-  currentRect: DOMRect,
-  candidateRect: DOMRect
+  currentRect: Rect,
+  candidateRect: Rect
 ) {
   const currentCenter = getAxisCenter(currentRect)
   const candidateCenter = getAxisCenter(candidateRect)

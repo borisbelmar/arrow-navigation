@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { ArrowNavigationInstance, ArrowNavigationOptions, ArrowNavigationState, Direction, FocusableElement } from '@/types'
 import {
+  directionPressHandler,
   getArrowPressHandler,
   getNextElementHandler,
   getNextGroupHandler,
   globalFocusHandler,
   registerElementHandler,
   registerGroupHandler,
+  resetGroupStateHandler,
   setFocusHandler,
   unregisterElementHandler
 } from './handlers'
 import changeFocusEventHandler from './handlers/changeFocusEventHandler'
 import createEventEmitter from './utils/createEventEmitter'
 import getCurrentElement from './utils/getCurrentElement'
+import getInitialArrowNavigationState from './utils/getInitialArrowNavigationState'
+import EVENTS from './config/events'
 
 let arrowNavigation: ArrowNavigationInstance | null
 
@@ -25,21 +29,24 @@ export const ERROR_MESSAGES = {
 export function initArrowNavigation ({
   errorOnReinit = false,
   debug = false,
-  preventScroll = true
+  preventScroll = true,
+  disableWebListeners = false,
+  adapter,
+  initialFocusElement,
+  registerCooldown = 500
 }: ArrowNavigationOptions = {}) {
-  const state: ArrowNavigationState = {
-    currentElement: null,
-    groups: new Map(),
-    groupsConfig: new Map(),
-    elements: new Map(),
-    debug
-  }
+  const state: ArrowNavigationState = getInitialArrowNavigationState({
+    debug,
+    adapter,
+    initialFocusElement,
+    registerCooldown
+  })
   const emitter = createEventEmitter()
 
   const changeFocusElementHandler = (nextElement: FocusableElement, direction?: Direction) => {
     const prevElement = getCurrentElement(state) as FocusableElement
     state.currentElement = nextElement.id
-    nextElement.el.focus({ preventScroll })
+    state.adapter.focusNode(nextElement, { preventScroll })
     changeFocusEventHandler({
       nextElement,
       prevElement,
@@ -48,6 +55,30 @@ export function initArrowNavigation ({
       emit: emitter.emit
     })
   }
+
+  emitter.on(EVENTS.ELEMENTS_REGISTER_END, () => {
+    const currentElement = getCurrentElement(state)
+
+    if ((!currentElement) && state.elements.size) {
+      const initialElement = state.elements.get(state.initialFocusElement || '')
+      if (initialElement) {
+        changeFocusElementHandler(initialElement)
+        return
+      }
+      const firstElement = state.elements.values().next().value
+      if (firstElement) {
+        changeFocusElementHandler(firstElement)
+        return
+      }
+    }
+
+    const focusedRef = state.adapter.getFocusedNode()
+    const currentRef = currentElement && state.adapter.getNodeRef(currentElement)
+
+    if (currentElement && focusedRef !== currentRef) {
+      state.adapter.focusNode(currentElement, { preventScroll })
+    }
+  })
 
   if (arrowNavigation) {
     if (errorOnReinit) {
@@ -59,22 +90,47 @@ export function initArrowNavigation ({
     arrowNavigation.destroy()
   }
 
-  const onKeyPress = getArrowPressHandler(state, changeFocusElementHandler)
+  const onKeyPress = getArrowPressHandler({
+    state,
+    onChangeCurrentElement: changeFocusElementHandler
+  })
 
   const onGlobalFocus = (event: FocusEvent) => globalFocusHandler(state, event, preventScroll)
 
-  window.addEventListener('keydown', onKeyPress)
-  window.addEventListener('focus', onGlobalFocus, true)
+  if (!disableWebListeners) {
+    window.addEventListener('keydown', onKeyPress)
+    window.addEventListener('focus', onGlobalFocus, true)
+  }
 
   arrowNavigation = {
-    getFocusedElement: () => state.elements.get(state.currentElement as string) || null,
-    setFocusElement: setFocusHandler(state, changeFocusElementHandler),
-    registerGroup: registerGroupHandler(state, emitter.emit),
-    registerElement: registerElementHandler(state, changeFocusElementHandler, emitter.emit),
-    unregisterElement: unregisterElementHandler(state, changeFocusElementHandler, emitter.emit),
+    getFocusedElement: () => (
+      state.elements.get(state.currentElement as string) || null
+    ),
+    setFocusElement: setFocusHandler({ state, onChangeCurrentElement: changeFocusElementHandler }),
+    setInitialFocusElement: (id: string) => {
+      state.initialFocusElement = id
+    },
+    registerGroup: registerGroupHandler({
+      state,
+      emit: emitter.emit
+    }),
+    registerElement: registerElementHandler({
+      state,
+      emit: emitter.emit
+    }),
+    unregisterElement: unregisterElementHandler({
+      state,
+      emit: emitter.emit
+    }),
+    resetGroupState: resetGroupStateHandler({
+      state,
+      emit: emitter.emit
+    }),
     destroy () {
-      window.removeEventListener('keydown', onKeyPress)
-      window.removeEventListener('focus', onGlobalFocus, true)
+      if (!disableWebListeners) {
+        window.removeEventListener('keydown', onKeyPress)
+        window.removeEventListener('focus', onGlobalFocus, true)
+      }
       arrowNavigation = null
     },
     getCurrentGroups () {
@@ -94,6 +150,14 @@ export function initArrowNavigation ({
     },
     getNextElement: getNextElementHandler(state),
     getNextGroup: getNextGroupHandler(state),
+    handleDirectionPress: (direction: Direction, repeat?: boolean) => {
+      directionPressHandler({
+        state,
+        direction,
+        repeat: !!repeat,
+        onChangeCurrentElement: changeFocusElementHandler
+      })
+    },
     _forceNavigate (key) {
       if (!state.debug) return
       onKeyPress({
@@ -105,10 +169,7 @@ export function initArrowNavigation ({
     },
     _setState (newState: ArrowNavigationState) {
       if (!state.debug) return
-      state.currentElement = newState.currentElement
-      state.groups = newState.groups
-      state.groupsConfig = newState.groupsConfig
-      state.elements = newState.elements
+      Object.assign(state, newState)
     },
     on: emitter.on,
     off: emitter.off

@@ -1,26 +1,20 @@
 import EVENTS from '@/config/events'
-import type { ArrowNavigationState, FocusableElement } from '@/types'
+import type { ArrowNavigationState } from '@/types'
 import { EventEmitter } from '@/utils/createEventEmitter'
-import focusNextElement from './utils/focusNextElement'
 
-export default function unregisterElementHandler (
-  state: ArrowNavigationState,
-  onChangeCurrentElement: (element: FocusableElement) => void,
+interface UnregisterElementHandlerProps {
+  state: ArrowNavigationState
   emit: EventEmitter['emit']
-) {
-  return (element: HTMLElement | string) => {
-    const elementId = typeof element === 'string' ? element : element.id
-    const groupId = state.elements.get(elementId)?.group as string
+}
 
-    if (elementId === state.currentElement) {
-      focusNextElement({
-        direction: undefined,
-        state,
-        onChangeCurrentElement
-      })
-    }
+export default function unregisterElementHandler ({
+  state,
+  emit
+}: UnregisterElementHandlerProps) {
+  return (id: string) => {
+    const groupId = state.elements.get(id)?.group as string
 
-    state.elements.delete(elementId)
+    state.elements.delete(id)
     emit(EVENTS.ELEMENTS_CHANGED, state.elements)
 
     const focusableGroup = state.groups.get(groupId)
@@ -29,11 +23,16 @@ export default function unregisterElementHandler (
       return
     }
 
-    focusableGroup.elements.delete(elementId)
+    focusableGroup.elements.delete(id)
 
     if (focusableGroup.elements.size === 0) {
       state.groups.delete(groupId)
       emit(EVENTS.GROUPS_CHANGED, state.groups)
+    }
+
+    if (state.currentElement === id) {
+      // eslint-disable-next-line no-param-reassign
+      state.currentElement = null
     }
   }
 }

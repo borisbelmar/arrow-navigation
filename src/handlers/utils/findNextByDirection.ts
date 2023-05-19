@@ -1,7 +1,6 @@
 import type { ArrowNavigationState, Direction, FocusableElement, FocusableGroupConfig, FocusableWithKind } from '@/types'
 import findNextGroupElement from './findNextGroupElement'
 import findNextGroupByDirection from './findNextGroupByDirection'
-import isElementDisabled from './isElementDisabled'
 import getFocusableWithKind from './isFocusableWithKind'
 import getNextByOrder from './getNextByOrder'
 
@@ -45,7 +44,7 @@ export default function findNextByDirection ({
   if (focusableWithKind.kind === 'element') {
     const nextElement = state.elements.get(focusableWithKind.id as string)
     if (nextElement) {
-      if (!isElementDisabled(nextElement.el)) return nextElement
+      if (!state.adapter.isNodeDisabled(nextElement)) return nextElement
       return findNextByDirection({
         fromElement: nextElement,
         direction,

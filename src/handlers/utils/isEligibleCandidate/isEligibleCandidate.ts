@@ -1,10 +1,11 @@
+import type { Rect } from '@/types'
 import isElementInDirection from './utils/isElementInDirection'
 import isElementPartiallyInViewport from './utils/isElementPartiallyInViewport'
 
 interface Props {
   direction?: string
-  currentRect: DOMRect
-  candidateRect: DOMRect
+  currentRect: Rect
+  candidateRect: Rect
   isViewportSafe?: boolean
   threshold?: number
 }

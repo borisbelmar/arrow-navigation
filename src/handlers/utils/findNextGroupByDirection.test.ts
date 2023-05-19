@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { ArrowNavigationState, FocusableGroup, FocusableGroupConfig } from '@/types'
 import getViewNavigationStateMock from '@/__mocks__/viewNavigationState.mock'
 import findNextGroupByDirection from './findNextGroupByDirection'
@@ -8,6 +9,10 @@ describe('findNextGroupByDirection', () => {
     state = getViewNavigationStateMock()
     window.innerWidth = 50
     window.innerHeight = 52
+  })
+
+  afterEach(() => {
+    document.body.innerHTML = ''
   })
 
   it('should return the next group in the direction', () => {
@@ -33,7 +38,7 @@ describe('findNextGroupByDirection', () => {
     const group1 = state.groups.get('group-1') as FocusableGroup
 
     group1.elements.forEach(id => {
-      state.elements.get(id)?.el.setAttribute('disabled', 'true')
+      state.elements.get(id)?._ref?.setAttribute('disabled', 'true')
     })
 
     group0Config.nextGroupByDirection = {

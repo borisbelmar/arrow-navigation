@@ -1,24 +1,31 @@
+/* eslint-disable no-param-reassign */
 import EVENTS from '@/config/events'
 import type { ArrowNavigationState, FocusableElement, FocusableElementOptions } from '@/types'
 import type { EventEmitter } from '@/utils/createEventEmitter'
 import getElementIdByOrder from '@/utils/getElementIdByOrder'
-import isElementDisabled from './utils/isElementDisabled'
-import isFocusableElement from './utils/isFocusableElement'
 
 export const ERROR_MESSAGES = {
   GROUP_REQUIRED: 'Group is required',
   ELEMENT_ID_REQUIRED: 'Element ID is required',
+  ELEMENT_DOES_NOT_EXIST: (id: string) => `Element with id ${id} does not exist. Check if you are not registering an element that does not exist.`,
   ELEMENT_ID_ALREADY_REGISTERED: (id: string) => `Element with id ${id} is already registered. Check if you are not registering the same element twice. If you are, use the "unregisterElement" method to unregister it first.`,
   ELEMENT_NOT_FOCUSABLE: (id: string) => `Element with id ${id} is not focusable. Check if you are not registering an element that is not focusable.`
 }
 
-export default function registerElementHandler (
-  state: ArrowNavigationState,
-  onChangeCurrentElement: (element: FocusableElement) => void,
+export const TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED = 500
+let timeout: ReturnType<typeof setTimeout>
+
+interface RegisterElementHandlerProps {
+  state: ArrowNavigationState
   emit: EventEmitter['emit']
-) {
+}
+
+export default function registerElementHandler ({
+  state,
+  emit
+}: RegisterElementHandlerProps) {
   return (
-    element: HTMLElement,
+    id: string,
     group: string,
     options?: FocusableElementOptions
   ) => {
@@ -32,49 +39,58 @@ export default function registerElementHandler (
     const isByOrder = existentGroupConfig?.byOrder
       && options?.order !== undefined
 
-    if (!element.id && !isByOrder) {
+    const element = state.adapter.getNodeRef({ id }) as HTMLElement
+
+    if (!id && !isByOrder) {
       throw new Error(ERROR_MESSAGES.ELEMENT_ID_REQUIRED)
     }
 
-    if (!isFocusableElement(element)) {
-      throw new Error(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
+    if (!element) {
+      throw new Error(ERROR_MESSAGES.ELEMENT_DOES_NOT_EXIST(id))
     }
 
-    if (state.elements.get(element.id)) {
-      console.warn(ERROR_MESSAGES.ELEMENT_ID_ALREADY_REGISTERED(element.id))
+    if (state.elements.get(id)) {
+      console.warn(ERROR_MESSAGES.ELEMENT_ID_ALREADY_REGISTERED(id))
       return
     }
 
-    const id = isByOrder
+    const finalId = isByOrder
       ? getElementIdByOrder(group, options.order || 0)
-      : element.id
+      : id
 
-    element.setAttribute('id', id)
+    element.setAttribute('id', finalId)
 
-    const focusableElement = {
-      id,
-      el: element,
+    const focusableElement: FocusableElement = {
+      id: finalId,
+      _ref: element,
       group,
       ...options
     }
 
-    state.elements.set(id, focusableElement)
+    if (!state.adapter.isNodeFocusable(focusableElement)) {
+      throw new Error(ERROR_MESSAGES.ELEMENT_NOT_FOCUSABLE(element.id))
+    }
+
+    clearTimeout(timeout)
+
+    state.elements.set(finalId, focusableElement)
     emit(EVENTS.ELEMENTS_CHANGED, state.elements)
 
     if (!existentGroup) {
-      const elementsSet = new Set<string>().add(id)
+      const elementsSet = new Set<string>().add(finalId)
       state.groups.set(group, {
         id: group,
         elements: elementsSet,
-        el: existentGroupConfig?.el || null as unknown as HTMLElement
+        // eslint-disable-next-line no-underscore-dangle
+        _ref: existentGroupConfig?._ref || null as unknown as HTMLElement
       })
       emit(EVENTS.GROUPS_CHANGED, state.groups)
     } else {
-      existentGroup.elements.add(id)
+      existentGroup.elements.add(finalId)
     }
 
-    if (!state.currentElement && !isElementDisabled(focusableElement.el)) {
-      onChangeCurrentElement(focusableElement)
-    }
+    timeout = setTimeout(() => {
+      emit(EVENTS.ELEMENTS_REGISTER_END)
+    }, state.registerCooldown || TIMEOUT_TIME_EMIT_ELEMENTS_CHANGED)
   }
 }

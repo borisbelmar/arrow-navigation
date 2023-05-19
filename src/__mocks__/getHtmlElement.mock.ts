@@ -6,7 +6,8 @@ interface Props {
   x?: number,
   y?: number,
   width?: number,
-  height?: number
+  height?: number,
+  mountOn?: string
 }
 
 export default function getHtmlElementMock ({
@@ -15,7 +16,8 @@ export default function getHtmlElementMock ({
   x = 0,
   y = 0,
   width = 0,
-  height = 0
+  height = 0,
+  mountOn = ''
 }: Props): HTMLElement {
   const getBoundingClientRect = jest.fn(() => getDOMRectMock(x, y, width, height))
   const focus = jest.fn()
@@ -24,5 +26,7 @@ export default function getHtmlElementMock ({
   element.id = id
   element.getBoundingClientRect = getBoundingClientRect
   element.focus = focus
+  const container = document.getElementById(mountOn) || document.body
+  container.appendChild(element)
   return element
 }

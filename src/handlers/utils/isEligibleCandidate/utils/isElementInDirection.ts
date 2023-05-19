@@ -1,9 +1,10 @@
+import type { Rect } from '@/types'
 import { isXAxisIntersecting, isYAxisIntersecting } from './isIntersecting'
 
 interface Props {
   direction: string
-  currentRect: DOMRect
-  candidateRect: DOMRect
+  currentRect: Rect
+  candidateRect: Rect
   threshold?: number
 }
 

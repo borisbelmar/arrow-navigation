@@ -7,7 +7,8 @@ const EVENTS = {
   GROUP_BLUR: 'group:blur',
   GROUP_FOCUS: 'group:focus',
   ELEMENT_FOCUS: 'element:focus',
-  ELEMENT_BLUR: 'element:blur'
+  ELEMENT_BLUR: 'element:blur',
+  ELEMENTS_REGISTER_END: 'elements:register-end'
 }
 
 export default EVENTS
