@@ -1,7 +1,6 @@
 import type { ArrowNavigationState, FocusableElement, FocusableGroup } from '@/types'
 import getCurrentElement from '@/utils/getCurrentElement'
 import findClosestElementInGroup from './findClosestElementInGroup'
-import findNextElementByDirection from './findNextElementByDirection'
 import findNextGroup from './findNextGroup'
 import findNextByDirection from './findNextByDirection'
 
@@ -29,18 +28,6 @@ export default function findNextElement ({
     nextElement = findNextByDirection({
       direction,
       fromElement: selectedElement,
-      state
-    })
-    if (nextElement === null) return null
-  } else if (selectedElement?.nextElementByDirection) {
-    /**
-     * If the current element has a nextElementByDirection property, we use it
-     * to find the next element.
-     * This will be removed in the next major version.
-     */
-    nextElement = findNextElementByDirection({
-      fromElement: selectedElement,
-      direction,
       state
     })
     if (nextElement === null) return null
