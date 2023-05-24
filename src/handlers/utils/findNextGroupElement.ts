@@ -20,7 +20,10 @@ export default function findNextGroupElement ({
   const config = state.groupsConfig.get(nextGroup.id)
 
   if (config) {
-    const firstElement = (config.saveLast && config.lastElement) || config.firstElement
+    const lastElement = config.saveLast && config.lastElement
+    const lastElementNode = lastElement && state.elements.get(lastElement)
+
+    const firstElement = (lastElementNode && lastElement) || config.firstElement
 
     if (firstElement) {
       nextElement = state.elements.get(firstElement) as FocusableElement
