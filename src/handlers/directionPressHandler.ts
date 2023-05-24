@@ -21,6 +21,13 @@ export default function directionPressHandler ({
 }: DirectionPressHandlerProps) {
   const currentElement = getCurrentElement(state)
 
+  const focusRef = state.adapter.getFocusedNode()
+  const currentRef = currentElement && state.adapter.getNodeRef(currentElement)
+
+  if (currentRef && focusRef !== currentRef) {
+    state.adapter.focusNode(currentElement, { preventScroll: true })
+  }
+
   if (!currentElement) {
     const initialElement = state.elements.get(state.initialFocusElement || '')
     if (initialElement) {
@@ -34,13 +41,6 @@ export default function directionPressHandler ({
       console.warn(ERROR_MESSAGES.NO_ELEMENT_FOCUSED)
     }
     return
-  }
-
-  const focusRef = state.adapter.getFocusedNode()
-  const currentRef = currentElement && state.adapter.getNodeRef(currentElement)
-
-  if (currentElement && focusRef !== currentRef) {
-    state.adapter.focusNode(currentElement, { preventScroll: true })
   }
 
   const currentGroupConfig = state.groupsConfig.get(currentElement.group)
