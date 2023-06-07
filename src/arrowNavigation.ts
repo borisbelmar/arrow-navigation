@@ -10,7 +10,9 @@ import {
   registerGroupHandler,
   resetGroupStateHandler,
   setFocusHandler,
-  unregisterElementHandler
+  unregisterElementHandler,
+  updateElementHandler,
+  updateGroupHandler
 } from './handlers'
 import changeFocusEventHandler from './handlers/changeFocusEventHandler'
 import createEventEmitter from './utils/createEventEmitter'
@@ -114,7 +116,15 @@ export function initArrowNavigation ({
       state,
       emit: emitter.emit
     }),
+    updateGroup: updateGroupHandler({
+      state,
+      emit: emitter.emit
+    }),
     registerElement: registerElementHandler({
+      state,
+      emit: emitter.emit
+    }),
+    updateElement: updateElementHandler({
       state,
       emit: emitter.emit
     }),
