@@ -4,6 +4,7 @@ export {
 } from './arrowNavigation'
 
 export { default as getElementIdByOrder } from './utils/getElementIdByOrder'
+export { default as webAdapter } from './utils/webAdapter'
 
 export { default as ArrowNavigationEvents } from './config/events'
 export { default as ArrowNavigationOrder } from './config/order'

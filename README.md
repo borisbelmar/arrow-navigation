@@ -84,7 +84,7 @@ const api = getArrowNavigation()
 
 // Set the focus to the first element of the group-0
 const id = getElementIdByOrder('group-0', 0) // 'group-0-0'
-api.setFocusedElement(id)
+api.setFocusElement(id)
 ```
 
 ## getArrowNavigation
@@ -226,7 +226,7 @@ api.registerElement(element.id, 'group-0')
 const focusedElement = api.getFocusedElement()
 ```
 
-### setFocusedElement
+### setFocusElement
 
 Set the focused element.
 
@@ -246,7 +246,7 @@ api.registerGroup(container.id)
 api.registerElement(element.id, container.id)
 api.registerElement(element2.id, container.id)
 
-api.setFocusedElement('element-0-1')
+api.setFocusElement('element-0-1')
 
 document.activeElement.id === element2.id // true
 ```
