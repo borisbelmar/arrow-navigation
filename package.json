@@ -1,85 +1,29 @@
 {
-  "name": "@arrow-navigation/core",
-  "version": "2.1.1",
-  "description": "Zero-dependency library to navigate through UI elements using the keyboard arrow keys built with Typescript",
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
-  "types": "./lib/index.d.ts",
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "lib",
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "import": "./lib/index.mjs",
-      "require": "./lib/index.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "name": "arrow-navigation",
+  "private": true,
   "scripts": {
-    "build": "tsup ./src/index.ts --format esm,cjs --dts --minify --out-dir lib",
-    "watch": "tsup ./src/index.ts --format esm,cjs --dts --minify --watch --out-dir lib --sourcemap",
-    "build:dist": "tsup ./src/dist.ts --format cjs --minify --out-dir dist",
-    "watch:dist": "tsup ./src/dist.ts --format cjs --minify --watch --out-dir dist --sourcemap",
-    "build:all": "yarn build && yarn build:dist",
-    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts}' --quiet --fix",
-    "clean": "rm -rf node_modules && rm -rf dist",
-    "test": "jest",
-    "test:script": "ts-node --project tsconfig.json ./src/tests/testExecution.ts",
-    "ci": "yarn --freeze-lockfile",
-    "prepublishOnly": "yarn lint && yarn build:all",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "publish": "turbo publish",
+    "deploy": "turbo deploy",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install"
   },
-  "keywords": [
-    "spatial navigation",
-    "keyboard navigation",
-    "keyboard",
-    "navigation",
-    "arrow keys",
-    "arrow",
-    "tv navigation",
-    "tv",
-    "focus",
-    "remote control",
-    "remote",
-    "control",
-    "focusable",
-    "tizen",
-    "webos",
-    "web"
-  ],
-  "author": "Boris Belmar <borisbelmarm@gmail.com>",
-  "license": "MIT",
-  "homepage": "https://github.com/borisbelmar/arrow-navigation/",
-  "bugs": {
-    "url": "https://github.com/borisbelmar/arrow-navigation/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/borisbelmar/arrow-navigation.git"
-  },
   "devDependencies": {
-    "@testing-library/jest-dom": "5.16.5",
-    "@types/jest": "29.4.0",
-    "@types/jsdom": "21.1.1",
-    "@types/node": "18.15.11",
-    "@types/react-native": "0.72",
-    "@typescript-eslint/eslint-plugin": "5.45.0",
-    "@typescript-eslint/parser": "5.45.0",
-    "eslint": "8.28.0",
-    "eslint-config-airbnb-base": "15.0.0",
-    "eslint-import-resolver-typescript": "3.5.5",
-    "eslint-plugin-import": "2.26.0",
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
     "husky": "8.0.2",
-    "jest": "29.3.1",
-    "jest-environment-jsdom": "29.5.0",
-    "jsdom": "21.1.1",
-    "ts-jest": "29.0.3",
-    "ts-node": "10.9.1",
-    "tsup": "6.5.0",
-    "typescript": "4.9.3"
-  }
+    "prettier": "^3.2.5",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

@@ -1,0 +1,16 @@
+{
+  "name": "core-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@arrow-navigation/core": "*",
+    "vite": "^5.2.0",
+    "wrangler": "3.52.0"
+  }
+}

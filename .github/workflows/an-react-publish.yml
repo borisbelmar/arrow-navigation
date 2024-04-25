@@ -1,9 +1,9 @@
-name: Publish Package
+name: Publish React Core
 
 on:
   push:
     tags:
-      - v*
+      - react-v*
 
 jobs:
   publish:
@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Cache node modules
@@ -27,9 +27,13 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: yarn ci
+        run: yarn --frozen-lockfile
+
+      - name: Build Core Package
+        run: yarn build --filter=@arrow-navigation/core
 
       - name: Publish package
+        working-directory: ./packages/an-react
         run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
