@@ -42,6 +42,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/core-demo
+          command: pages deploy dist --project-name=core-demo
 
       - name: Deploy React Demo
         if: steps.filter.outputs.react == 'true'
@@ -49,4 +50,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/react-demo
+          command: pages deploy dist --project-name=react-demo
 
