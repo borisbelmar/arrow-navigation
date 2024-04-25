@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsup ./src/index.ts --format esm,cjs --dts --minify --external react",
     "dev": "tsup ./src/index.ts --format esm,cjs --dts --sourcemap --minify --external react --watch",
-    "lint": "eslint --ext ts,tsx --quiet --fix",
+    "lint": "tsc --noEmit && eslint --ext ts,tsx --quiet --fix",
     "clean": "rm -rf node_modules && rm -rf dist",
     "test": "jest",
     "prepublishOnly": "yarn build",

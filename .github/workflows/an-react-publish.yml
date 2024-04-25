@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Build Core Package
+        run: yarn build --filter=@arrow-navigation/core
+
       - name: Publish package
         working-directory: ./packages/an-react
         run: yarn publish
