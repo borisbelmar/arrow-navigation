@@ -39,7 +39,7 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: Packages Build
-        run: yarn build --filter=@arrow-navigation/core
+        run: yarn build --filter=@arrow-navigation/core --force
 
       - name: Run tests with coverage
         run: yarn test:coverage
