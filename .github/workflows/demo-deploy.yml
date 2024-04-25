@@ -9,7 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    needs: [lint-and-test]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -35,16 +34,16 @@ jobs:
         run: yarn build --filter=core-demo --filter=react-demo --filter=@arrow-navigation/react --filter=@arrow-navigation/core
 
       - name: Deploy Core Demo
-        if: steps.filter.outputs.core == 'true'
-        working-directory: ./apps/core-demo
         uses: cloudflare/wrangler-action@v3
+        if: steps.filter.outputs.core == 'true'
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: ./apps/core-demo
 
       - name: Deploy React Demo
         if: steps.filter.outputs.react == 'true'
-        working-directory: ./apps/react-demo
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: ./apps/react-demo
 
