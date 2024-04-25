@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Packages Build
+        run: yarn build --filter=@arrow-navigation/core
+
       - name: Run tests with coverage
         run: yarn test:coverage
 
