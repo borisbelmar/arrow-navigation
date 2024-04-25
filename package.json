@@ -6,7 +6,7 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "test": "turbo test",
-    "test:coverage": "turbo test -- --coverage",
+    "test:coverage": "turbo test -- --coverage --detectOpenHandles --forceExit",
     "publish": "turbo publish",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky install"
