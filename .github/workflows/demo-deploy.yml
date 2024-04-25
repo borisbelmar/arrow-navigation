@@ -30,8 +30,11 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Packages Build
+        run: yarn build --filter=@arrow-navigation/react --filter=@arrow-navigation/core
+
       - name: Build
-        run: yarn build --filter=core-demo --filter=react-demo --filter=@arrow-navigation/react --filter=@arrow-navigation/core
+        run: yarn build --filter=core-demo --filter=react-demo
 
       - name: Deploy Core Demo
         uses: cloudflare/wrangler-action@v3
