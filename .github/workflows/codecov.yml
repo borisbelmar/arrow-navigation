@@ -39,7 +39,7 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: Run tests with coverage
-        run: yarn test -- --coverage
+        run: yarn test:coverage
 
       - name: Upload Core coverage to Codecov
         if: steps.filter.outputs.core == 'true'
