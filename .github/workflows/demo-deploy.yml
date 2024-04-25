@@ -42,13 +42,13 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ./apps/core-demo
-          command: pages deploy dist
+          command: pages deploy dist --project-name arrow-navigation-core-demo
 
       - name: Deploy React Demo
         if: steps.filter.outputs.react == 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./apps/react-demo
+          workingDirectory: ./apps/react-demo --project-name arrow-navigation-react-demo
           command: pages deploy dist
 
