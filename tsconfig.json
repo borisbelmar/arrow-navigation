@@ -1,0 +1,14 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "exclude": [
+    "assets",
+    "**/dist/**/*",
+    "**/*.js",
+    "**/*.js.map",
+    "**/*.mjs",
+    "**/*.mjs.map",
+    "**/*.cjs",
+    "**/*.cjs.map",
+    "**/*.d.ts"
+  ]
+}
