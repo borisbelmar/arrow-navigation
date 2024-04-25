@@ -1,9 +1,5 @@
 name: Arrow Navigation Core Publish Package
 
-defaults:
-  run:
-    working-directory: ./packages/an-core
-
 on:
   push:
     tags:
@@ -19,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Cache node modules
@@ -31,9 +27,10 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: yarn ci
+        run: yarn --frozen-lockfile
 
       - name: Publish package
+        working-directory: ./packages/an-core
         run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

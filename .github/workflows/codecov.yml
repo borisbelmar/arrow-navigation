@@ -1,0 +1,60 @@
+name: Codecov
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  codecov:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            core:
+              - 'packages/an-core/**'
+            react:
+              - 'packages/an-react/**'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run tests with coverage
+        run: yarn test --coverage
+
+      - name: Upload Core coverage to Codecov
+        if: steps.filter.outputs.core == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          flags: core
+          files: ./packages/an-core/coverage/coverage-final.json
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+
+      - name: Upload React coverage to Codecov
+        if: steps.filter.outputs.react == 'true'
+        uses: codecov/codecov-action@v3
+        with:
+          flags: react
+          files: ./packages/an-react/coverage/coverage-final.json
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
