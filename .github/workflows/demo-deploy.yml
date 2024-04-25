@@ -49,6 +49,6 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./apps/react-demo --project-name arrow-navigation-react-demo
-          command: pages deploy dist
+          workingDirectory: ./apps/react-demo
+          command: pages deploy dist --project-name arrow-navigation-react-demo
 
