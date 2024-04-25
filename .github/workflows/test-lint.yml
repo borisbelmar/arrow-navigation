@@ -1,20 +1,14 @@
-name: Core Demo Lint
-
-defaults:
-  run:
-    working-directory: ./apps/react-demo
+name: Lint and Test
 
 on:
   push:
-    paths:
-      - 'apps/react-demo/**'
     branches:
       - develop
+      - main
 
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '18.x'
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -33,7 +27,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: yarn ci
+        run: yarn --frozen-lockfile
 
       - name: Run linter
         run: yarn lint

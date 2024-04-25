@@ -11,7 +11,6 @@
     "lint": "tsc --noEmit && eslint --ext ts,tsx --quiet --fix",
     "clean": "rm -rf node_modules && rm -rf dist",
     "test": "jest",
-    "ci": "yarn --freeze-lockfile",
     "prepublishOnly": "yarn build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
