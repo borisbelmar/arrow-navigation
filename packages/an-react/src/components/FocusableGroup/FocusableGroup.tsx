@@ -2,6 +2,11 @@ import { createContext, createElement, ReactNode, useContext, useMemo } from 're
 import type { FocusableElementOptions, FocusEventResult, FocusableGroupConfig, BlurEventResult } from '@arrow-navigation/core'
 import useFocusableGroupContext from './hooks/useFocusableGroupContext'
 
+export type GroupFocusEventResult = FocusEventResult<FocusableGroupConfig>
+export type GroupFocusEvent = (event: GroupFocusEventResult) => void
+export type GroupBlurEventResult = FocusEventResult<FocusableGroupConfig>
+export type GroupBlurEvent = (event: GroupBlurEventResult) => void
+
 export type GroupOptions = {
   firstElement?: string,
   byOrder?: 'horizontal' | 'vertical' | 'grid'
@@ -9,8 +14,8 @@ export type GroupOptions = {
   saveLast?: boolean
   viewportSafe?: boolean
   threshold?: number
-  onFocus?: (result: FocusEventResult<FocusableGroupConfig>) => void
-  onBlur?: (result: BlurEventResult<FocusableGroupConfig>) => void
+  onFocus?: GroupFocusEvent
+  onBlur?: GroupBlurEvent
   keepFocus?: boolean
   arrowDebounce?: boolean
   nextUp?: string
