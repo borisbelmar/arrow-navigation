@@ -4,7 +4,7 @@ import useFocusableGroupContext from './hooks/useFocusableGroupContext'
 
 export type GroupFocusEventResult = FocusEventResult<FocusableGroupConfig>
 export type GroupFocusEvent = (event: GroupFocusEventResult) => void
-export type GroupBlurEventResult = FocusEventResult<FocusableGroupConfig>
+export type GroupBlurEventResult = BlurEventResult<FocusableGroupConfig>
 export type GroupBlurEvent = (event: GroupBlurEventResult) => void
 
 export type GroupOptions = {
