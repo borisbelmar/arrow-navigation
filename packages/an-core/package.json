@@ -1,6 +1,6 @@
 {
   "name": "@arrow-navigation/core",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Zero-dependency library to navigate through UI elements using the keyboard arrow keys built with Typescript",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
