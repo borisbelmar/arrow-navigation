@@ -1,6 +1,5 @@
 # Arrow Navigation React
 
-[![codecov](https://codecov.io/gh/borisbelmar/arrow-navigation-react/branch/main/graph/badge.svg?token=u655p5vrEe)](https://codecov.io/gh/borisbelmar/arrow-navigation-react)
 [![install size](https://packagephobia.com/badge?p=@arrow-navigation/react)](https://packagephobia.com/result?p=@arrow-navigation/react)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

@@ -1,5 +1,8 @@
-import { FocusableGroup } from '@arrow-navigation/react'
-import type { BlurEventResult, FocusEventResult, FocusableGroupConfig } from '@arrow-navigation/core'
+import {
+  FocusableGroup,
+  type GroupBlurEvent,
+  type GroupFocusEvent
+} from '@arrow-navigation/react'
 import SliderItem from './SliderItem'
 import useSlider from './hooks/useSlider'
 import { Content } from '../../../atoms/content'
@@ -11,12 +14,12 @@ interface SliderProps {
   backToStart?: boolean
   onReachLastElement?: () => void
   title?: string
-  onSliderFocus?: (result: FocusEventResult<FocusableGroupConfig>) => void
+  onSliderFocus?: GroupFocusEvent
   nextGroupByDirection?: Record<string, string | undefined>
   itemRenderer?: (item: Content, idx: number) => ReactNode
   focusableSlideClassName?: string
   saveLast?: boolean
-  onSliderBlur?: (result: BlurEventResult<FocusableGroupConfig>) => void
+  onSliderBlur?: GroupBlurEvent
 }
 
 export default function Slider({

@@ -1,0 +1,53 @@
+---
+title: getArrowNavigation
+description: Learn how to get the Arrow Navigation instance in your project and get started with spatial navigation.
+---
+
+This function returns the Arrow Navigation instance, which you can use to control the navigation behavior. You can access the Arrow Navigation instance from any part of your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+```
+
+## Parameters
+
+None
+
+## Returns
+
+This function returns an object with the Arrow Navigation API. It provides the following methods and properties:
+
+- `getFocusedElement`: Returns the currently focused element. [Docs](/docs/core/api/get-focused-element)
+- `setFocusElement`: Sets the focus on the specified element. [Docs](/docs/core/api/set-focus-element)
+- `setInitialFocusElement`: Sets the initial focus element. [Docs](/docs/core/api/set-initial-focus-element)
+- `registerGroup`: Registers a group of elements for navigation. [Docs](/docs/core/api/register-group)
+- `updateGroup`: Updates the configuration of a group. [Docs](/docs/core/api/update-group)
+- `registerElement`: Registers an element inside a group. [Docs](/docs/core/api/register-element)
+- `updateElement`: Updates the configuration of an element. [Docs](/docs/core/api/update-element)
+- `unregisterElement`: Unregisters an element. [Docs](/docs/core/api/unregister-element)
+- `resetGroupState`: Resets the state of a group. [Docs](/docs/core/api/reset-group-state)
+- `destroy`: Destroys the Arrow Navigation instance. [Docs](/docs/core/api/destroy)
+- `getCurrentGroups`: Returns the currently registered groups. [Docs](/docs/core/api/get-current-groups)
+- `getGroupElements`: Returns the elements of a group. [Docs](/docs/core/api/get-group-elements)
+- `getGroupConfig`: Returns the configuration of a group. [Docs](/docs/core/api/get-group-config)
+- `getRegisteredElements`: Returns the registered elements. [Docs](/docs/core/api/get-registered-elements)
+- `getFocusedGroup`: Returns the currently focused group. [Docs](/docs/core/api/get-focused-group)
+- `getNextElement`: Returns the next element to focus. [Docs](/docs/core/api/get-next-element)
+- `getNextGroup`: Returns the next group to focus. [Docs](/docs/core/api/get-next-group)
+- `handleDirectionPress`: Handles the arrow key press. [Docs](/docs/core/api/handle-direction-press)
+- `on`: Adds an event listener. [Docs](/docs/core/api/events)
+- `off`: Removes an event listener. [Docs](/docs/core/api/events)
+
+## Example
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.setFocusElement('element-0-0')
+```

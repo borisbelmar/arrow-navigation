@@ -1,0 +1,48 @@
+---
+title: useListenLastGroupReached
+description: Hook to listen when the last group is reached and trigger a callback function.
+---
+
+## Usage
+
+```jsx
+import { useListenLastGroupReached } from '@arrow-navigation/react'
+
+const App = () => {
+  useListenLastGroupReached(() => {
+    console.log('Last group reached')
+  }, 'right')
+
+  return (
+    <div>
+      <FocusableGroup id="group-1">
+        <FocusableElement id="btn-1">
+          Button 1
+        </FocusableElement>
+        <FocusableElement id="btn-2">
+          Button 2
+        </FocusableElement>
+      </FocusableGroup>
+      <FocusableGroup id="group-2">
+        <FocusableElement id="btn-3">
+          Button 3
+        </FocusableElement>
+        <FocusableElement id="btn-4">
+          Button 4
+        </FocusableElement>
+      </FocusableGroup>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+## Parameters
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| callback | function | - | Callback function to be called when the last group of a group receives focus |
+| direction | string | - | The direction to navigate when the last group of a group receives focus. Possible values are: 'up', 'down', 'left' and 'right' |
+| options | object | - | The options for the listener. |
+| options.groupPattern | RegExp | - | The pattern to match the group id. If not provided, the listener will be triggered for all groups |

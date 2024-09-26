@@ -1,0 +1,38 @@
+---
+title: useWatchElementFocused
+description: Hook to watch when an element receives focus and return a boolean value.
+---
+
+## Usage
+
+```jsx
+import { useWatchElementFocused } from '@arrow-navigation/react'
+
+const App = () => {
+  const isBtn1Focused = useWatchElementFocused('btn-1')
+
+  return (
+    <div>
+      <FocusableGroup id="group-1">
+        <FocusableElement id="btn-1">
+          Button 1
+        </FocusableElement>
+        <FocusableElement id="btn-2">
+          Button 2
+        </FocusableElement>
+      </FocusableGroup>
+      <div>
+        {isBtn1Focused && <span>Button 1 is focused</span>}
+      </div>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+## Parameters
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| id | string | - | The element id |

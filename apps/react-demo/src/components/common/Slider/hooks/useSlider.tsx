@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useRef } from 'react'
-import type { BlurEventResult, FocusEventResult, FocusableElement, FocusableGroupConfig } from '@arrow-navigation/core'
 import getSliderElementId from '../utils/getSliderElementId'
 import { Content } from '../../../../atoms/content'
+import { ElementFocusEventResult, GroupBlurEvent, GroupBlurEventResult, GroupFocusEvent } from '@arrow-navigation/react'
 
 interface SliderOptions {
   items: Content[]
   sliderId: string | number
   onReachLastElement?: () => void
   backToStart?: boolean
-  onSliderFocus?: (result: FocusEventResult<FocusableGroupConfig>) => void
-  onSliderBlur?: (result: BlurEventResult<FocusableGroupConfig>) => void
+  onSliderFocus?: GroupFocusEvent
+  onSliderBlur?: GroupBlurEvent
   nextGroupByDirection?: { up?: string; down?: string }
   saveLast?: boolean
 }
@@ -27,7 +27,7 @@ export default function useSlider({
   const translation = useRef(0)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const onElementFocus = useCallback((result: FocusEventResult<FocusableElement>, idx: number) => {
+  const onElementFocus = useCallback((result: ElementFocusEventResult, idx: number) => {
     const currentElement = document.getElementById(result.current?.id || '')
     const lastSlideIdx = items.length - 1
     const lastElement = document.getElementById(getSliderElementId(sliderId, lastSlideIdx))
@@ -53,7 +53,7 @@ export default function useSlider({
     translation.current = trans
   }, [items, sliderId, onReachLastElement])
 
-  const onGroupBlur = useCallback((result: BlurEventResult<FocusableGroupConfig>) => {
+  const onGroupBlur = useCallback((result: GroupBlurEventResult) => {
     onSliderBlur?.(result)
     if (!backToStart || saveLast) return
     const groupContainer = containerRef.current

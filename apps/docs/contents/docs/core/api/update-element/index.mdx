@@ -1,0 +1,25 @@
+---
+title: updateElement
+description: Update the properties of an element in Arrow Navigation.
+---
+
+This function updates the properties of the specified element. You can use this function to programmatically update the properties of an element in your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.updateElement('element-id', {
+  // Element Config
+})
+```
+
+## Parameters
+
+| Name        | Type    | Description                                                                 |
+| ----------- | ------- | --------------------------------------------------------------------------- |
+| `element-id` | string  | The id of the element to update.    |
+| `config`     | object  | The properties to update. [See the options](/docs/core/api/register-element#parameters) |

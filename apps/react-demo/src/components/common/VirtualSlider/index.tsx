@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
-import { BlurEventResult, FocusEventResult, FocusableGroupConfig } from '@arrow-navigation/core'
 import Slider from '../Slider'
 import VirtualSlide from './components/VirtualSlide'
 import { Content } from '../../../atoms/content'
 import type { SliderConfig } from '../../../utils/getSliders'
+import { GroupBlurEvent, GroupFocusEvent } from '@arrow-navigation/react'
 
 interface VirtualSliderProps {
   slider: SliderConfig
@@ -16,8 +16,8 @@ interface VirtualSliderProps {
     width: number | string
     height: number | string
   }
-  onSliderBlur: (result: BlurEventResult<FocusableGroupConfig>) => void
-  onSliderFocus: (event: FocusEventResult<FocusableGroupConfig>) => void
+  onSliderBlur: GroupBlurEvent
+  onSliderFocus: GroupFocusEvent
 }
 
 export default function VirtualSlider({

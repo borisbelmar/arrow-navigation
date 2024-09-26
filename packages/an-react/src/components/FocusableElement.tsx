@@ -1,5 +1,10 @@
 import React, { createElement } from 'react'
-import type { FocusableByDirection, FocusableElementOptions } from '@arrow-navigation/core'
+import type {
+  FocusEventResult,
+  FocusableByDirection,
+  FocusableElement as IFocusableElement,
+  FocusableElementOptions
+} from '@arrow-navigation/core'
 import { useFocusableElement } from '..'
 
 export type Options = {
@@ -11,6 +16,11 @@ export type Options = {
   nextLeft?: FocusableByDirection['left']
   nextRight?: FocusableByDirection['right']
 }
+
+export type ElementFocusEventResult = FocusEventResult<IFocusableElement>
+export type ElementFocusEvent = (event: ElementFocusEventResult) => void
+export type ElementBlurEventResult = FocusEventResult<IFocusableElement>
+export type ElementBlurEvent = (event: ElementBlurEventResult) => void
 
 type FocusableElementWithoutFocusAndBlur = Omit<React.HTMLAttributes<HTMLDivElement>, 'onFocus' | 'onBlur'>
 

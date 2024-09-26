@@ -13,15 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            core:
-              - 'packages/an-core/**'
-            react:
-              - 'packages/an-react/**'
-
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -38,23 +29,26 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
 
+      - name: Packages Build
+        run: yarn build --filter=@arrow-navigation/core --force
+
       - name: Run tests with coverage
-        run: yarn test --coverage
+        run: yarn test:coverage
 
       - name: Upload Core coverage to Codecov
-        if: steps.filter.outputs.core == 'true'
         uses: codecov/codecov-action@v3
         with:
           flags: core
+          name: core
           files: ./packages/an-core/coverage/coverage-final.json
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
 
       - name: Upload React coverage to Codecov
-        if: steps.filter.outputs.react == 'true'
         uses: codecov/codecov-action@v3
         with:
           flags: react
+          name: react
           files: ./packages/an-react/coverage/coverage-final.json
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true

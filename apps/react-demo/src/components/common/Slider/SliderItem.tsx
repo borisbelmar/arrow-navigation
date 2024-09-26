@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { FocusEventResult, FocusableElement } from '@arrow-navigation/react'
+import { type ElementFocusEventResult, FocusableElement } from '@arrow-navigation/react'
 import getSliderElementId from './utils/getSliderElementId'
 import { Content, useSetSelectedContent } from '../../../atoms/content.js'
-import type { FocusableElement as IFocusableElement } from '@arrow-navigation/core'
 
 interface SliderItemProps {
   item: Content
   idx: number
   itemRenderer?: (item: Content, idx: number) => React.ReactNode
   sliderId: string | number
-  onFocus: (result: FocusEventResult<IFocusableElement>, idx: number) => void
+  onFocus: (result: ElementFocusEventResult, idx: number) => void
   className?: string
 }
 
@@ -25,7 +24,7 @@ export default function SliderItem({
   const timeout = useRef<NodeJS.Timeout | number>(0)
   const setSelectedContent = useSetSelectedContent()
 
-  const handleFocus = useCallback((result: FocusEventResult<IFocusableElement>) => {
+  const handleFocus = useCallback((result: ElementFocusEventResult) => {
     timeout.current = setTimeout(() => {
       setSelectedContent(item)
     }, 500)

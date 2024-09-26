@@ -1,0 +1,122 @@
+---
+title: Core Quick Start Guide
+description: This section provides an overview of Quick Start Guide for Arrow Navigation Core library.
+---
+
+For a quick start, follow the steps below to get started with Arrow Navigation Core library.
+
+<Note type="danger" title="Remember">
+If you are using React for your project, please refer to the [Quick Start Guide for Arrow Navigation React library](/docs/react/quick-start-guide). The react library provides a set of components and hooks to implement spatial navigation in your web app easily.
+</Note>
+
+## Before You Begin
+
+Before you start using Arrow Navigation Core library, make sure to install the library in your project. You can install the library using a package manager or include the library script directly in your HTML file using a CDN link. For more information, refer to the [Installation Guide](/docs/core/installation).
+
+## Getting Started
+
+To get started with Arrow Navigation Core library, follow these steps:
+<Tabs defaultValue="npm" className="pt-5 pb-1">
+  <TabsList className="mb-8">
+    <TabsTrigger value="npm">npm</TabsTrigger>
+    <TabsTrigger value="cdn">cdn</TabsTrigger>
+  </TabsList>
+<Stepper>
+  <StepperItem title="Initialize">
+    Initialize Arrow Navigation Core library in your project by calling the `initArrowNavigation` function. This function initializes the library and sets up the necessary configurations. This function must be called at the beginning of your application.
+    <TabsContent value="npm">
+      ```ts
+      import { initArrowNavigation } from "@arrow-navigation/core"
+
+      initArrowNavigation({ debug: true })
+      ```
+    </TabsContent>
+    <TabsContent value="cdn">
+      ```html
+      <script src="https://cdn.jsdelivr.net/npm/@arrow-navigation/core/dist/dist.js"></script>
+      <script>
+        window.arrowNavigation.init()
+      </script>
+      ```
+    </TabsContent>
+  </StepperItem>
+  <StepperItem title="Get the API instance">
+    Get the Arrow Navigation API instance. This function returns the Arrow Navigation API instance, which you can use to control the navigation behavior. You can access the Arrow Navigation API instance from any part of your application.
+    <TabsContent value="npm">
+      ```tsx {3}
+      import { getArrowNavigation } from '@arrow-navigation/core'
+
+      const navigationApi = getArrowNavigation()
+      ```
+    </TabsContent>
+    <TabsContent value="cdn">
+      ```js
+      const navigationApi = window.arrowNavigation.get()
+      ```
+    </TabsContent>
+  </StepperItem>
+  <StepperItem title="Register a group of elements">
+    Let's use a simple html structure to demonstrate how to register a group of elements for navigation, for styling we will use TailwindCSS. In this example, we have a list of items that we want to navigate using arrow keys.
+    ```html
+    <div id="group-0" class="flex gap-2 p-8 border rounded-lg">
+      <button
+        id="item-0-0"
+        class="w-16 h-16 bg-teal-500 focus:bg-teal-600"
+      ></button>
+      <button
+        id="item-0-1"
+        class="w-16 h-16 bg-teal-500 focus:bg-teal-600"
+      ></button>
+      <button
+        id="item-0-2"
+        class="w-16 h-16 bg-teal-500 focus:bg-teal-600"
+      ></button>
+    </div>
+    ```
+    To register the group of elements, you need to call the `registerGroup` function and pass the container id as an argument.
+    ```ts
+    navigationApi.registerGroup('group-0')
+    ```
+  </StepperItem>
+  <StepperItem title="Register group elements">
+    To register the elements inside the group, you need to call the `registerElement` function and pass the element id and the group id as arguments.
+    ```ts
+    navigationApi.registerElement('item-0-0', 'group-0')
+    navigationApi.registerElement('item-0-1', 'group-0')
+    navigationApi.registerElement('item-0-2', 'group-0')
+    ```
+  </StepperItem>
+  <StepperItem title="Navigate between elements">
+    Now you can navigate between the elements using the arrow keys. The focus will move to the next or previous element based on the arrow key pressed, focusing on the nearest element in the direction of the arrow key. In the example below, you can see how the focus moves between the buttons and groups.
+    <TabsContent value="npm">
+      <iframe src="https://codesandbox.io/embed/mtm6x6?view=preview&module=%2Fsrc%2Findex.ts&hidenavigation=1"
+        style={{
+          width: '100%',
+          height: '500px',
+          border: 0,
+          borderRadius: '4px',
+          overflow: 'hidden'
+        }}
+        title="core-quick-start-npm"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+      />
+    </TabsContent>
+    <TabsContent value="cdn">
+      <iframe src="https://codesandbox.io/embed/j2gqx9?view=preview&module=%2Fsrc%2Findex.ts&hidenavigation=1"
+        style={{
+          width: '100%',
+          height: '500px',
+          border: 0,
+          borderRadius: '4px',
+          overflow: 'hidden'
+        }}
+        title="core-quick-start-cdn"
+        allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+        sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+      />
+    </TabsContent>
+  </StepperItem>
+</Stepper>
+</Tabs>
+

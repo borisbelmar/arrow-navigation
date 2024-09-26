@@ -1,0 +1,79 @@
+---
+title: FocusableGroup
+description: The FocusableGroup component is a wrapper component that groups a set of focusable elements.
+---
+
+A wrapper component that groups a set of focusable elements.
+
+## Usage
+
+```tsx
+import { FocusableGroup, FocusableElement } from '@arrow-navigation/react'
+
+const Component = () => {
+  return (
+    <div>
+      <FocusableGroup id="group-1">
+        <FocusableElement id="btn-1">
+          Button 1
+        </FocusableElement>
+        <FocusableElement id="btn-2">
+          Button 2
+        </FocusableElement>
+        <FocusableElement id="btn-3">
+          Button 3
+        </FocusableElement>
+      </FocusableGroup>
+    </div>
+  )
+}
+```
+
+## Props
+
+The `FocusableGroup` component will receive all HTML attributes and events for the HTML tag used as wrapper. Some important props are:
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| id | string | - | The group id. Must be unique |
+| as | string | div | The HTML tag to be used as wrapper |
+| onFocus | function | - | Callback function to be called when the group receives focus. It returns a object with focus result that includes prev, current and direction |
+| onBlur | function | - | Callback function to be called when the group loses focus. It returns a object with focus result that includes next, current and direction |
+| firstElement | string | - | The id of the first element to receive focus when the group receives focus |
+| nextUp / nextDown / nextRight / nextLeft | string | - | The next group id by direction. |
+| saveLast | boolean | false | If true, the last focused element will be saved and used as firstElement |
+| viewportSafe | boolean | true | If true, the navigation will be limited to the viewport |
+| threshold | number | 0 | The threshold to intersection discriminator |
+| keepFocus | boolean | false | If true, the focus will be kept in the group when the last element receives focus |
+| byOrder | ORDER | 'horizontal' | Navigate by order setted on elements. Can be 'horizontal', 'vertical' or 'grid', this enum comes with ArrowNavigationOrder constant object. Take care with this option, because this will change the id of the elements, for example, for group-0, the element in order 1 will be group-0-1. It includes a utility function getElementIdByOrder(groupId, order): string. Keep this in mind if you are using the id of the elements for firstElement or nextByDirection options. |
+| cols | number - Record\<number, number\> | 1 | The number of columns to navigate when the byOrder is 'grid'. The default value is 1 and you can set a object with the number of columns for each breakpoint. For example: `{ 0: 1, 768: 2, 1024: 3 }` |
+
+## byOrder groups
+
+If you want to use a efficient way to navigate between elements and you know the layout of the elements, you can use the `byOrder` prop to navigate between elements. This prop will change the id of the elements based on the order setted on the elements. For example, if you have a group with the id `group-0` and you set the `byOrder` prop to `horizontal`, the elements will have the id `group-0-1`, `group-0-2`, `group-0-3`, and so on. This way, you can navigate between the elements using the arrow keys and the focus will move to the next or previous element based on the order setted on the elements. This approach can be really efficient because this will work as a linked list, and the focus will move to the next or previous element based on the order setted on the elements and doesnt need to calculate the nearest element in the direction of the arrow key pressed.
+
+```tsx
+import { FocusableGroup, FocusableElement, ArrowNavigationOrder } from '@arrow-navigation/react'
+
+const Component = () => {
+  return (
+    <div>
+      <FocusableGroup id="group-1" byOrder={ArrowNavigationOrder.horizontal}>
+        <FocusableElement order={1}>
+          Button 1
+        </FocusableElement>
+        <FocusableElement order={2}>
+          Button 2
+        </FocusableElement>
+        <FocusableElement order={3}>
+          Button 3
+        </FocusableElement>
+      </FocusableGroup>
+    </div>
+  )
+}
+```
+
+## Threshold
+
+The `threshold` prop is used to set a threshold to the intersection observer. The intersection observer is used to calculate the nearest element in the direction of the arrow key pressed. The default value is 0, which means that the nearest element will be the element that has the highest intersection ratio with the viewport. If you set a value higher than 0, the nearest element will be the element that has the highest intersection ratio with the viewport minus the threshold value. This can be useful if you want to set a distance between the elements and the viewport to calculate the nearest element in the direction of the arrow key pressed.

@@ -1,4 +1,4 @@
-import { FocusEventResult, FocusableGroupConfig } from '@arrow-navigation/core'
+import { GroupFocusEventResult } from '@arrow-navigation/react'
 import { useCallback, useRef } from 'react'
 
 interface UseSliderGridProps {
@@ -8,7 +8,7 @@ interface UseSliderGridProps {
 export default function useSliderGrid({ slidersContainerRef }: UseSliderGridProps) {
   const accumulator = useRef(0)
 
-  const onSliderFocus = useCallback(({ prev, current, direction }: FocusEventResult<FocusableGroupConfig>) => {
+  const onSliderFocus = useCallback(({ prev, current, direction }: GroupFocusEventResult) => {
     const isSliderGroup = /^virtual_\d+$/gm.test(prev?.id || '')
     if (!isSliderGroup) return
 

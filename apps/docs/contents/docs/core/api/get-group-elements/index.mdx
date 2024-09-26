@@ -1,0 +1,26 @@
+---
+title: getGroupElements
+description: Get the elements of a group in Arrow Navigation.
+---
+
+This function returns the elements of a group. You can use this function to get the list of elements that are registered in a group.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const elements = navigationApi.getGroupElements(groupId)
+
+console.log(elements) // Set<string>
+```
+
+## Parameters
+
+- `groupId`: The id of the group for which you want to retrieve the elements. [Docs](/docs/core/api/register-group)
+
+## Returns
+
+This function returns the elements of the specified group. The elements are returned as a Set of element ids. If the group does not exist, it returns an empty Set.

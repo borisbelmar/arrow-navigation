@@ -1,0 +1,42 @@
+---
+title: getGroupConfig
+description: Retrieve the configuration of a specific group in Arrow Navigation.
+---
+
+This function returns the configuration of a specified group. You can use this function to get the configuration details of any group registered in your Arrow Navigation instance.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const groupConfig = navigationApi.getGroupConfig(groupId)
+
+console.log(groupConfig) // GroupConfig | null
+```
+
+## Parameters
+
+- `groupId`: The id of the group for which you want to retrieve the configuration. [Docs](/docs/core/api/register-group)
+
+## Returns
+
+This function returns the configuration of the specified group. The configuration object contains the following properties:
+
+
+- `id`: The id of the group.
+- `instance`: The instance of the group. This property is used internally by Arrow Navigation.
+- `firstElement`: The id of the first element in the group.
+- `lastElement`: The id of the last element in the group.
+- `nextGroupByDirection`: The next group to focus when navigating in a specific direction.
+- `byOrder`: The order in which the elements are focused.
+- `cols`: The number of columns in the group. This property is used for grid navigation.
+- `saveLast`: A boolean value that indicates whether the last focused element should be saved.
+- `viewportSafe`: A boolean value that indicates whether the group is safe to focus in the viewport.
+- `threshold`: The threshold value for focusing the group.
+- `onFocus`: A callback function that is called when the group is focused.
+- `onBlur`: A callback function that is called when the group is blurred.
+- `keepFocus`: A boolean value that indicates whether the focus should be kept on the group.
+- `arrowDebounce`: A boolean value that indicates whether the arrow key debounce is enabled.
