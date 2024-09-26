@@ -1,0 +1,21 @@
+---
+title: FocusableElement
+description: The FocusableElement component is a wrapper component that makes an element focusable.
+---
+
+A wrapper component that makes an element focusable. The element must be a child of a `FocusableGroup` component and the HTML tag used as wrapper must be focusable, for example, `input`, `button`, `a`, `select`, `textarea`, etc.
+
+### Props
+
+The `FocusableElement` component will receive all HTML attributes and events for the HTML tag used as wrapper. Some important props are:
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| id | string | - | The element id. Must be unique |
+| as | string | div | The HTML tag to be used as wrapper |
+| onFocus | function | - | Callback function to be called when the element receives focus. It returns a object with focus result that includes prev, current and direction |
+| onBlur | function | - | Callback function to be called when the element loses focus. It returns a object with focus result that includes next, current and direction |
+| nextUp / nextDown / nextRight / nextLeft | string | NextFocusable |  The next element or group by direction. In the case of group, must be an object `{ kind: 'group', id: 'group-0 }` |
+| order | number | - | The order of the element. No default value. This is needed when the group is setted to navigate byOrder. If no setted, byOrder will be ignored. |
+
+

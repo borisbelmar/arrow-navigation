@@ -1,0 +1,24 @@
+---
+title: unregisterElement
+description: Unregister an element from Arrow Navigation.
+---
+
+This function unregisters the specified element from Arrow Navigation. You can use this function to programmatically unregister an element from the API.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.unregisterElement('element-id')
+```
+
+## Parameters
+
+- `element-id`: The id of the element to unregister. [Docs](/docs/core/api/register-element)
+
+## Returns
+
+This function does not return anything. If the element does not exist, it does nothing.

@@ -1,0 +1,28 @@
+---
+title: getNextGroup
+description: Get next focusable group in Arrow Navigation.
+---
+
+This function returns the next focusable group in the Arrow Navigation instance. You can use this function to get the next focusable group from any part of your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const nextGroup = navigationApi.getNextGroup({ direction: 'down' })
+
+console.log(nextGroup) // 'groupId' | null
+```
+
+## Parameters
+
+- `props`: An object with the following properties:
+  - `direction`: The direction in which you want to find the next focusable group. The direction can be one of the following values: `'up'`, `'down'`, `'left'`, or `'right'`.
+  - `elementId`: The id of the element from which you want to find the next focusable group. Default value is the currently focused element.
+
+## Returns
+
+This function returns the id of the next focusable group. If no group is found, it returns `null`.

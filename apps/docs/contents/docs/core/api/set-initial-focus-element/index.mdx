@@ -1,0 +1,24 @@
+---
+title: setInitialFocusElement
+description: Set the initial focus element in Arrow Navigation.
+---
+
+This function sets the initial focus element in Arrow Navigation. You can use this function to programmatically set the initial focus element in your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.setInitialFocusElement('element-id')
+```
+
+## Parameters
+
+- `element-id`: The id of the element to which you want to set the initial focus. [Docs](/docs/core/api/register-element)
+
+## Returns
+
+This function does not return anything. If the element does not exist, it does nothing.

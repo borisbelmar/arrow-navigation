@@ -1,0 +1,42 @@
+---
+title: registerElement
+description: Register an element in Arrow Navigation.
+---
+
+This function registers an element in Arrow Navigation. You can use this function to register an element in your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.registerElement('element-id', 'group-id', {
+  order: 0,
+  nextByDirection: {
+    up: 'element-id',
+    down: undefined, // This is the default value, and it means that the library will calculate the next element based on spatial proximity.
+    left: 'element-id',
+    right: null // This means that is not posible to navigate to the right from this element.
+  },
+  onFocus: () => {
+    console.log('Element focused')
+  },
+  onBlur: () => {
+    console.log('Element blurred')
+  },
+})
+```
+
+## Parameters
+
+| Name     | Type      | Description                                                                                   |
+|----------|-----------|-----------------------------------------------------------------------------------------------|
+| elementId| `string`  | The id of the element to register.                                                            |
+| groupId  | `string`  | The id of the group to which the element belongs.                                             |
+| config  | `object`  | An object with the following properties:                                                      |
+| order    | `number`  | The order of the element in the group. Default value is `undefined`.                          |
+| nextByDirection | `object` | An object with the ids of the next focusable elements in each direction. Default value is an object with all directions pointing to the same element. |
+| onFocus  | `function`| A function that is called when the element is focused. Default value is an empty function.    |
+| onBlur   | `function`| A function that is called when the element is blurred. Default value is an empty function.    |

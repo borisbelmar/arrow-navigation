@@ -1,0 +1,27 @@
+---
+title: handleDirectionPress
+description: Handle the direction press event in Arrow Navigation.
+---
+
+This function is used to handle the direction press event in Arrow Navigation. You can use this function to handle the direction press event in your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.handleDirectionPress('down', false)
+```
+
+## Parameters
+
+| Parameter | Type    | Description                                                                 |
+| --------- | ------- | --------------------------------------------------------------------------- |
+| direction | string  | The direction in which the key was pressed. Possible values are `up`, `down`, `left`, and `right`. |
+| repeat    | boolean | Whether the key press event is a repeat event. Default value is `false`.    |
+
+## Returns
+
+This function returns void.

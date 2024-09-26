@@ -1,0 +1,24 @@
+---
+title: setFocusElement
+description: Set focus to an element in Arrow Navigation.
+---
+
+This function sets focus to the specified element. You can use this function to programmatically set focus to an element in your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.setFocusElement('element-id')
+```
+
+## Parameters
+
+- `element-id`: The id of the element to which you want to set focus. [Docs](/docs/core/api/register-element)
+
+## Returns
+
+This function does not return anything. If the element does not exist, it does nothing.

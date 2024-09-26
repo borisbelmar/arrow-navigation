@@ -1,0 +1,24 @@
+---
+title: getCurrentGroups
+description: Get the currently registered groups in Arrow Navigation.
+---
+
+This function returns the currently registered groups in Arrow Navigation. You can use this function to get the list of groups that are registered in your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const groups = navigationApi.getCurrentGroups()
+```
+
+## Parameters
+
+None
+
+## Returns
+
+This function returns a Set of group ids.

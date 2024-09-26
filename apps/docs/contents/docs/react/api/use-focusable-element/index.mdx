@@ -1,0 +1,41 @@
+---
+title: useFocusableElement
+description: The useFocusableElement hook is used to make an element focusable.
+---
+
+Hook to make an element focusable. The element must be a child of a `FocusableGroup` component and the HTML tag used as wrapper must be focusable, for example, `input`, `button`, `a`, `select`, `textarea`, etc. The hook props are the same as `FocusableElement` component.
+
+## Usage
+
+```jsx
+import { useFocusableElement } from '@arrow-navigation/react'
+
+const MyButton = ({ id }) => {
+  // Is important to pass the id to the hook and to the button
+  useFocusableElement({ id })
+
+  return (
+    <button id={id}>
+      Button 1
+    </button>
+  )
+}
+
+const App = () => {
+  return (
+    <div>
+      <FocusableGroup id="group-1">
+        <MyButton id="btn-1" />
+        <MyButton id="btn-2" />
+        <MyButton id="btn-3" />
+      </FocusableGroup>
+    </div>
+  )
+}
+```
+
+## Parameters
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| id | string | - | The element id. Must be unique |

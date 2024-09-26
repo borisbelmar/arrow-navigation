@@ -1,0 +1,137 @@
+---
+title: Events
+description: Learn how to use events in Arrow Navigation and get started with spatial navigation.
+---
+
+Arrow Navigation provides a set of events that you can use to listen to navigation changes and handle them in your application. You can use these events to implement custom behavior based on the navigation state.
+
+## Example
+  
+```ts
+import { ArrowNavigationEvents, getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const handleCurrentElementChange = (element, direction) => {
+  console.log('Current element changed', element, direction)
+}
+
+// Add an event listener
+navigationApi.on(ArrowNavigationEvents.CURRENT_ELEMENT_CHANGE, handleCurrentElementChange)
+
+// Remove the event listener
+navigationApi.off(ArrowNavigationEvents.CURRENT_ELEMENT_CHANGE, handleCurrentElementChange)
+```
+
+## Events
+
+
+The API implements an Event Emitter to listen to events. The events are accessible through the `on` and `off` methods. All the events can be accesed through the `ArrowNavigationEvents` enum.
+
+### current-element:change
+
+This event is triggered when the current element is changed.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| element   | `Element`  | The new element.                 |
+| direction | `Direction`| The direction of the change.     |
+
+### current-group:change
+
+This event is triggered when the current group is changed.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| group     | `Group`    | The new group.                   |
+| direction | `Direction`| The direction of the change.     |
+
+### element:focus
+
+This event is triggered when an element is focused.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| current   | `Element`  | The currently focused element.   |
+| direction | `Direction`| The direction of the focus.      |
+| prev      | `Element`  | The previously focused element.  |
+
+### element:blur
+
+This event is triggered when an element is blurred.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| current   | `Element`  | The currently blurred element.   |
+| direction | `Direction`| The direction of the blur.       |
+| next      | `Element`  | The next element to be focused.  |
+
+### group:focus
+
+This event is triggered when a group is focused.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| current   | `Group`    | The currently focused group.     |
+| direction | `Direction`| The direction of the focus.      |
+| prev      | `Group`    | The previously focused group.    |
+
+### group:blur
+
+This event is triggered when a group is blurred.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| current   | `Group`    | The currently blurred group.     |
+| direction | `Direction`| The direction of the blur.       |
+| next      | `Group`    | The next group to be focused.    |
+
+### groups:change
+
+This event is triggered when the groups are changed.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| groups    | `Group[]`  | The new groups.                  |
+
+### elements:change
+
+This event is triggered when the elements are changed.
+
+#### Parameters
+
+| Name      | Type       | Description                      |
+| --------- | ---------- | -------------------------------- |
+| elements  | `Element[]`| The new elements.                |
+
+### groups-config:change
+
+This event is triggered when the groups configuration is changed.
+
+#### Parameters
+
+| Name              | Type                | Description                      |
+| ----------------- | ------------------- | -------------------------------- |
+| groupsConfig      | `GroupsConfig`      | The new groups configuration.    |
+
+### elements:register-end
+
+This event is triggered when the elements are registered.
+
+#### Parameters
+
+This event does not receive any parameters.

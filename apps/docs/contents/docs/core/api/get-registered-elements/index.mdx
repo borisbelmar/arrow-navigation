@@ -1,0 +1,26 @@
+---
+title: getRegisteredElements
+description: Get the registered elements in Arrow Navigation.
+---
+
+This function returns the registered elements in Arrow Navigation. You can use this function to get the list of elements that are registered in your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const elements = navigationApi.getRegisteredElements()
+
+console.log(elements) // Set<string>
+```
+
+## Parameters
+
+None
+
+## Returns
+
+This function returns the registered elements. The elements are returned as a Set of element ids. If no elements are registered, it returns an empty Set.

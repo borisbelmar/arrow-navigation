@@ -1,0 +1,48 @@
+---
+title: initArrowNavigation - Core API
+description: Learn how to use Arrow Navigation Core library in your project and get started with spatial navigation.
+---
+
+Initializes the arrow navigation. This function should be called only once in your application.
+
+<Note title="Important" type="danger">
+  If you are using React for your project, please refer to the [Quick Start Guide for Arrow Navigation React library](/docs/react/quick-start-guide). The react library provides a set of components and hooks to implement spatial navigation in your web app easily.
+</Note>
+
+### Syntax
+
+```ts
+import { initArrowNavigation } from '@arrow-navigation/core'
+
+initArrowNavigation({
+  preventScroll: true // Prevent the default behavior of the arrow keys to scroll the page. The default value is true,
+  disableWebListeners: false, // Disable the web listeners. The default value is false
+  adapter: webAdapter, // The adapter to use. The default value is webAdapter included in the package. You can create your own adapter to use the module in other platforms like React Native.
+  initialFocusElement: 'element-0-0' // The element to be focused when the elements has been registered. The default value is null
+})
+```
+
+### Parameters
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | object | - | The options object |
+| options.preventScroll | boolean | true | Prevent the default behavior of the arrow keys to scroll the page. The default value is true. |
+| options.disableWebListeners | boolean | false | Disable the web listeners. The default value is false. |
+| options.adapter | object | webAdapter | The adapter to use. The default value is webAdapter included in the package. You can create your own adapter to use the module in other platforms like React Native. |
+| options.initialFocusElement | string | null | The element to be focused when the elements has been registered. The default value is null. |
+| options.registerCooldown | number | 500 | The cooldown time to register the elements. The default value is 500. |
+| options.debug | boolean | false | Enable the debug mode. The default value is false. |
+| options.errorOnReinit | boolean | false | Throw an error when the arrow navigation is reinitialized. The default value is false. |
+
+### Returns
+
+- `ArrowNavigationInstace`: An object with the arrow navigation api. For more information, refer to the [Arrow Navigation Instance](/docs/core/api/get-arrow-navigation).
+
+### Example
+
+```ts
+import { initArrowNavigation } from '@arrow-navigation/core'
+
+initArrowNavigation({ debug: true })
+```

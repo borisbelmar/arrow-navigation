@@ -1,0 +1,29 @@
+---
+title: getNextElement
+description: Get next focusable element in Arrow Navigation.
+---
+
+This function returns the next focusable element in the Arrow Navigation instance. You can use this function to get the next focusable element from any part of your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const nextElement = navigationApi.getNextElement({ direction: 'down' })
+
+console.log(nextElement) // 'elementId' | null
+```
+
+## Parameters
+
+- `props`: An object with the following properties:
+  - `direction`: The direction in which you want to find the next focusable element. The direction can be one of the following values: `'up'`, `'down'`, `'left'`, or `'right'`.
+  - `inGroup`: The next focusable element should be in the same group. Default value is `false`.
+  - `elementId`: The id of the element from which you want to find the next focusable element. Default value is the currently focused element.
+
+## Returns
+
+This function returns the id of the next focusable element. If no element is found, it returns `null`.
