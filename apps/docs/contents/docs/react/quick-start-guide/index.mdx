@@ -1,0 +1,131 @@
+---
+title: React Quick Start Guide
+description: This section provides an overview of Quick Start Guide for Arrow Navigation React library.
+---
+
+For a quick start, follow the steps below to get started with Arrow Navigation React library.
+
+<Note type="danger" title="Remember">
+If you are using Vanilla JS for your project, please refer to the [Quick Start Guide for Arrow Navigation Core library](/docs/core/quick-start-guide). The core library provides a set of functions to implement spatial navigation in your web app easily.
+</Note>
+
+## Before You Begin
+
+Before you start using Arrow Navigation React library, make sure to install the library in your project. You can install the library using a package manager. For more information, refer to the [Installation Guide](/docs/react/installation).
+
+## Getting Started
+
+To get started with Arrow Navigation React library, follow these steps:
+
+
+<Stepper>
+  <StepperItem title="Initialize">
+    Initialize Arrow Navigation Core library in your project by calling the `initArrowNavigation` function. This function initializes the library and sets up the necessary configurations. This function must be called at the beginning of your application. For this example, we will use a CRA project.
+
+    <Note type="warning" title="Remember">
+    For **WebOS or Tizen** projects, you need to use a full SPA approach. You can use a bundler like Webpack, Rollup, or Vite to bundle your application. This is important, because your application will be loaded from the **HTML file**.
+    </Note>
+
+    index.tsx
+
+    ```tsx {4,9} showLineNumbers
+    import React from "react";
+    import ReactDOM from "react-dom/client";
+    import App from "./App";
+    import { initArrowNavigation } from "@arrow-navigation/react";
+
+    const rootElement = document.getElementById("root")!;
+    const root = ReactDOM.createRoot(rootElement);
+
+    initArrowNavigation();
+
+    root.render(<App />);
+    ```
+  </StepperItem>
+  <StepperItem title="Create a group with focusable elements">
+    In app.tsx file, create a group of focusable elements. In this example, we have a list of items that we want to navigate using arrow keys. We will use TailwindCSS for styling.
+    
+    App.tsx
+
+    ```tsx {2,7-11} showLineNumbers
+    import "./styles.css";
+    import { FocusableElement, FocusableGroup } from "@arrow-navigation/react";
+
+    export default function App() {
+      return (
+        <main className="flex flex-col gap-4 w-screen h-screen bg-gray-800 relative items-center justify-center overflow-hidden px-8">
+          <FocusableGroup id="group-0">
+            <FocusableElement id="item-0-0" as="button" className="w-16 h-16 bg-teal-500 focus:bg-teal-600" />
+            <FocusableElement id="item-0-1" as="button" className="w-16 h-16 bg-teal-500 focus:bg-teal-600" />
+            <FocusableElement id="item-0-2" as="button" className="w-16 h-16 bg-teal-500 focus:bg-teal-600" />
+          </FocusableGroup>
+        </main>
+      )
+    }
+    ```
+
+    The FocusableGroup and FocusableElement can be whatever you want, but they must have an id. The id is used to identify the group and the element. The FocusableElement can be any focusable element, like a button, input, or anchor tag. The FocusableGroup is a container for the focusable elements and is used to manage the focus within the group, calculating the nearest element in the direction of the arrow key pressed.
+  </StepperItem>
+  <StepperItem title="Let's try a better approach">
+    In this example, we will use a programmatic approach to create some groups of focusable elements.
+
+    App.tsx
+
+    ```tsx {2,4-15,20-34} showLineNumbers
+    import "./styles.css";
+    import { FocusableElement, FocusableGroup } from "@arrow-navigation/react";
+
+    const groups = [
+      {
+        id: "group-0",
+        buttonStyles: "bg-teal-500 focus:bg-teal-600",
+        count: 3,
+      },
+      {
+        id: "group-1",
+        buttonStyles: "bg-orange-500 focus:bg-orange-600",
+        count: 3,
+      },
+    ];
+
+    export default function App() {
+      return (
+        <main className="flex flex-col gap-4 w-screen h-screen bg-gray-800 relative items-center justify-center overflow-hidden px-8">
+          {groups.map((g) => (
+            <FocusableGroup
+              key={g.id}
+              id={g.id}
+              className="flex gap-2 p-8 border rounded-lg"
+            >
+              {Array.from({ length: g.count }).map((_, idx) => (
+                <FocusableElement
+                  key={`${g.id}-${idx}`}
+                  id={`${g.id}-${idx}`}
+                  as="button"
+                  className={`w-16 h-16 ${g.buttonStyles}`}
+                />
+              ))}
+            </FocusableGroup>
+          ))}
+        </main>
+      );
+    }
+    ```
+
+    Now you can navigate between the elements using the arrow keys. The focus will move to the next or previous element based on the arrow key pressed, focusing on the nearest element in the direction of the arrow key. In the example below, you can see how the focus moves between the buttons and groups.
+
+    <iframe src="https://codesandbox.io/embed/nfq58q?view=preview&module=%2Fsrc%2FApp.tsx&hidenavigation=1"
+      style={{
+        width: '100%',
+        height: '500px',
+        border: 0,
+        borderRadius: '4px',
+        overflow: 'hidden'
+      }}
+      title="react-quick-start"
+      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+    />
+  </StepperItem>
+</Stepper>
+

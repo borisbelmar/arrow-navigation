@@ -1,0 +1,166 @@
+---
+title: Introduction
+description: Learn about the Arrow Navigation library and how it can help you implement efficient spatial navigation in web applications for platforms like WebOS and Tizen.
+---
+
+Implementing efficient spatial navigation in web applications for platforms like WebOS (LG) and Tizen (Samsung) often presents performance and complexity challenges. Developers frequently face issues with focus management, directional navigation, and maintaining a smooth user experience across these devices. A library like **Arrow Navigation**, focused on simplicity and performance, addresses these challenges. It is specifically designed for web apps on WebOS and Tizen, allowing developers to streamline their code while ensuring optimal performance, making the development process easier and more efficient.
+
+## Getting Started
+
+To get started with Arrow Navigation, all will depends on the library you are using. Arrow Navigation is available in two versions: **React** and **Vanilla JS Core**. Choose the version that best suits your project requirements.
+
+- **Vanilla JS Core:** Suitable for vanilla JavaScript projects, this version offers a set of functions to implement spatial navigation in your web app. [Explore the Vanilla JS Core](/docs/vanilla-js/getting-started/installation)
+
+- **React Version:** Ideal for React projects, this version provides a set of components and hooks to implement spatial navigation in your web app. It uses the vanilla JS version under the hood. [Explore the React Version](/docs/react/getting-started/installation)
+
+## Foundational Concepts
+
+Arrow Navigation is built on a few foundational concepts that are essential to understanding how the library works:
+
+- **Focus Management:** Arrow Navigation manages focus on elements within the navigation container, ensuring that the focus is always on the active element.
+
+- **Directional Navigation:** The library enables users to navigate through elements using arrow keys, providing a seamless and intuitive navigation experience.
+
+- **Optimized Performance:** Arrow Navigation is designed to be lightweight and efficient, ensuring optimal performance on WebOS and Tizen platforms.
+
+## Code Samples
+
+Simplicity is at the core of Arrow Navigation, and the library's code samples reflect this philosophy. Here are a few examples of how you can use Arrow Navigation in your web app:
+
+<Tabs defaultValue="core" className="pt-5 pb-1">
+  <TabsList className="">
+    <TabsTrigger value="core">Core</TabsTrigger>
+    <TabsTrigger value="react">React</TabsTrigger>
+  </TabsList>
+  <TabsContent value="core">
+    index.html
+    ```html {42} showLineNumbers
+    <html>
+      <head>
+        <title>Arrow Navigation Core Demo CDN</title>
+        <meta charset="UTF-8" />
+        <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+
+      <body>
+        <main
+          id="app"
+          class="flex flex-col gap-4 w-screen h-screen bg-gray-800 relative items-center justify-center overflow-hidden px-8"
+        >
+          <div id="group-0" class="flex gap-2 p-8 border rounded-lg">
+            <button
+              id="item-0-0"
+              class="w-16 h-16 bg-teal-500 focus:bg-teal-600"
+            ></button>
+            <button
+              id="item-0-1"
+              class="w-16 h-16 bg-teal-500 focus:bg-teal-600"
+            ></button>
+            <button
+              id="item-0-2"
+              class="w-16 h-16 bg-teal-500 focus:bg-teal-600"
+            ></button>
+          </div>
+          <div id="group-1" class="flex gap-2 p-8 border rounded-lg">
+            <button
+              id="item-1-0"
+              class="w-16 h-16 bg-orange-500 focus:bg-orange-600"
+            ></button>
+            <button
+              id="item-1-1"
+              class="w-16 h-16 bg-orange-500 focus:bg-orange-600"
+            ></button>
+            <button
+              id="item-1-2"
+              class="w-16 h-16 bg-orange-500 focus:bg-orange-600"
+            ></button>
+          </div>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/@arrow-navigation/core/dist/dist.js"></script>
+        <script src="src/index.js"></script>
+      </body>
+    </html>
+    ```
+    index.js
+    ```jsx {5} showLineNumbers
+      window.arrowNavigation.init({ debug: true });
+
+      const navigationApi = window.arrowNavigation.get();
+
+      navigationApi.registerGroup("group-0");
+
+      navigationApi.registerElement("item-0-0", "group-0");
+      navigationApi.registerElement("item-0-1", "group-0");
+      navigationApi.registerElement("item-0-2", "group-0");
+
+      navigationApi.registerGroup("group-1");
+
+      navigationApi.registerElement("item-1-0", "group-1");
+      navigationApi.registerElement("item-1-1", "group-1");
+      navigationApi.registerElement("item-1-2", "group-1");
+    ```
+    
+    Vanilla JS Core implementation example:
+    <iframe src="https://codesandbox.io/embed/mtm6x6?view=preview&module=%2Fsrc%2Findex.ts&hidenavigation=1"
+      style={{
+        width: '100%',
+        height: '500px',
+        border: 0,
+        borderRadius: '4px',
+        overflow: 'hidden'
+      }}
+      title="core-quick-start-npm"
+      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+    />
+  </TabsContent>
+  <TabsContent value="react">
+    ```tsx {8} showLineNumbers
+    import React from 'react'
+    import {
+      initArrowNavigation,
+      FocusableElement,
+      FocusableGroup
+    } from '@arrow-navigation/react'
+
+    initArrowNavigation()
+
+    const App = () => {
+      return (
+        <div>
+          <FocusableGroup id="group-1">
+            <FocusableElement id="btn-1">
+              Button 1
+            </FocusableElement>
+            <FocusableElement id="btn-2">
+              Button 2
+            </FocusableElement>
+            <FocusableElement id="btn-3">
+              Button 3
+            </FocusableElement>
+          </FocusableGroup>
+        </div>
+      )
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'))
+    ```
+    React implementation example:
+    <iframe src="https://codesandbox.io/embed/nfq58q?view=preview&hidenavigation=1"
+      style={{
+        width: '100%',
+        height: '500px',
+        border: 0,
+        borderRadius: '4px',
+        overflow: 'hidden'
+      }}
+      title="react-quick-start"
+      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+    />
+  </TabsContent>
+</Tabs>
+
+## Last Thoughts
+
+Arrow Navigation is a powerful library that simplifies the implementation of spatial navigation in web applications for WebOS and Tizen platforms. By focusing on performance and ease of use, Arrow Navigation enables developers to create efficient and intuitive navigation experiences for their users. Whether you are building a vanilla JavaScript project or a React application, Arrow Navigation has you covered. Get started today and see the difference it can make in your web app development process.

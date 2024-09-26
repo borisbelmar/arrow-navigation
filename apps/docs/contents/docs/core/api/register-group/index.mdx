@@ -1,0 +1,164 @@
+---
+title: registerGroup
+description: Register a group in Arrow Navigation.
+---
+
+This function registers a group in Arrow Navigation. You can use this function to create a group and add elements to it.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.registerGroup(groupId, {
+  byOrder: 'horizonal',
+  firstElement: 'elementId',
+  lastElement: 'elementId',
+  nextGroupByDirection: {
+    up: 'groupId',
+    down: undefined, // If is undefined, the next group will be calculated by the library.
+    left: 'groupId',
+    right: null // If is null, will not be possible to navigate to the right.
+  },
+  onFocus: () => {
+    console.log('Group focused')
+  },
+  onBlur: () => {
+    console.log('Group blurred')
+  },
+  cols: 3,
+  saveLast: true,
+  viewportSafe: true,
+  threshold: 0.5,
+  keepFocus: true,
+  arrowDebounce: true,
+})
+```
+
+## Parameters
+
+| Name           | Type    | Description                                                                                                      |
+| -------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| `groupId`      | string  | The id of the group to register.                                                                                  |
+| `options`      | object  | An object with the following properties:                                                                          |
+| `byOrder`      | string  | The order in which the elements are focused. The value can be `'horizontal'`, `'vertical'`, or `'grid'`. Default value is `undefined`. |
+| `firstElement` | string  | The id of the first element in the group. Default value is `undefined`.                                           |
+| `lastElement`  | string  | The id of the last element in the group. Default value is `undefined`.                                            |
+| `nextGroupByDirection` | object | An object with the ids of the next focusable groups in each direction. Default value is `undefined`, the next group will be calculated by the library. |
+| `onFocus`      | function | A function that is called when the group is focused. Default value is an empty function.                         |
+| `onBlur`       | function | A function that is called when the group is blurred. Default value is an empty function.                         |
+| `cols`         | number  | The number of columns in the group. This property is used for grid navigation. Default value is `undefined`.     |
+| `saveLast`     | boolean | A boolean value that indicates whether the last focused element should be saved. Default value is `false`.      |
+| `viewportSafe` | boolean | A boolean value that indicates whether the group is safe to focus in the viewport. Default value is `false`.     |
+| `threshold`    | number  | The threshold value for focusing the group. Default value is `0`.                                                 |
+| `keepFocus`    | boolean | A boolean value that indicates whether the focus should be kept on the group. Default value is `false`.          |
+| `arrowDebounce`| boolean | A boolean value that indicates whether the arrow key debounce is enabled. Default value is `false`.              |
+
+
+## Examples
+
+### Register a group with horizontal order
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.registerGroup('group-id', {
+  byOrder: 'horizontal',
+  firstElement: 'element-1',
+  lastElement: 'element-3',
+  onFocus: () => {
+    console.log('Group focused')
+  },
+  onBlur: () => {
+    console.log('Group blurred')
+  },
+})
+```
+
+## Better performance with `byOrder` and nextGroupByDirection
+
+When you set the `byOrder` and the `nextGroupByDirection` properties, the library will calculate the next element or group based on the order and direction. This will work as a linked list, and the library will not need to iterate over all elements or groups to find the next one. This will improve the performance of your application.
+
+### Example
+
+```html
+<div id="group-0">
+  <div id="element-0-0"></div>
+  <div id="element-0-1"></div>
+  <div id="element-0-2"></div>
+</div>
+<div id="group-1">
+  <div id="element-1-0"></div>
+  <div id="element-1-1"></div>
+  <div id="element-1-2"></div>
+</div>
+<!-- This will be below group 1 and 0 -->
+<div id="group-2">
+  <div id="element-2-0"></div>
+  <div id="element-2-1"></div>
+  <div id="element-2-2"></div>
+</div>
+<div id="group-3">
+  <div id="element-3-0"></div>
+  <div id="element-3-1"></div>
+  <div id="element-3-2"></div>
+</div>
+```
+
+The groups will be registered as follows:
+
+```
+|--------------------|--------------------|
+| group-0            | group-1            |
+|--------------------|--------------------|
+| group-2            | group-3            |
+|--------------------|--------------------|
+```
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+navigationApi.registerGroup('group-0', {
+  byOrder: 'horizontal',
+  firstElement: 'element-0-0',
+  lastElement: 'element-0-2',
+  nextGroupByDirection: {
+    up: null,
+    left: null,
+    right: 'group-1',
+    down: 'group-2',
+  },
+})
+
+navigationApi.registerElement('element-0-0', 'group-0', {
+  order: 0
+})
+
+navigationApi.registerElement('element-0-1', 'group-0', {
+  order: 1
+})
+
+// ...Rest of the elements
+
+navigationApi.registerGroup('group-1', {
+  byOrder: 'horizontal',
+  firstElement: 'element-1-0',
+  lastElement: 'element-1-2',
+  nextGroupByDirection: {
+    up: null,
+    right: null,
+    left: 'group-0',
+    down: 'group-3',
+  },
+})
+
+// ...Rest of the groups and elements
+```
+
+In this example, the library doesnt need to execute the algorithm to find the next group or element, it will be calculated by the library based on the `byOrder` and `nextGroupByDirection` properties. This will improve the performance of your application considerably.

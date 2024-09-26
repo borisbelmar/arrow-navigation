@@ -1,0 +1,38 @@
+---
+title: useListenElementFocused
+description: Hook to listen when an element receives focus and trigger a callback function.
+---
+
+## Usage
+
+```jsx
+import { useListenElementFocused } from '@arrow-navigation/react'
+
+const App = () => {
+  useListenElementFocused(() => {
+    console.log('Button 1 focused')
+  }, 'btn-1')
+
+  return (
+    <div>
+      <FocusableGroup id="group-1">
+        <FocusableElement id="btn-1">
+          Button 1
+        </FocusableElement>
+        <FocusableElement id="btn-2">
+          Button 2
+        </FocusableElement>
+      </FocusableGroup>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+## Parameters
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| callback | function | - | Callback function to be called when the element receives focus |
+| id | string | - | The element id |

@@ -1,0 +1,26 @@
+---
+title: getFocusedElement
+description: Get the currently focused element in Arrow Navigation.
+---
+
+This function returns the currently focused element. You can use this function to get the currently focused element from any part of your application.
+
+## Syntax
+
+```ts
+import { getArrowNavigation } from '@arrow-navigation/core'
+
+const navigationApi = getArrowNavigation()
+
+const focusedElement = navigationApi.getFocusedElement()
+
+console.log(focusedElement) // FocusableElement | null
+```
+
+## Parameters
+
+None
+
+## Returns
+
+This function returns the currently focused element. If no element is focused, it returns `null`.
