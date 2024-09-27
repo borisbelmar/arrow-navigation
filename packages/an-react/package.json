@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit && eslint --ext ts,tsx --quiet --fix",
     "clean": "rm -rf node_modules && rm -rf dist",
     "test": "jest",
-    "prepublishOnly": "yarn build",
+    "prepublishOnly": "sh scripts/version-replace.sh && yarn build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -40,13 +40,12 @@
     "url": "git+https://github.com/borisbelmar/arrow-navigation-react.git"
   },
   "dependencies": {
-    "@arrow-navigation/core": "^2.2.0"
+    "@arrow-navigation/core": "*"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17 || ^18"
   },
   "devDependencies": {
-    "@arrow-navigation/core": "*",
     "@babel/preset-env": "7.21.4",
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.21.4",
