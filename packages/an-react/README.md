@@ -9,18 +9,12 @@ A light and performant React implementation for [@arrow-navigation/core]('https:
 ## Installation
 
 ```bash
-npm install --save @arrow-navigation/react @arrow-navigation/core
+npm install --save @arrow-navigation/react
 
 # or
 
-yarn add @arrow-navigation/react @arrow-navigation/core
+yarn add @arrow-navigation/react
 ```
-
-### Disclaimer
-
-The `@arrow-navigation/react` package is a wrapper for the `@arrow-navigation/core` package. It is not a replacement for the `@arrow-navigation/core` package. You must install both packages to use the `@arrow-navigation/react` package.
-
-Check peer dependencies for more information about the `@arrow-navigation/core` package and versions.
 
 ## Usage
 
@@ -60,6 +54,18 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ### `initArrowNavigation()`
 
 Initializes the arrow navigation. This function should be called only once in your application.
+
+### `useArrowNavigation`
+
+This hook returns the Arrow Navigation instance. It can be used to access the Arrow Navigation API from any part of your application.
+
+## Syntax
+
+```ts
+import { useArrowNavigation } from '@arrow-navigation/react'
+
+const navigationApi = useArrowNavigation()
+```
 
 ### `FocusableGroup`
 

@@ -36,7 +36,7 @@ export default function Home() {
             Get Started
           </Link>
           <Link
-            href="#"
+            href="/docs/core/api"
             className={buttonVariants({
               variant: "outline",
               className: "px-6",
