@@ -1,4 +1,4 @@
-![image](assets/logo.png)
+[![image](assets/logo.png)](https://arrow-navigation-docs.vercel.app/)
 
 [![codecov](https://codecov.io/gh/borisbelmar/arrow-navigation/graph/badge.svg?token=6EEWATKTFX)](https://codecov.io/gh/borisbelmar/arrow-navigation)
 
@@ -14,6 +14,10 @@
 
 ![tizen](https://img.shields.io/badge/tizen-00b6f0.svg?style=for-the-badge&logo=tizen&logoColor=white)
 ![webos](https://img.shields.io/badge/webos-CB3837.svg?style=for-the-badge&logo=webos&logoColor=white)
+
+# Documentation
+
+All the documentation and demos are available [here](https://arrow-navigation-docs.vercel.app/).
 
 # In this mono-repo
 
@@ -34,12 +38,6 @@ All the documentation is available in the README of each package.
 1. Clone the repo
 2. Install the dependencies with `yarn install`
 3. Initialize the packages and demos with `yarn dev`
-
-# Roadmap
-
-- [x] Make it a mono-repo
-- [ ] Make a better documentation
-- [ ] Add more demos
 
 # Contributing
 
