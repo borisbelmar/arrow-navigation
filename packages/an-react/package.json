@@ -39,8 +39,10 @@
     "type": "git",
     "url": "git+https://github.com/borisbelmar/arrow-navigation-react.git"
   },
+  "dependencies": {
+    "@arrow-navigation/core": "^2.2.0"
+  },
   "peerDependencies": {
-    "@arrow-navigation/core": "^2.1.0",
     "react": "^16.8.0 || ^17 || ^18"
   },
   "devDependencies": {
