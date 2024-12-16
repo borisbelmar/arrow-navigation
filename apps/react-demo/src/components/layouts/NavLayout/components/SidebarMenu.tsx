@@ -6,6 +6,7 @@ export default function SidebarMenu() {
   return (
     <FocusableGroup
       id="sidebar-menu"
+      saveLast
       className="bg-gray-800 flex flex-col p-4 space-y-4 flex-grow-0 h-screen items-center justify-center fixed top-0 left-0"
     >
       {elements.map(id => (
